@@ -7,27 +7,27 @@
 <meta name="description" content="Portfolio of Al Baset, Mechanical Engineering undergraduate at CUET, specializing in materials, composites, and power systems.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg-deep:#0E2A44;
-    --bg-panel:#153C5C;
-    --bg-panel-2:#1B4869;
-    --line:#3E6F91;
-    --paper:#F3EEE1;
-    --paper-line:#D8CFB8;
-    --ink:#EAF3FA;
-    --ink-dim:#9FC1D9;
-    --cyan:#6FD1F0;
-    --brass:#D9A566;
-    --brass-dim:#B8875A;
-    --mono:'IBM Plex Mono', monospace;
-    --sans:'IBM Plex Sans', sans-serif;
+    --bg:#FFFFFF;
+    --bg-soft:#F7F8FB;
+    --panel:#FFFFFF;
+    --panel-2:#F2F4F8;
+    --border:#E6E9F0;
+    --blue:#2555E7;
+    --blue-dark:#1B3FB8;
+    --blue-tint:#EEF2FF;
+    --text:#0F1524;
+    --text-dim:#5B6472;
+    --text-dimmer:#9399A6;
+    --heading:'Plus Jakarta Sans', sans-serif;
+    --body:'Inter', sans-serif;
     --maxw:1120px;
+    --radius:18px;
   }
 
   *{box-sizing:border-box; margin:0; padding:0;}
-
   html{scroll-behavior:smooth;}
   @media (prefers-reduced-motion: reduce){
     html{scroll-behavior:auto;}
@@ -35,447 +35,383 @@
   }
 
   body{
-    background:var(--bg-deep);
-    color:var(--ink);
-    font-family:var(--sans);
-    line-height:1.6;
-    background-image:
-      linear-gradient(var(--line) 1px, transparent 1px),
-      linear-gradient(90deg, var(--line) 1px, transparent 1px);
-    background-size:48px 48px;
-    background-position:center top;
-    position:relative;
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--body);
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
   }
-  body::before{
-    content:"";
-    position:fixed;
-    inset:0;
-    background:radial-gradient(ellipse at top, rgba(14,42,68,0) 0%, rgba(14,42,68,0.55) 70%, rgba(14,42,68,0.85) 100%);
-    pointer-events:none;
-    z-index:0;
-  }
-
-  /* crop / frame marks */
-  .frame-mark{
-    position:fixed;
-    width:22px; height:22px;
-    border-color:var(--brass);
-    border-style:solid;
-    z-index:50;
-    opacity:0.8;
-    pointer-events:none;
-  }
-  .frame-mark.tl{top:14px; left:14px; border-width:2px 0 0 2px;}
-  .frame-mark.tr{top:14px; right:14px; border-width:2px 2px 0 0;}
-  .frame-mark.bl{bottom:14px; left:14px; border-width:0 0 2px 2px;}
-  .frame-mark.br{bottom:14px; right:14px; border-width:0 2px 2px 0;}
 
   a{color:inherit; text-decoration:none;}
+  ul{list-style:none;}
+  img{max-width:100%; display:block;}
+  svg{display:block;}
 
-  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 28px; position:relative; z-index:1;}
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 24px;}
 
   .eyebrow{
-    font-family:var(--mono);
-    font-size:0.72rem;
-    letter-spacing:0.18em;
-    text-transform:uppercase;
-    color:var(--cyan);
-    display:flex;
-    align-items:center;
-    gap:10px;
-    margin-bottom:14px;
-  }
-  .eyebrow::before{
-    content:"";
-    width:22px; height:1px; background:var(--cyan);
-    display:inline-block;
+    font-family:var(--heading); font-size:0.82rem; font-weight:700;
+    letter-spacing:0.03em; text-transform:uppercase; color:var(--blue); margin-bottom:10px;
   }
 
-  h1,h2,h3{
-    font-family:var(--mono);
-    font-weight:600;
-    color:var(--ink);
-  }
+  h1,h2,h3{font-family:var(--heading); color:var(--text);}
+
+  .reveal{opacity:0; transform:translateY(16px); transition:opacity 0.6s ease, transform 0.6s ease;}
+  .reveal.in{opacity:1; transform:none;}
 
   /* NAV */
   nav{
-    position:fixed; top:0; left:0; right:0;
-    z-index:40;
-    background:rgba(14,42,68,0.86);
-    backdrop-filter:blur(6px);
-    border-bottom:1px solid var(--line);
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    background:rgba(255,255,255,0.85); backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--border);
   }
   .nav-inner{
-    max-width:var(--maxw); margin:0 auto; padding:14px 28px;
+    max-width:var(--maxw); margin:0 auto; padding:16px 24px;
     display:flex; align-items:center; justify-content:space-between;
   }
-  .nav-brand{
-    font-family:var(--mono); font-size:0.85rem; letter-spacing:0.1em;
-    color:var(--ink); font-weight:600;
-  }
-  .nav-brand span{color:var(--brass);}
-  .nav-links{
-    display:flex; gap:22px; list-style:none;
-  }
+  .nav-brand{font-family:var(--heading); font-size:1.1rem; font-weight:800; letter-spacing:-0.01em;}
+  .nav-brand span{color:var(--blue);}
+  .nav-links{display:flex; gap:24px;}
   .nav-links a{
-    font-family:var(--mono); font-size:0.68rem; letter-spacing:0.1em;
-    text-transform:uppercase; color:var(--ink-dim);
-    transition:color 0.2s ease;
-    white-space:nowrap;
+    font-size:0.88rem; font-weight:500; color:var(--text-dim);
+    position:relative; padding-bottom:4px; transition:color 0.2s ease; white-space:nowrap;
   }
-  .nav-links a:hover{color:var(--cyan);}
-  .nav-toggle{display:none; background:none; border:1px solid var(--line); color:var(--ink); font-family:var(--mono); padding:6px 10px; font-size:0.7rem; cursor:pointer;}
+  .nav-links a::after{
+    content:""; position:absolute; left:0; bottom:0; width:0; height:2px;
+    background:var(--blue); transition:width 0.2s ease;
+  }
+  .nav-links a:hover{color:var(--text);}
+  .nav-links a.active{color:var(--text);}
+  .nav-links a.active::after{width:100%;}
+  .nav-cta{
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--blue); color:#fff; font-weight:600; font-size:0.84rem;
+    padding:10px 18px; border-radius:9px;
+    transition:transform 0.2s ease, background 0.2s ease; flex-shrink:0;
+  }
+  .nav-cta:hover{background:var(--blue-dark); transform:translateY(-1px);}
+  .nav-toggle{
+    display:none; background:none; border:1px solid var(--border); color:var(--text);
+    width:38px; height:38px; border-radius:9px; align-items:center; justify-content:center;
+  }
+  .nav-toggle svg{width:18px; height:18px;}
 
-  @media (max-width:860px){
+  @media (max-width:1000px){
     .nav-links{
       position:absolute; top:100%; left:0; right:0;
-      background:var(--bg-panel);
-      flex-direction:column; gap:0;
-      display:none;
-      border-bottom:1px solid var(--line);
+      background:#fff; flex-direction:column; gap:0;
+      display:none; border-bottom:1px solid var(--border); padding:6px 0;
+      box-shadow:0 12px 24px -12px rgba(15,21,36,0.15);
     }
     .nav-links.open{display:flex;}
-    .nav-links a{padding:14px 28px; border-top:1px solid var(--line);}
-    .nav-toggle{display:block;}
+    .nav-links a{padding:14px 24px; width:100%;}
+    .nav-toggle{display:flex;}
+    .nav-cta{display:none;}
   }
 
   /* HERO */
-  header.hero{
-    padding:150px 0 90px;
-    position:relative;
+  header.hero{padding:120px 0 64px;}
+  .hero-grid{display:grid; grid-template-columns:1.15fr 0.85fr; gap:48px; align-items:center;}
+  @media (max-width:900px){.hero-grid{grid-template-columns:1fr; gap:36px;}}
+
+  .hero-badge{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:0.78rem; font-weight:600; color:var(--blue);
+    background:var(--blue-tint); border:1px solid #DCE4FF;
+    padding:7px 14px; border-radius:99px; margin-bottom:20px;
   }
-  .hero-datum{
-    font-family:var(--mono);
-    font-size:0.72rem;
-    color:var(--ink-dim);
-    letter-spacing:0.06em;
-    margin-bottom:28px;
-    display:flex;
-    flex-wrap:wrap;
-    gap:24px;
-  }
-  .hero-datum b{color:var(--cyan); font-weight:600;}
+  .hero-badge::before{content:""; width:6px; height:6px; border-radius:50%; background:var(--blue);}
 
   .hero h1.name{
-    font-size:clamp(2.6rem, 8vw, 5.2rem);
-    letter-spacing:0.01em;
-    text-transform:uppercase;
-    line-height:1;
-    margin-bottom:18px;
+    font-size:clamp(2.2rem, 6.5vw, 3.6rem); font-weight:800; line-height:1.08;
+    letter-spacing:-0.02em; margin-bottom:8px;
   }
   .hero .role{
-    font-family:var(--sans);
-    font-size:clamp(1.05rem, 2vw, 1.35rem);
-    color:var(--ink-dim);
-    max-width:640px;
-    font-weight:400;
-    margin-bottom:32px;
+    font-family:var(--heading); font-weight:700; font-size:clamp(1.05rem, 2.6vw, 1.35rem);
+    color:var(--blue); margin-bottom:18px;
   }
-  .hero .role strong{color:var(--brass); font-weight:600;}
+  .hero .desc{color:var(--text-dim); max-width:54ch; margin-bottom:18px; font-size:1rem;}
+  .hero .locline{display:flex; align-items:center; gap:8px; color:var(--text-dimmer); font-size:0.88rem; margin-bottom:28px;}
+  .hero .locline svg{width:15px; height:15px; color:var(--blue); flex-shrink:0;}
 
-  .hero-cta{
-    display:flex; flex-wrap:wrap; gap:14px;
-    margin-bottom:64px;
-  }
+  .hero-cta{display:flex; flex-wrap:wrap; gap:12px; margin-bottom:26px;}
   .btn{
-    font-family:var(--mono); font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase;
-    padding:13px 22px;
-    border:1px solid var(--brass);
-    color:var(--brass);
-    transition:all 0.2s ease;
+    font-family:var(--body); font-weight:600; font-size:0.88rem; padding:13px 24px; border-radius:10px;
     display:inline-flex; align-items:center; gap:8px;
+    transition:transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
   }
-  .btn:hover{background:var(--brass); color:var(--bg-deep);}
-  .btn.solid{background:var(--brass); color:var(--bg-deep);}
-  .btn.solid:hover{background:var(--cyan); border-color:var(--cyan);}
+  .btn.solid{background:var(--blue); color:#fff;}
+  .btn.solid:hover{background:var(--blue-dark); transform:translateY(-1px);}
+  .btn.outline{border:1px solid var(--border); color:var(--text); background:#fff;}
+  .btn.outline:hover{border-color:var(--blue); color:var(--blue);}
 
-  /* TITLE BLOCK - signature element */
-  .title-block{
-    border:1px solid var(--line);
-    background:var(--bg-panel);
-    display:grid;
-    grid-template-columns:repeat(4, 1fr);
-    font-family:var(--mono);
-    font-size:0.72rem;
+  .social-row{display:flex; gap:10px;}
+  .social-row a{
+    width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center;
+    background:var(--panel-2); border:1px solid var(--border); color:var(--text-dim); transition:all 0.2s ease;
   }
-  .title-block .cell{
-    padding:14px 16px;
-    border-right:1px solid var(--line);
-    border-top:1px solid var(--line);
+  .social-row a:hover{color:var(--blue); border-color:var(--blue); background:var(--blue-tint);}
+  .social-row svg{width:17px; height:17px;}
+
+  .hero-photo-block{display:flex; flex-direction:column; gap:12px;}
+  .hero-photo{
+    border-radius:var(--radius); overflow:hidden; border:1px solid var(--border);
+    aspect-ratio:3/3.5; background:var(--panel-2);
+    box-shadow:0 24px 48px -24px rgba(15,21,36,0.2);
+    display:flex; align-items:center; justify-content:center;
   }
-  .title-block .cell:last-child{border-right:none;}
-  .title-block .cell .k{color:var(--ink-dim); letter-spacing:0.08em; text-transform:uppercase; font-size:0.62rem; margin-bottom:6px;}
-  .title-block .cell .v{color:var(--ink); font-weight:600;}
-  .title-block .cell.wide{grid-column:span 2;}
-  @media (max-width:640px){
-    .title-block{grid-template-columns:repeat(2,1fr);}
-    .title-block .cell.wide{grid-column:span 2;}
+  .hero-photo img{width:100%; height:100%; object-fit:cover;}
+  .ph-placeholder{text-align:center; color:var(--text-dimmer); font-size:0.76rem; padding:20px; line-height:1.7;}
+  .ph-placeholder b{display:block; color:var(--blue); font-family:var(--heading); font-size:0.88rem; margin-bottom:6px;}
+  .photo-caption{text-align:center; font-size:0.74rem; letter-spacing:0.03em; color:var(--text-dimmer); font-weight:600;}
+
+  .stat-row{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:44px;}
+  @media (max-width:640px){.stat-row{grid-template-columns:repeat(2,1fr);}}
+  .stat-card{background:var(--panel); border:1px solid var(--border); border-radius:16px; padding:18px 16px;}
+  .stat-card .icon{
+    width:36px; height:36px; border-radius:10px; background:var(--blue-tint); color:var(--blue);
+    display:flex; align-items:center; justify-content:center; margin-bottom:12px;
   }
+  .stat-card .icon svg{width:19px; height:19px;}
+  .stat-card .title{font-family:var(--heading); font-weight:700; font-size:0.94rem; margin-bottom:3px;}
+  .stat-card .sub{color:var(--text-dim); font-size:0.8rem; line-height:1.4;}
 
   /* SECTION SHELL */
-  section{
-    padding:90px 0;
-    border-top:1px solid var(--line);
-    position:relative;
-  }
-  .section-head{
-    display:flex; align-items:baseline; justify-content:space-between;
-    margin-bottom:48px;
-    flex-wrap:wrap; gap:12px;
-  }
-  .section-head h2{
-    font-size:clamp(1.5rem, 3vw, 2rem);
-    text-transform:uppercase;
-    letter-spacing:0.02em;
-  }
-  .section-head .idx{
-    font-family:var(--mono); color:var(--ink-dim); font-size:0.8rem;
-  }
-
-  .reveal{opacity:0; transform:translateY(16px); transition:opacity 0.7s ease, transform 0.7s ease;}
-  .reveal.in{opacity:1; transform:none;}
+  section{padding:80px 0; border-top:1px solid var(--border);}
+  .section-head{margin-bottom:38px;}
+  .section-head h2{font-size:clamp(1.5rem, 3.4vw, 2.05rem); font-weight:800; letter-spacing:-0.01em;}
+  .section-lede{color:var(--text-dim); max-width:60ch; margin-top:8px; font-size:0.95rem;}
 
   /* ABOUT */
-  .about-grid{
-    display:grid; grid-template-columns:1.3fr 1fr; gap:48px;
+  .about-grid{display:grid; grid-template-columns:1fr 0.85fr; gap:44px; align-items:start;}
+  @media (max-width:880px){.about-grid{grid-template-columns:1fr;}}
+  .about-text p{color:var(--text-dim); margin-bottom:15px; max-width:60ch; font-size:0.96rem;}
+  .about-text strong{color:var(--text);}
+  .about-photo{
+    border-radius:var(--radius); overflow:hidden; border:1px solid var(--border);
+    aspect-ratio:4/3.2; background:var(--panel-2);
+    display:flex; align-items:center; justify-content:center; margin-bottom:20px;
   }
-  @media (max-width:800px){.about-grid{grid-template-columns:1fr;}}
-  .about-text p{color:var(--ink-dim); margin-bottom:16px; max-width:60ch;}
-  .about-text strong{color:var(--ink);}
-  .spec-list{
-    border:1px solid var(--line); background:var(--bg-panel);
-  }
-  .spec-list .row{
-    display:flex; justify-content:space-between; padding:14px 18px;
-    border-bottom:1px solid var(--line);
-    font-family:var(--mono); font-size:0.8rem;
-  }
-  .spec-list .row:last-child{border-bottom:none;}
-  .spec-list .row .k{color:var(--ink-dim);}
-  .spec-list .row .v{color:var(--cyan); font-weight:600; text-align:right;}
+  .about-photo img{width:100%; height:100%; object-fit:cover;}
 
-  /* REVISION TABLE (Education) */
-  .rev-table{width:100%; border-collapse:collapse; font-family:var(--mono); font-size:0.82rem;}
-  .rev-table th{
-    text-align:left; padding:12px 16px; border-bottom:1px solid var(--brass);
-    color:var(--brass); text-transform:uppercase; font-size:0.68rem; letter-spacing:0.08em;
+  .about-panel{background:var(--panel-2); border:1px solid var(--border); border-radius:14px; padding:20px 22px; margin-bottom:14px;}
+  .about-panel .k{font-size:0.7rem; color:var(--blue); text-transform:uppercase; letter-spacing:0.05em; font-weight:700; margin-bottom:10px;}
+  .tag-list{display:flex; flex-wrap:wrap; gap:8px;}
+  .tag{background:#fff; border:1px solid var(--border); border-radius:8px; padding:6px 12px; font-size:0.8rem; color:var(--text-dim);}
+  .quote-block{
+    border-left:3px solid var(--blue); padding-left:16px; margin-top:14px;
+    color:var(--text-dim); font-size:0.86rem; font-style:italic; line-height:1.6;
   }
-  .rev-table td{
-    padding:16px; border-bottom:1px solid var(--line); vertical-align:top; color:var(--ink-dim);
+  .info-chip-row{display:flex; flex-wrap:wrap; gap:28px;}
+  .info-chip .v{font-weight:600; font-size:0.9rem;}
+  .info-chip .sub{color:var(--text-dim); font-size:0.8rem;}
+
+  /* EDUCATION */
+  .edu-list{display:flex; flex-direction:column; gap:14px;}
+  .edu-card{
+    background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:20px 22px;
+    display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
   }
-  .rev-table td.main{color:var(--ink); font-weight:600; font-family:var(--sans); font-size:0.95rem;}
-  .rev-table td .sub{display:block; color:var(--ink-dim); font-family:var(--sans); font-size:0.85rem; margin-top:4px;}
-  .rev-table td.tag{color:var(--cyan); white-space:nowrap;}
-  .rev-table{overflow-x:auto; display:block;}
-  @media (min-width:640px){.rev-table{display:table;}}
+  .edu-card .main{font-weight:700; font-size:0.98rem;}
+  .edu-card .sub{color:var(--text-dim); font-size:0.86rem; margin-top:4px;}
+  .edu-card .meta{text-align:right; font-size:0.84rem; color:var(--blue); font-weight:600; white-space:nowrap;}
+  .edu-card .meta .period{display:block; color:var(--text-dimmer); font-weight:400; font-size:0.76rem; margin-top:3px;}
+
+  /* PHOTO GALLERY */
+  .gallery-2{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  @media (max-width:600px){.gallery-2{grid-template-columns:1fr;}}
+  .gallery-2 .g-item{
+    border-radius:12px; overflow:hidden; border:1px solid var(--border);
+    aspect-ratio:4/3; background:var(--panel-2);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .gallery-2 .g-item img{width:100%; height:100%; object-fit:cover;}
+  .g-placeholder{text-align:center; color:var(--text-dimmer); font-size:0.72rem; padding:14px; line-height:1.6;}
+  .g-placeholder b{display:block; color:var(--blue); font-family:var(--heading); font-size:0.8rem; margin-bottom:4px;}
+  .gallery-caption{text-align:center; font-size:0.78rem; color:var(--text-dimmer); margin-top:12px; font-style:italic;}
 
   /* THESIS PANEL */
-  .abstract-panel{
-    border:1px solid var(--brass);
-    background:var(--bg-panel);
-    padding:36px;
-    position:relative;
-  }
-  .abstract-panel::before{
-    content:"ABSTRACT";
-    position:absolute; top:-11px; left:28px;
-    background:var(--bg-deep);
-    padding:0 10px;
-    font-family:var(--mono); font-size:0.68rem; letter-spacing:0.12em; color:var(--brass);
-  }
-  .abstract-panel h3{font-size:1.2rem; font-style:italic; color:var(--ink); margin-bottom:18px; font-weight:500; font-family:var(--sans);}
-  .abstract-panel ul{list-style:none; margin:18px 0; padding:0;}
-  .abstract-panel li{
-    padding-left:20px; position:relative; margin-bottom:10px; color:var(--ink-dim);
-  }
-  .abstract-panel li::before{
-    content:"—"; position:absolute; left:0; color:var(--cyan);
-  }
-  .meta-row{display:flex; flex-wrap:wrap; gap:24px; margin-top:24px; padding-top:20px; border-top:1px solid var(--line);}
-  .meta-row div{font-family:var(--mono); font-size:0.72rem;}
-  .meta-row .k{color:var(--ink-dim); text-transform:uppercase; letter-spacing:0.06em; display:block; margin-bottom:4px;}
-  .meta-row .v{color:var(--ink);}
+  .abstract-panel{background:var(--panel-2); border:1px solid var(--border); border-radius:var(--radius); padding:28px 30px; margin-bottom:24px;}
+  .abstract-panel h3{font-size:1.12rem; font-weight:700; margin-bottom:14px; line-height:1.4;}
+  .abstract-panel ul{margin:14px 0;}
+  .abstract-panel li{padding-left:20px; position:relative; margin-bottom:8px; color:var(--text-dim); font-size:0.92rem;}
+  .abstract-panel li::before{content:"→"; position:absolute; left:0; color:var(--blue);}
+  .meta-row{display:flex; flex-wrap:wrap; gap:24px; margin-top:20px; padding-top:18px; border-top:1px solid var(--border);}
+  .meta-row .k{color:var(--text-dimmer); text-transform:uppercase; letter-spacing:0.04em; font-size:0.68rem; display:block; margin-bottom:4px;}
+  .meta-row .v{font-weight:600; font-size:0.88rem;}
 
-  /* EXPERIENCE CARDS */
-  .exp-log{border-left:2px solid var(--line); padding-left:0;}
-  .exp-card{
-    position:relative; padding:0 0 40px 36px; margin-left:4px;
-  }
-  .exp-card:last-child{padding-bottom:0;}
-  .exp-card::before{
-    content:""; position:absolute; left:-6px; top:4px;
-    width:11px; height:11px; background:var(--bg-deep); border:2px solid var(--cyan); border-radius:50%;
-  }
-  .exp-card .head{display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:8px;}
-  .exp-card .site{font-family:var(--mono); font-size:1rem; color:var(--ink); font-weight:600;}
-  .exp-card .date{font-family:var(--mono); font-size:0.72rem; color:var(--brass); white-space:nowrap;}
-  .exp-card .pos{color:var(--cyan); font-size:0.85rem; font-family:var(--mono); margin-bottom:10px; display:block;}
-  .exp-card ul{padding-left:18px; color:var(--ink-dim);}
-  .exp-card li{margin-bottom:6px;}
+  /* INDUSTRIAL EXPERIENCE */
+  .exp-main{background:var(--panel-2); border:1px solid var(--border); border-radius:var(--radius); padding:28px 30px; margin-bottom:28px;}
+  .exp-main .head{display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:4px;}
+  .exp-main .site{font-weight:700; font-size:1.02rem;}
+  .exp-main .date{font-size:0.78rem; color:var(--blue); font-weight:600; white-space:nowrap;}
+  .exp-main .pos{color:var(--text-dim); font-size:0.85rem; margin-bottom:14px; display:block; font-style:italic;}
+  .exp-main ul{padding-left:20px; color:var(--text-dim); font-size:0.9rem; margin-bottom:22px;}
+  .exp-main li{margin-bottom:6px;}
+
+  .visit-subhead{font-size:0.82rem; font-weight:700; color:var(--blue); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:16px;}
+  .visit-grid{display:grid; grid-template-columns:1fr 1fr; gap:22px;}
+  @media (max-width:760px){.visit-grid{grid-template-columns:1fr;}}
+  .visit-card{background:var(--panel); border:1px solid var(--border); border-radius:16px; padding:22px 24px;}
+  .visit-card .site{font-weight:700; font-size:0.96rem; margin-bottom:3px;}
+  .visit-card .date{font-size:0.76rem; color:var(--blue); font-weight:600; margin-bottom:10px; display:block;}
+  .visit-card p{color:var(--text-dim); font-size:0.86rem; margin-bottom:14px;}
+  .visit-card .gallery-2{gap:10px;}
 
   /* SKILLS */
-  .skill-groups{display:grid; grid-template-columns:1fr 1fr; gap:40px;}
-  @media (max-width:700px){.skill-groups{grid-template-columns:1fr;}}
-  .skill-group h3{font-size:0.8rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--brass); margin-bottom:18px;}
-  .gauge{margin-bottom:20px;}
-  .gauge .label{display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.8rem; margin-bottom:6px;}
-  .gauge .label .lvl{color:var(--ink-dim); font-size:0.68rem; text-transform:uppercase; letter-spacing:0.05em;}
-  .gauge-track{
-    height:6px; background:var(--bg-panel-2); position:relative; border:1px solid var(--line);
-  }
-  .gauge-track .fill{
-    height:100%; background:linear-gradient(90deg, var(--cyan), var(--brass));
-    transition:width 1.2s ease;
-  }
-  .gauge-track .ticks{position:absolute; inset:0; display:flex; justify-content:space-between; pointer-events:none;}
-  .gauge-track .ticks span{width:1px; background:var(--bg-deep); height:100%; opacity:0.5;}
+  .skill-groups{display:grid; grid-template-columns:repeat(2,1fr); gap:30px 40px;}
+  @media (max-width:640px){.skill-groups{grid-template-columns:1fr;}}
+  .skill-group h3{font-size:0.88rem; font-weight:700; color:var(--blue); margin-bottom:14px;}
 
   /* PROJECTS */
-  .proj-grid{display:grid; grid-template-columns:1fr 1fr; gap:28px;}
-  @media (max-width:760px){.proj-grid{grid-template-columns:1fr;}}
-  .proj-card{border:1px solid var(--line); background:var(--bg-panel);}
+  .proj-grid{display:grid; grid-template-columns:1fr 1fr; gap:22px;}
+  @media (max-width:720px){.proj-grid{grid-template-columns:1fr;}}
+  .proj-card{background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden;}
   .proj-render{
-    aspect-ratio:16/10;
-    border-bottom:1px dashed var(--line);
-    background:
-      repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(111,209,240,0.05) 10px, rgba(111,209,240,0.05) 20px);
-    display:flex; align-items:center; justify-content:center;
-    color:var(--ink-dim); font-family:var(--mono); font-size:0.72rem; text-align:center; padding:20px;
-    letter-spacing:0.05em;
+    aspect-ratio:16/10; background:var(--panel-2);
+    display:flex; align-items:center; justify-content:center; color:var(--text-dimmer);
+    font-size:0.76rem; text-align:center; padding:18px; line-height:1.6; overflow:hidden;
   }
+  .proj-render img{width:100%; height:100%; object-fit:cover;}
+  .proj-render b{display:block; color:var(--blue); font-family:var(--heading); margin-bottom:6px;}
   .proj-body{padding:22px 24px;}
-  .proj-body h3{font-size:1.05rem; font-family:var(--sans); font-weight:600; margin-bottom:10px;}
-  .proj-body ul{color:var(--ink-dim); padding-left:18px; font-size:0.92rem;}
-  .proj-body li{margin-bottom:6px;}
-  .proj-tag{font-family:var(--mono); font-size:0.65rem; color:var(--cyan); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:8px; display:block;}
+  .proj-body h3{font-size:1.02rem; font-weight:700; margin-bottom:10px;}
+  .proj-body ul{color:var(--text-dim); padding-left:18px; font-size:0.88rem;}
+  .proj-body li{margin-bottom:5px;}
+  .proj-tag{font-size:0.7rem; font-weight:700; color:var(--blue); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:10px; display:block;}
 
-  /* CERTIFICATES - paper section */
-  .paper-section{
-    background:var(--paper); color:#2A2418;
+  /* CERTIFICATES */
+  .cert-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(210px,1fr)); gap:18px;}
+  .cert-tile{background:var(--panel); border:1px solid var(--border); border-radius:14px; overflow:hidden;}
+  .cert-tile .img-slot{
+    aspect-ratio:4/3; background:var(--panel-2);
+    display:flex; align-items:center; justify-content:center; overflow:hidden;
+    color:var(--text-dimmer); font-size:0.68rem; text-align:center; padding:12px; line-height:1.6;
   }
-  .paper-section .eyebrow{color:var(--brass-dim);}
-  .paper-section .eyebrow::before{background:var(--brass-dim);}
-  .paper-section h2{color:#2A2418;}
-  .paper-section .section-head .idx{color:#8A7F63;}
-  .cert-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:22px;}
-  @media (max-width:820px){.cert-grid{grid-template-columns:repeat(2,1fr);}}
-  @media (max-width:560px){.cert-grid{grid-template-columns:1fr;}}
-  .cert-card{
-    background:#fff;
-    border:1px solid var(--paper-line);
-    box-shadow:0 2px 0 var(--paper-line);
-  }
-  .cert-img-slot{
-    aspect-ratio:4/3;
-    border-bottom:1px dashed var(--paper-line);
-    display:flex; align-items:center; justify-content:center;
-    background:repeating-linear-gradient(45deg, #fff, #fff 10px, #F7F3E8 10px, #F7F3E8 20px);
-    color:#9A8C68; font-family:var(--mono); font-size:0.68rem; text-align:center; padding:16px;
-    overflow:hidden;
-  }
-  .cert-img-slot img{width:100%; height:100%; object-fit:cover;}
-  .cert-info{padding:16px 18px;}
-  .cert-info .title{font-weight:600; font-size:0.92rem; margin-bottom:4px;}
-  .cert-info .issuer{font-family:var(--mono); font-size:0.7rem; color:#7A6E52; text-transform:uppercase; letter-spacing:0.04em;}
+  .cert-tile .img-slot b{display:block; color:var(--blue); font-family:var(--heading); margin-bottom:4px;}
+  .cert-tile .img-slot img{width:100%; height:100%; object-fit:cover;}
+  .cert-tile .cap{padding:13px 15px;}
+  .cert-tile .cap .title{font-weight:700; font-size:0.84rem; margin-bottom:3px;}
+  .cert-tile .cap .issuer{font-size:0.7rem; color:var(--text-dim);}
 
-  /* AWARDS / LEADERSHIP */
-  .two-col{display:grid; grid-template-columns:1fr 1fr; gap:48px;}
-  @media (max-width:760px){.two-col{grid-template-columns:1fr;}}
-  .simple-list{list-style:none;}
-  .simple-list li{
-    padding:16px 0; border-bottom:1px solid var(--line);
-    display:flex; gap:16px; align-items:baseline;
-  }
+  /* AWARDS / ACTIVITIES */
+  .two-col{display:grid; grid-template-columns:1fr 1fr; gap:40px;}
+  @media (max-width:720px){.two-col{grid-template-columns:1fr;}}
+  .simple-list li{padding:16px 0; border-bottom:1px solid var(--border); display:flex; gap:14px; align-items:flex-start;}
   .simple-list li:first-child{padding-top:0;}
-  .simple-list .mark{font-family:var(--mono); color:var(--brass); font-size:0.75rem; flex-shrink:0;}
-  .simple-list .txt strong{color:var(--ink); display:block; margin-bottom:2px;}
-  .simple-list .txt span{color:var(--ink-dim); font-size:0.88rem;}
+  .simple-list li:last-child{border-bottom:none;}
+  .simple-list .mark{
+    font-weight:700; color:var(--blue); font-size:0.76rem; flex-shrink:0;
+    background:var(--blue-tint); border-radius:8px; padding:5px 10px; white-space:nowrap;
+  }
+  .simple-list .txt strong{display:block; margin-bottom:3px; font-size:0.92rem;}
+  .simple-list .txt span{color:var(--text-dim); font-size:0.84rem;}
 
   /* FOOTER / CONTACT */
-  footer{
-    padding:80px 0 60px;
-    border-top:1px solid var(--line);
-  }
-  .footer-grid{display:grid; grid-template-columns:1.2fr 1fr; gap:48px; margin-bottom:60px;}
-  @media (max-width:760px){.footer-grid{grid-template-columns:1fr;}}
-  .contact-links{display:flex; flex-direction:column; gap:14px; margin-top:20px;}
+  footer{padding:70px 0 40px; border-top:1px solid var(--border); background:var(--bg-soft);}
+  .footer-grid{display:grid; grid-template-columns:1.1fr 0.9fr; gap:40px; margin-bottom:44px;}
+  @media (max-width:720px){.footer-grid{grid-template-columns:1fr;}}
+  .contact-links{display:flex; flex-direction:column; gap:12px; margin-top:22px;}
   .contact-links a{
-    font-family:var(--mono); font-size:0.85rem; color:var(--ink);
-    display:flex; align-items:center; gap:10px;
-    padding:12px 16px; border:1px solid var(--line); transition:border-color 0.2s ease, color 0.2s ease;
+    display:flex; align-items:center; gap:12px; padding:14px 16px; border:1px solid var(--border);
+    border-radius:12px; background:#fff; font-size:0.9rem;
+    transition:border-color 0.2s ease, color 0.2s ease;
   }
-  .contact-links a:hover{border-color:var(--cyan); color:var(--cyan);}
-  .lang-row{display:flex; gap:32px; font-family:var(--mono); font-size:0.8rem;}
-  .lang-row div .k{color:var(--ink-dim); display:block; font-size:0.65rem; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:4px;}
-
+  .contact-links a svg{width:17px; height:17px; color:var(--blue); flex-shrink:0;}
+  .contact-links a:hover{border-color:var(--blue);}
+  .footer-panel{background:#fff; border:1px solid var(--border); border-radius:var(--radius); padding:24px;}
+  .footer-panel .row{display:flex; justify-content:space-between; padding:11px 0; border-bottom:1px solid var(--border); font-size:0.86rem;}
+  .footer-panel .row:last-child{border-bottom:none;}
+  .footer-panel .row .k{color:var(--text-dimmer);}
+  .footer-panel .row .v{font-weight:600;}
   .foot-bottom{
-    display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;
-    font-family:var(--mono); font-size:0.68rem; color:var(--ink-dim);
-    padding-top:24px; border-top:1px solid var(--line);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+    font-size:0.76rem; color:var(--text-dimmer); padding-top:22px; border-top:1px solid var(--border);
   }
 </style>
 </head>
 <body>
 
-<div class="frame-mark tl"></div>
-<div class="frame-mark tr"></div>
-<div class="frame-mark bl"></div>
-<div class="frame-mark br"></div>
-
 <nav>
   <div class="nav-inner">
-    <div class="nav-brand">AL<span>·</span>BASET</div>
-    <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks">MENU</button>
+    <div class="nav-brand">AI<span> </span>Baset</div>
+    <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
     <ul class="nav-links" id="navLinks">
-      <li><a href="#about">Summary</a></li>
-      <li><a href="#education">Education</a></li>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
       <li><a href="#research">Research</a></li>
       <li><a href="#experience">Experience</a></li>
       <li><a href="#skills">Skills</a></li>
       <li><a href="#projects">Projects</a></li>
       <li><a href="#certificates">Certificates</a></li>
+      <li><a href="#activities">Activities</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
+    <a class="nav-cta" href="CV.pdf" download>Download CV</a>
   </div>
 </nav>
 
-<header class="hero">
+<header class="hero" id="home">
   <div class="wrap">
-    <div class="hero-datum reveal">
-      <span>DEPT: <b>Mechanical Engineering</b></span>
-    
+    <div class="hero-grid">
+      <div>
+        <div class="hero-badge reveal">Mechanical Engineer · CUET</div>
+        <h1 class="name reveal">Al Baset</h1>
+        <div class="role reveal">Mechanical Engineering Graduate</div>
+        <p class="desc reveal">Mechanical Engineering student at Chittagong University of Engineering and Technology (CUET) with hands-on experience in materials fabrication, CAD design, and engineering analysis. My research focuses on hybrid Al–Cu metal matrix composites reinforced with SiC and fly ash.</p>
+        <div class="locline reveal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+          Cumilla, Bangladesh
+        </div>
+        <div class="hero-cta reveal">
+          <a class="btn solid" href="#contact">Contact me</a>
+          <a class="btn outline" href="CV.pdf" download>Download CV</a>
+        </div>
+        <div class="social-row reveal">
+          <a href="https://www.linkedin.com/in/al-baset/" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+          </a>
+          <a href="mailto:baset.czs2018@gmail.com" aria-label="Email">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16v12H4z"/><path d="M4 6l8 7 8-7"/></svg>
+          </a>
+          <a href="#" aria-label="ResearchGate" onclick="return false;">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.6 8.4c0-2.6-1.9-4.4-4.6-4.4h-4.4v1.7h1v12.6h-1V20h5.1v-1.7h-1.1v-4.6c.4.1.9.1 1.4.1 2.7 0 4.6-1.8 4.6-5zm-4.9 3.4c-.4 0-.8 0-1.1-.1V5.7h1c1.7 0 2.8 1.2 2.8 3 0 2-1 3.1-2.7 3.1zM5.1 4l-1 1.7 3 1.7-3 1.7 1 1.7 3-1.7v3.5h2V9.1l3 1.7 1-1.7-3-1.7 3-1.7-1-1.7-3 1.7V2h-2v3.7L5.1 4z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-photo-block reveal">
+        <div class="hero-photo">
+          <!-- Replace this whole placeholder div with: <img src="images/hero-photo.jpg" alt="Al Baset"> -->
+          <div class="ph-placeholder"><b>Your photo</b>images/hero-photo.jpg<br>(portrait orientation)</div>
+        </div>
+        <div class="photo-caption">At CUET — Department of Mechanical Engineering</div>
+      </div>
     </div>
-    <h1 class="name reveal">Al Baset</h1>
-    <p class="role reveal">Mechanical Engineering undergraduate at <strong>CUET</strong>, working at the intersection of <strong>materials &amp; composites research</strong> and <strong>power &amp; manufacturing systems</strong>. Hands-on with SolidWorks, MATLAB, and industrial-scale process exposure.</p>
-    <div class="hero-cta reveal">
-      <a class="btn solid" href="#contact">Get in touch</a>
-      <a class="btn" href="#certificates">View certificates</a>
-      <a class="btn" href="https://www.linkedin.com/in/al-baset/" target="_blank" rel="noopener">LinkedIn ↗</a>
-    </div>
-    <div class="title-block reveal">
-      <div class="cell wide">
-        <div class="k">Name</div>
-        <div class="v">Al Baset</div>
+
+    <div class="stat-row reveal">
+      <div class="stat-card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/></svg></div>
+        <div class="title">Education</div>
+        <div class="sub">B.Sc. in ME<br>CGPA 3.77/4.00</div>
       </div>
-      <div class="cell">
-        <div class="k">Drawing</div>
-        <div class="v">Portfolio v1</div>
+      <div class="stat-card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3h6M10 3v5.5L5 18a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9.5V3"/></svg></div>
+        <div class="title">Research</div>
+        <div class="sub">Materials &amp;<br>Corrosion</div>
       </div>
-      <div class="cell">
-        <div class="k">Sheet</div>
-        <div class="v">1 of 1</div>
+      <div class="stat-card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9c.2.6.7 1 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></div>
+        <div class="title">Design</div>
+        <div class="sub">CAD &amp;<br>Simulation</div>
       </div>
-      <div class="cell wide">
-        <div class="k">Institution</div>
-        <div class="v">CUET, Dept. of ME</div>
-      </div>
-      <div class="cell">
-        <div class="k">Date</div>
-        <div class="v">Jul 2026</div>
-      </div>
-      <div class="cell">
-        <div class="k">Scale</div>
-        <div class="v">N.T.S.</div>
+      <div class="stat-card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></div>
+        <div class="title">Goal</div>
+        <div class="sub">Innovation<br>&amp; Impact</div>
       </div>
     </div>
   </div>
@@ -484,22 +420,37 @@
 <section id="about">
   <div class="wrap">
     <div class="section-head reveal">
-      <h2>Summary</h2>
-      <span class="idx">§ 01</span>
+      <div class="eyebrow">About</div>
+      <h2>Who I Am</h2>
     </div>
     <div class="about-grid">
       <div class="about-text reveal">
-        <p>I'm a final-year <strong>Mechanical Engineering</strong> student at Chittagong University of Engineering &amp; Technology (CUET), graduating in July 2026 with a CGPA of 3.77 out of 4.</p>
-        <p>My final-year thesis investigates <strong>SiC and fly ash reinforcement in hybrid Al-Cu metal matrix composites</strong>, combining hands-on fabrication (stir casting) with mechanical and corrosion testing. Alongside research, I've spent time on the ground at one of Bangladesh's largest power plants and at manufacturing facilities, which shapes how I think about design: for real processes, real constraints, and real operating conditions.</p>
-        <p>I design and model in <strong>SolidWorks</strong>, compute in <strong>MATLAB, FORTRAN and C</strong>, and I'm currently active in student leadership through the CUET Career Club and the CUET Automotive &amp; Mobility Society.</p>
+        <p>I'm a final-year <strong>Mechanical Engineering</strong> student at Chittagong University of Engineering &amp; Technology (CUET), graduating in July 2026 with a CGPA of <strong>3.77 out of 4.00</strong>. I have a strong interest in materials engineering, design, manufacturing, and computational tools.</p>
+        <p>My final-year thesis investigates <strong>SiC and fly ash reinforcement in hybrid Al-Cu metal matrix composites</strong>, combining hands-on fabrication (stir casting) with mechanical and corrosion testing. I've also spent time on the ground at one of Bangladesh's largest power plants and at manufacturing facilities, which shapes how I think about design for real processes and real operating conditions.</p>
+        <p>I aspire to build a career in materials and mechanical engineering research, and I am currently exploring graduate study opportunities where I can apply engineering principles to solve practical problems.</p>
+        <div class="quote-block">To apply engineering knowledge, hands-on fabrication skill, and analytical problem-solving toward developing practical, sustainable materials solutions — while continuing to grow as a researcher.</div>
       </div>
-      <div class="spec-list reveal">
-        <div class="row"><span class="k">Location</span><span class="v">Cumilla, Bangladesh</span></div>
-        <div class="row"><span class="k">Program</span><span class="v">BSc, Mechanical Eng.</span></div>
-        <div class="row"><span class="k">Graduating</span><span class="v">Jul 2026</span></div>
-        <div class="row"><span class="k">CGPA</span><span class="v">3.77 / 4.00</span></div>
-        <div class="row"><span class="k">Focus areas</span><span class="v">Materials · Power · CAD</span></div>
-        <div class="row"><span class="k">Languages</span><span class="v">Bangla · English</span></div>
+      <div class="reveal">
+        <div class="about-photo">
+          <!-- Replace this whole placeholder div with: <img src="images/about-photo.jpg" alt="Al Baset at CUET"> -->
+          <div class="ph-placeholder"><b>About photo</b>images/about-photo.jpg</div>
+        </div>
+        <div class="about-panel">
+          <div class="k">Research &amp; Professional Interests</div>
+          <div class="tag-list">
+            <span class="tag">Metal Matrix Composites</span>
+            <span class="tag">Materials Engineering</span>
+            <span class="tag">CAD &amp; Simulation</span>
+            <span class="tag">Power Systems</span>
+          </div>
+        </div>
+        <div class="about-panel">
+          <div class="k">Languages</div>
+          <div class="info-chip-row">
+            <div><div class="v">Bangla</div><div class="sub">Native</div></div>
+            <div><div class="v">English</div><div class="sub">Fluent</div></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -508,53 +459,41 @@
 <section id="education">
   <div class="wrap">
     <div class="section-head reveal">
-      <h2>Education — Revision History</h2>
-      <span class="idx">§ 02</span>
+      <div class="eyebrow">Academic Credentials</div>
+      <h2>Education</h2>
     </div>
-    <table class="rev-table reveal">
-      <thead>
-        <tr>
-          <th>Rev</th>
-          <th>Credential</th>
-          <th>Result</th>
-          <th>Period</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="tag">03</td>
-          <td class="main">Bachelor of Science, Mechanical Engineering
-            <span class="sub">Chittagong University of Engineering &amp; Technology (CUET)</span>
-          </td>
-          <td>CGPA 3.77 / 4.00</td>
-          <td>Mar 2022 – Jul 2026</td>
-        </tr>
-        <tr>
-          <td class="tag">02</td>
-          <td class="main">Higher Secondary School Certificate (HSC)
-            <span class="sub">Notre Dame College, Dhaka</span>
-          </td>
-          <td>GPA 5.00 / 5.00</td>
-          <td>Jul 2018 – Jan 2021</td>
-        </tr>
-        <tr>
-          <td class="tag">01</td>
-          <td class="main">Secondary School Certificate (SSC)
-            <span class="sub">Cumilla Zilla School, Cumilla</span>
-          </td>
-          <td>GPA 5.00 / 5.00</td>
-          <td>Jan 2013 – May 2018</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="edu-list reveal">
+      <div class="edu-card">
+        <div>
+          <div class="main">Bachelor of Science, Mechanical Engineering</div>
+          <div class="sub">Chittagong University of Engineering &amp; Technology (CUET)</div>
+        </div>
+        <div class="meta">CGPA 3.77 / 4.00<span class="period">Mar 2022 – Jul 2026</span></div>
+      </div>
+      <div class="edu-card">
+        <div>
+          <div class="main">Higher Secondary School Certificate (HSC)</div>
+          <div class="sub">Notre Dame College, Dhaka</div>
+        </div>
+        <div class="meta">GPA 5.00 / 5.00<span class="period">Jul 2018 – Jan 2021</span></div>
+      </div>
+      <div class="edu-card">
+        <div>
+          <div class="main">Secondary School Certificate (SSC)</div>
+          <div class="sub">Cumilla Zilla School, Cumilla</div>
+        </div>
+        <div class="meta">GPA 5.00 / 5.00<span class="period">Jan 2013 – May 2018</span></div>
+      </div>
+    </div>
   </div>
 </section>
 
 <section id="research">
   <div class="wrap">
     <div class="section-head reveal">
-      <h2>Research Experience</h2>
-      <span class="idx">§ 03</span>
+      <div class="eyebrow">Research &amp; Thesis</div>
+      <h2>Undergraduate Research</h2>
+      <p class="section-lede">Fabrication, testing and analysis of a hybrid metal matrix composite.</p>
     </div>
     <div class="abstract-panel reveal">
       <h3>Analysis of SiC and Fly Ash Reinforcement on Mechanical and Corrosion Behavior of Hybrid Al-Cu Matrix Composites</h3>
@@ -568,48 +507,84 @@
         <div><span class="k">Duration</span><span class="v">Oct 2025 – Jul 2026</span></div>
       </div>
     </div>
+    <div class="reveal">
+      <div class="gallery-2">
+        <div class="g-item">
+          <!-- Replace with: <img src="images/research-1.jpg" alt="Stir casting fabrication"> -->
+          <div class="g-placeholder"><b>Fabrication photo</b>images/research-1.jpg</div>
+        </div>
+        <div class="g-item">
+          <!-- Replace with: <img src="images/research-2.jpg" alt="Mechanical/corrosion testing"> -->
+          <div class="g-placeholder"><b>Testing photo</b>images/research-2.jpg</div>
+        </div>
+      </div>
+      <div class="gallery-caption">Left: Stir casting fabrication of the composite samples · Right: Mechanical and corrosion testing</div>
+    </div>
   </div>
 </section>
 
 <section id="experience">
   <div class="wrap">
     <div class="section-head reveal">
-      <h2>Industrial Experience</h2>
-      <span class="idx">§ 04</span>
+      <div class="eyebrow">Industry</div>
+      <h2>Industrial Experience &amp; Visits</h2>
+      <p class="section-lede">Hands-on exposure to power generation and manufacturing industries.</p>
     </div>
-    <div class="exp-log reveal">
-      <div class="exp-card">
-        <div class="head">
-          <span class="site">Matarbari 2×600 MW Ultra-Super Critical Coal-Fired Power Plant (CPGCBL)</span>
-          <span class="date">Dec 2025 – Jan 2026</span>
-        </div>
-        <span class="pos">Industrial Trainee</span>
-        <ul>
-          <li>Completed a three-week industrial training program at one of Bangladesh's most advanced ultra-supercritical coal-fired power plants.</li>
-          <li>Gained hands-on exposure to power plant operations, maintenance practices, industrial safety, and major mechanical systems including boilers, turbines, generators, and pumps.</li>
-        </ul>
+
+    <div class="exp-main reveal">
+      <div class="head">
+        <span class="site">Matarbari 2×600 MW Ultra-Super Critical Coal-Fired Power Plant (CPGCBL)</span>
+        <span class="date">Dec 2025 – Jan 2026</span>
       </div>
-      <div class="exp-card">
-        <div class="head">
-          <span class="site">Walton Hi-Tech Industries PLC</span>
-          <span class="date">Jul 2025</span>
+      <span class="pos">Industrial Trainee</span>
+      <ul>
+        <li>Completed a three-week industrial training program at one of Bangladesh's most advanced ultra-supercritical coal-fired power plants.</li>
+        <li>Gained hands-on exposure to power plant operations, maintenance practices, industrial safety, and major mechanical systems including boilers, turbines, generators, and pumps.</li>
+      </ul>
+      <div class="gallery-2">
+        <div class="g-item">
+          <!-- Replace with: <img src="images/matarbari-1.jpg" alt="Matarbari Power Plant training"> -->
+          <div class="g-placeholder"><b>Training photo</b>images/matarbari-1.jpg</div>
         </div>
-        <span class="pos">One-Day Industrial Visit</span>
-        <ul>
-          <li>Gained practical exposure to refrigerator, air-conditioner, and PCB manufacturing processes, including assembly operations, production systems, and quality control procedures.</li>
-          <li>Acquired knowledge of large-scale manufacturing systems and production planning.</li>
-        </ul>
+        <div class="g-item">
+          <!-- Replace with: <img src="images/matarbari-2.jpg" alt="Matarbari Power Plant training"> -->
+          <div class="g-placeholder"><b>Training photo</b>images/matarbari-2.jpg</div>
+        </div>
       </div>
-      <div class="exp-card">
-        <div class="head">
-          <span class="site">S. Alam Cold Rolled Steels Limited</span>
-          <span class="date">May 2024</span>
+      <div class="gallery-caption">Industrial training at Matarbari 2×600 MW Power Plant, CPGCBL</div>
+    </div>
+
+    <div class="visit-subhead reveal">One-Day Industrial Visits</div>
+    <div class="visit-grid reveal">
+      <div class="visit-card">
+        <span class="site">Walton Hi-Tech Industries PLC</span>
+        <span class="date">Jul 2025</span>
+        <p>Gained practical exposure to refrigerator, air-conditioner, and PCB manufacturing processes, including assembly operations, production systems, and quality control procedures.</p>
+        <div class="gallery-2">
+          <div class="g-item">
+            <!-- Replace with: <img src="images/walton-1.jpg" alt="Walton Hi-Tech Industries visit"> -->
+            <div class="g-placeholder"><b>Photo</b>images/walton-1.jpg</div>
+          </div>
+          <div class="g-item">
+            <!-- Replace with: <img src="images/walton-2.jpg" alt="Walton Hi-Tech Industries visit"> -->
+            <div class="g-placeholder"><b>Photo</b>images/walton-2.jpg</div>
+          </div>
         </div>
-        <span class="pos">One-Day Industrial Visit</span>
-        <ul>
-          <li>Observed cold-rolled steel manufacturing, boiler operations, and warehouse management systems.</li>
-          <li>Gained knowledge of galvanized and corrugated sheet production processes and material handling.</li>
-        </ul>
+      </div>
+      <div class="visit-card">
+        <span class="site">S. Alam Cold Rolled Steels Limited</span>
+        <span class="date">May 2024</span>
+        <p>Observed cold-rolled steel manufacturing, boiler operations, and warehouse management systems, along with galvanized and corrugated sheet production processes.</p>
+        <div class="gallery-2">
+          <div class="g-item">
+            <!-- Replace with: <img src="images/salam-1.jpg" alt="S. Alam Cold Rolled Steels visit"> -->
+            <div class="g-placeholder"><b>Photo</b>images/salam-1.jpg</div>
+          </div>
+          <div class="g-item">
+            <!-- Replace with: <img src="images/salam-2.jpg" alt="S. Alam Cold Rolled Steels visit"> -->
+            <div class="g-placeholder"><b>Photo</b>images/salam-2.jpg</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -618,36 +593,38 @@
 <section id="skills">
   <div class="wrap">
     <div class="section-head reveal">
-      <h2>Technical Proficiency</h2>
-      <span class="idx">§ 05</span>
+      <div class="eyebrow">Capabilities</div>
+      <h2>Technical Skills</h2>
     </div>
     <div class="skill-groups reveal">
       <div class="skill-group">
         <h3>CAD &amp; Design</h3>
-        <div class="gauge">
-          <div class="label"><span>SolidWorks</span><span class="lvl">Advanced</span></div>
-          <div class="gauge-track"><div class="fill" data-width="88%" style="width:0"></div><div class="ticks"><span></span><span></span><span></span><span></span><span></span></div></div>
-        </div>
-        <h3 style="margin-top:28px;">Reference &amp; Writing</h3>
-        <div class="gauge">
-          <div class="label"><span>Mendeley</span><span class="lvl">Working knowledge</span></div>
-          <div class="gauge-track"><div class="fill" data-width="70%" style="width:0"></div><div class="ticks"><span></span><span></span><span></span><span></span><span></span></div></div>
+        <div class="tag-list">
+          <span class="tag">SolidWorks — 2D Drawing</span>
+          <span class="tag">3D Modeling</span>
+          <span class="tag">Assembly Design &amp; Simulation</span>
         </div>
       </div>
       <div class="skill-group">
         <h3>Programming &amp; Numerical Computing</h3>
-        <div class="gauge">
-          <div class="label"><span>MATLAB</span><span class="lvl">Proficient</span></div>
-          <div class="gauge-track"><div class="fill" data-width="80%" style="width:0"></div><div class="ticks"><span></span><span></span><span></span><span></span><span></span></div></div>
+        <div class="tag-list">
+          <span class="tag">MATLAB</span>
+          <span class="tag">FORTRAN</span>
+          <span class="tag">C</span>
         </div>
-        <div class="gauge">
-          <div class="label"><span>FORTRAN / C</span><span class="lvl">Working knowledge</span></div>
-          <div class="gauge-track"><div class="fill" data-width="65%" style="width:0"></div><div class="ticks"><span></span><span></span><span></span><span></span><span></span></div></div>
+      </div>
+      <div class="skill-group">
+        <h3>Reference &amp; Academic Writing</h3>
+        <div class="tag-list">
+          <span class="tag">Mendeley</span>
         </div>
-        <h3 style="margin-top:28px;">Office Applications</h3>
-        <div class="gauge">
-          <div class="label"><span>Word · Excel · PowerPoint</span><span class="lvl">Proficient</span></div>
-          <div class="gauge-track"><div class="fill" data-width="85%" style="width:0"></div><div class="ticks"><span></span><span></span><span></span><span></span><span></span></div></div>
+      </div>
+      <div class="skill-group">
+        <h3>Office Applications</h3>
+        <div class="tag-list">
+          <span class="tag">Microsoft Word</span>
+          <span class="tag">Excel</span>
+          <span class="tag">PowerPoint</span>
         </div>
       </div>
     </div>
@@ -657,14 +634,14 @@
 <section id="projects">
   <div class="wrap">
     <div class="section-head reveal">
-      <h2>Design Projects</h2>
-      <span class="idx">§ 06</span>
+      <div class="eyebrow">Design Work</div>
+      <h2>Projects</h2>
     </div>
     <div class="proj-grid reveal">
       <div class="proj-card">
         <div class="proj-render">
-          [ Add turbo pump render/screenshot here — replace this block with:
-          &lt;img src="images/turbo-pump.jpg" alt="Turbo pump CAD render"&gt; ]
+          <!-- Replace with: <img src="images/turbo-pump.jpg" alt="Turbo pump CAD render"> -->
+          <div><b>Turbo pump render</b>images/turbo-pump.jpg</div>
         </div>
         <div class="proj-body">
           <span class="proj-tag">SolidWorks · Assembly Design</span>
@@ -678,8 +655,8 @@
       </div>
       <div class="proj-card">
         <div class="proj-render">
-          [ Add Wankel engine render/screenshot here — replace this block with:
-          &lt;img src="images/wankel-engine.jpg" alt="Wankel engine CAD render"&gt; ]
+          <!-- Replace with: <img src="images/wankel-engine.jpg" alt="Wankel engine CAD render"> -->
+          <div><b>Wankel engine render</b>images/wankel-engine.jpg</div>
         </div>
         <div class="proj-body">
           <span class="proj-tag">SolidWorks · Motion Analysis</span>
@@ -695,66 +672,49 @@
   </div>
 </section>
 
-<section id="certificates" class="paper-section">
+<section id="certificates">
   <div class="wrap">
     <div class="section-head reveal">
-      <h2>Certificates &amp; Trainings</h2>
-      <span class="idx">§ 07</span>
+      <div class="eyebrow">Credentials</div>
+      <h2>Certificates &amp; Achievements</h2>
+      <p class="section-lede">Professional trainings, workshops and academic recognitions.</p>
     </div>
     <div class="cert-grid reveal">
-      <div class="cert-card">
-        <div class="cert-img-slot">Add certificate image here<br>images/hvac-cert.jpg</div>
-        <div class="cert-info">
-          <div class="title">HVAC Design Session — Part 1</div>
-          <div class="issuer">ASHRAE CUET Student Branch · 2025 · 10 PDH</div>
-        </div>
+      <div class="cert-tile">
+        <div class="img-slot"><b>Certificate</b>images/hvac-cert.jpg</div>
+        <div class="cap"><div class="title">HVAC Design Session — Part 1</div><div class="issuer">ASHRAE CUET Student Branch · 2025 · 10 PDH</div></div>
       </div>
-      <div class="cert-card">
-        <div class="cert-img-slot">Add certificate image here<br>images/edge-cert.jpg</div>
-        <div class="cert-info">
-          <div class="title">Computer Fundamentals &amp; Office Applications</div>
-          <div class="issuer">EDGE Project, BCC &amp; CUET · 2025 · 60 hrs</div>
-        </div>
+      <div class="cert-tile">
+        <div class="img-slot"><b>Certificate</b>images/edge-cert.jpg</div>
+        <div class="cap"><div class="title">Computer Fundamentals &amp; Office Applications</div><div class="issuer">EDGE Project, BCC &amp; CUET · 2025 · 60 hrs</div></div>
       </div>
-      <div class="cert-card">
-        <div class="cert-img-slot">Add certificate image here<br>images/scholarship-hsc.jpg</div>
-        <div class="cert-info">
-          <div class="title">Government Merit Scholarship</div>
-          <div class="issuer">HSC Examination · 2020</div>
-        </div>
+      <div class="cert-tile">
+        <div class="img-slot"><b>Certificate</b>images/scholarship-hsc.jpg</div>
+        <div class="cap"><div class="title">Government Merit Scholarship</div><div class="issuer">HSC Examination · 2020</div></div>
       </div>
-      <div class="cert-card">
-        <div class="cert-img-slot">Add certificate image here<br>images/scholarship-ssc.jpg</div>
-        <div class="cert-info">
-          <div class="title">Government Merit Scholarship</div>
-          <div class="issuer">SSC Examination · 2018</div>
-        </div>
+      <div class="cert-tile">
+        <div class="img-slot"><b>Certificate</b>images/scholarship-ssc.jpg</div>
+        <div class="cap"><div class="title">Government Merit Scholarship</div><div class="issuer">SSC Examination · 2018</div></div>
       </div>
-      <div class="cert-card">
-        <div class="cert-img-slot">Add photo here<br>images/matarbari-visit.jpg</div>
-        <div class="cert-info">
-          <div class="title">Industrial Training Certificate</div>
-          <div class="issuer">Matarbari Power Plant, CPGCBL</div>
-        </div>
+      <div class="cert-tile">
+        <div class="img-slot"><b>Certificate</b>images/matarbari-cert.jpg</div>
+        <div class="cap"><div class="title">Industrial Training Certificate</div><div class="issuer">Matarbari Power Plant, CPGCBL</div></div>
       </div>
-      <div class="cert-card">
-        <div class="cert-img-slot">Add photo here<br>images/profile-or-extra.jpg</div>
-        <div class="cert-info">
-          <div class="title">Add another certificate</div>
-          <div class="issuer">Duplicate this card as needed</div>
-        </div>
+      <div class="cert-tile">
+        <div class="img-slot"><b>Add another</b>images/your-file-name.jpg</div>
+        <div class="cap"><div class="title">Add another certificate</div><div class="issuer">Duplicate this tile as needed</div></div>
       </div>
     </div>
   </div>
 </section>
 
-<section id="leadership">
+<section id="activities">
   <div class="wrap">
     <div class="two-col reveal">
       <div>
-        <div class="section-head" style="margin-bottom:24px;">
+        <div class="section-head" style="margin-bottom:22px;">
+          <div class="eyebrow">Recognition</div>
           <h2>Awards</h2>
-          <span class="idx">§ 08</span>
         </div>
         <ul class="simple-list">
           <li>
@@ -768,9 +728,9 @@
         </ul>
       </div>
       <div>
-        <div class="section-head" style="margin-bottom:24px;">
+        <div class="section-head" style="margin-bottom:22px;">
+          <div class="eyebrow">Involvement</div>
           <h2>Leadership</h2>
-          <span class="idx">§ 09</span>
         </div>
         <ul class="simple-list">
           <li>
@@ -794,35 +754,41 @@
 <footer id="contact">
   <div class="wrap">
     <div class="section-head reveal">
+      <div class="eyebrow">Get In Touch</div>
       <h2>Contact</h2>
-      <span class="idx">§ 10</span>
     </div>
     <div class="footer-grid reveal">
       <div>
-        <p style="color:var(--ink-dim); max-width:48ch;">Open to opportunities in mechanical design, materials engineering, and power systems. Reach out by email or LinkedIn — I usually reply within a day or two.</p>
+        <p style="color:var(--text-dim); max-width:48ch;">Open to opportunities in mechanical design, materials engineering, and power systems. The fastest way to reach me is by email or LinkedIn.</p>
         <div class="contact-links">
-          <a href="mailto:baset.czs2018@gmail.com">✉ baset.czs2018@gmail.com</a>
-          <a href="https://www.linkedin.com/in/al-baset/" target="_blank" rel="noopener">in linkedin.com/in/al-baset</a>
-          <a href="#" onclick="return false;">📍 North Racecourse, Kotwali, Cumilla Sadar-3500, BD</a>
+          <a href="mailto:baset.czs2018@gmail.com">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16v12H4z"/><path d="M4 6l8 7 8-7"/></svg>
+            baset.czs2018@gmail.com
+          </a>
+          <a href="https://www.linkedin.com/in/al-baset/" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+            linkedin.com/in/al-baset
+          </a>
+          <a href="#" onclick="return false;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+            North Racecourse, Kotwali, Cumilla Sadar-3500, BD
+          </a>
         </div>
       </div>
-      <div>
-        <div class="title-block" style="grid-template-columns:1fr 1fr;">
-          <div class="cell wide"><div class="k">Languages</div><div class="v">Bangla (Native) · English (Fluent)</div></div>
-          <div class="cell"><div class="k">Program</div><div class="v">BSc ME, CUET</div></div>
-          <div class="cell"><div class="k">Status</div><div class="v">Graduating Jul 2026</div></div>
-        </div>
+      <div class="footer-panel">
+        <div class="row"><span class="k">Languages</span><span class="v">Bangla · English</span></div>
+        <div class="row"><span class="k">Program</span><span class="v">BSc ME, CUET</span></div>
+        <div class="row"><span class="k">Status</span><span class="v">Graduating Jul 2026</span></div>
       </div>
     </div>
     <div class="foot-bottom">
-      <span>© 2026 Al Baset — Portfolio Sheet 1/1</span>
-      <span>Drawn with care · Built as a static site</span>
+      <span>© 2026 Al Baset — Portfolio</span>
+      <span>Built as a static site</span>
     </div>
   </div>
 </footer>
 
 <script>
-  // mobile nav toggle
   const navToggle = document.getElementById('navToggle');
   const navLinks = document.getElementById('navLinks');
   navToggle.addEventListener('click', () => {
@@ -834,7 +800,6 @@
     navToggle.setAttribute('aria-expanded', false);
   }));
 
-  // reveal on scroll
   const reveals = document.querySelectorAll('.reveal');
   const io = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -846,17 +811,17 @@
   }, { threshold: 0.12 });
   reveals.forEach(el => io.observe(el));
 
-  // gauge fill animation
-  const gauges = document.querySelectorAll('.gauge-track .fill');
-  const gio = new IntersectionObserver((entries) => {
+  const sections = document.querySelectorAll('section, header.hero');
+  const navA = document.querySelectorAll('.nav-links a');
+  const spy = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        entry.target.style.width = entry.target.dataset.width;
-        gio.unobserve(entry.target);
+        const id = entry.target.getAttribute('id');
+        navA.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
       }
     });
-  }, { threshold: 0.3 });
-  gauges.forEach(g => gio.observe(g));
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  sections.forEach(s => s.id && spy.observe(s));
 </script>
 
 </body>
