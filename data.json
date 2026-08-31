@@ -370,11 +370,11 @@
       },
       {
         "k": "Status",
-        "v": "Graduating Jul 2026"
+        "v": "Graduated Jul 2026"
       }
     ],
     "copyright": "© 2026 Al Baset — Portfolio",
-    "tagline": "Built as a static site"
+    "tagline": ""
   },
   "sectionVisibility": {
     "about": true,
