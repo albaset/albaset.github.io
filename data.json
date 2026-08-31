@@ -59,7 +59,11 @@
     "role": "Mechanical Engineering Graduate",
     "description": "Mechanical Engineering student at Chittagong University of Engineering and Technology (CUET) with hands-on experience in materials fabrication, CAD design, and engineering analysis. My research focuses on hybrid Al–Cu metal matrix composites reinforced with SiC and fly ash.",
     "location": "Cumilla, Bangladesh",
-    "photo": "images/hero-photo-1788158634821.jpg",
+    "photo": {
+      "src": "images/hero-photo-1788158634821.jpg",
+      "alt": "",
+      "hidden": false
+    },
     "photoCaption": "At CUET — Department of Mechanical Engineering",
     "cvFile": "CV.pdf",
     "ctaLabel": "Contact me"
@@ -105,7 +109,11 @@
       "I aspire to build a career in materials and mechanical engineering research, and I am currently exploring graduate study opportunities where I can apply engineering principles to solve practical problems."
     ],
     "quote": "",
-    "photo": "",
+    "photo": {
+      "src": "",
+      "alt": "",
+      "hidden": false
+    },
     "interests": [
       "Metal Matrix Composites",
       "Materials Engineering",
@@ -155,13 +163,21 @@
     "duration": "Oct 2025 – Jul 2026",
     "images": [
       {
-        "src": "",
+        "src": {
+          "src": "",
+          "alt": "",
+          "hidden": false
+        },
         "alt": "Stir casting fabrication",
         "label": "Fabrication photo",
         "path": "images/research-1.jpg"
       },
       {
-        "src": "",
+        "src": {
+          "src": "",
+          "alt": "",
+          "hidden": false
+        },
         "alt": "Mechanical/corrosion testing",
         "label": "Testing photo",
         "path": "images/research-2.jpg"
@@ -181,13 +197,21 @@
       ],
       "images": [
         {
-          "src": "",
+          "src": {
+            "src": "",
+            "alt": "",
+            "hidden": false
+          },
           "alt": "Matarbari Power Plant training",
           "label": "Training photo",
           "path": "images/matarbari-1.jpg"
         },
         {
-          "src": "",
+          "src": {
+            "src": "",
+            "alt": "",
+            "hidden": false
+          },
           "alt": "Matarbari Power Plant training",
           "label": "Training photo",
           "path": "images/matarbari-2.jpg"
@@ -202,13 +226,21 @@
         "desc": "Gained practical exposure to refrigerator, air-conditioner, and PCB manufacturing processes, including assembly operations, production systems, and quality control procedures.",
         "images": [
           {
-            "src": "",
+            "src": {
+              "src": "",
+              "alt": "",
+              "hidden": false
+            },
             "alt": "Walton Hi-Tech Industries visit",
             "label": "Photo",
             "path": "images/walton-1.jpg"
           },
           {
-            "src": "",
+            "src": {
+              "src": "",
+              "alt": "",
+              "hidden": false
+            },
             "alt": "Walton Hi-Tech Industries visit",
             "label": "Photo",
             "path": "images/walton-2.jpg"
@@ -221,13 +253,21 @@
         "desc": "Observed cold-rolled steel manufacturing, boiler operations, and warehouse management systems, along with galvanized and corrugated sheet production processes.",
         "images": [
           {
-            "src": "",
+            "src": {
+              "src": "",
+              "alt": "",
+              "hidden": false
+            },
             "alt": "S. Alam Cold Rolled Steels visit",
             "label": "Photo",
             "path": "images/salam-1.jpg"
           },
           {
-            "src": "",
+            "src": {
+              "src": "",
+              "alt": "",
+              "hidden": false
+            },
             "alt": "S. Alam Cold Rolled Steels visit",
             "label": "Photo",
             "path": "images/salam-2.jpg"
@@ -272,7 +312,11 @@
     {
       "tag": "SolidWorks · Assembly Design",
       "title": "Turbo Pump Design & Modeling",
-      "image": "",
+      "image": {
+        "src": "",
+        "alt": "",
+        "hidden": false
+      },
       "path": "images/turbo-pump.jpg",
       "label": "Turbo pump render",
       "bullets": [
@@ -284,7 +328,11 @@
     {
       "tag": "SolidWorks · Motion Analysis",
       "title": "Wankel Engine Design & Motion Analysis",
-      "image": "",
+      "image": {
+        "src": "",
+        "alt": "",
+        "hidden": false
+      },
       "path": "images/wankel-engine.jpg",
       "label": "Wankel engine render",
       "bullets": [
@@ -298,31 +346,51 @@
     {
       "title": "HVAC Design Session — Part 1",
       "issuer": "ASHRAE CUET Student Branch · 2025 · 10 PDH",
-      "image": "",
+      "image": {
+        "src": "",
+        "alt": "",
+        "hidden": false
+      },
       "path": "images/hvac-cert.jpg"
     },
     {
       "title": "Computer Fundamentals & Office Applications",
       "issuer": "EDGE Project, BCC & CUET · 2025 · 60 hrs",
-      "image": "",
+      "image": {
+        "src": "",
+        "alt": "",
+        "hidden": false
+      },
       "path": "images/edge-cert.jpg"
     },
     {
       "title": "Government Merit Scholarship",
       "issuer": "HSC Examination · 2020",
-      "image": "",
+      "image": {
+        "src": "",
+        "alt": "",
+        "hidden": false
+      },
       "path": "images/scholarship-hsc.jpg"
     },
     {
       "title": "Government Merit Scholarship",
       "issuer": "SSC Examination · 2018",
-      "image": "",
+      "image": {
+        "src": "",
+        "alt": "",
+        "hidden": false
+      },
       "path": "images/scholarship-ssc.jpg"
     },
     {
       "title": "Industrial Training Certificate",
       "issuer": "Matarbari Power Plant, CPGCBL",
-      "image": "",
+      "image": {
+        "src": "",
+        "alt": "",
+        "hidden": false
+      },
       "path": "images/matarbari-cert.jpg"
     }
   ],
@@ -401,21 +469,5 @@
     "certificates",
     "activities"
   ],
-  "customSections": [
-    {
-      "eyebrow": "Enjoyment",
-      "title": "Travel ",
-      "lede": "I love traveling ",
-      "placement": "activities",
-      "background": "images/background-photo-optional-1788160430074.jpg",
-      "showInNav": false,
-      "navLabel": "",
-      "blocks": [
-        {
-          "type": "text",
-          "text": ""
-        }
-      ]
-    }
-  ]
+  "customSections": []
 }
