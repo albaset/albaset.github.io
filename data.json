@@ -390,6 +390,7 @@
     "certificates": true,
     "activities": true
   },
+  "sectionOrder": ["about", "education", "research", "experience", "skills", "projects", "certificates", "activities"],
   "customSections": [
     {
       "eyebrow": "",
