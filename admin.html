@@ -331,6 +331,33 @@
     return wrap;
   }
 
+  function pdfField(labelText, obj, key, defaultFileName){
+    const wrap = document.createElement('div');
+    wrap.className = 'field';
+    const span = document.createElement('span'); span.textContent = labelText; wrap.appendChild(span);
+    const status = document.createElement('div');
+    status.style.cssText = 'font-size:0.82rem; color:var(--text-dim); margin-bottom:8px;';
+    status.textContent = obj[key] ? ('Current file: ' + obj[key]) : 'No file uploaded yet — the download button will not work until you add one.';
+    wrap.appendChild(status);
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file'; fileInput.accept = 'application/pdf';
+    fileInput.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if(!file) return;
+      const base64 = await fileToBase64(file);
+      const path = obj[key] || defaultFileName;
+      obj[key] = path;
+      state.pendingImages.push({path, base64});
+      status.textContent = 'Selected "' + file.name + '" — will upload as ' + path + ' when you click "Save to GitHub".';
+    });
+    wrap.appendChild(fileInput);
+    const hint = document.createElement('div');
+    hint.style.cssText = 'font-size:0.72rem; color:#9399A6; margin-top:4px;';
+    hint.textContent = 'PDF file, ideally under 2 MB';
+    wrap.appendChild(hint);
+    return wrap;
+  }
+
   function selectField(labelText, value, options, onChange){
     const wrap = document.createElement('label');
     wrap.className = 'field';
@@ -518,7 +545,8 @@
     b.appendChild(textField('Short description', h.description, v => h.description = v, true));
     b.appendChild(textField('Location', h.location, v => h.location = v));
     b.appendChild(textField('Contact button label', h.ctaLabel, v => h.ctaLabel = v));
-    b.appendChild(textField('CV file name (upload the PDF to your repo with this exact name)', h.cvFile, v => h.cvFile = v));
+    if(!h.cvFile) h.cvFile = 'CV.pdf';
+    b.appendChild(pdfField('Your CV / resume (PDF)', h, 'cvFile', 'CV.pdf'));
     b.appendChild(imageField('Hero photo', h, 'photo', 'Portrait photo works best, e.g. 900×1050px (roughly 6:7)'));
     b.appendChild(textField('Photo caption', h.photoCaption, v => h.photoCaption = v));
   }
