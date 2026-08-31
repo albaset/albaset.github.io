@@ -421,6 +421,22 @@
     return wrap;
   }
 
+  function itemVisibleToggle(item){
+    const wrap = document.createElement('label');
+    wrap.style.cssText = 'display:flex; align-items:center; gap:6px; font-size:0.78rem; color:var(--text-dim); margin-bottom:12px; cursor:pointer;';
+    const chk = document.createElement('input');
+    chk.type = 'checkbox';
+    chk.style.width = 'auto';
+    chk.checked = item.visible !== false;
+    chk.addEventListener('change', () => { item.visible = chk.checked; });
+    wrap.appendChild(chk);
+    const span = document.createElement('span');
+    span.textContent = 'Show this entry on the site';
+    span.style.margin = '0';
+    wrap.appendChild(span);
+    return wrap;
+  }
+
   function headingFields(key, defaults){
     state.data.sectionHeadings = state.data.sectionHeadings || {};
     const sh = state.data.sectionHeadings[key] = state.data.sectionHeadings[key] || {};
@@ -479,9 +495,7 @@
     renderSimpleList('sec-awards', 'Awards', state.data.awards, [
       {k:'year', label:'Year'}, {k:'title', label:'Title'}, {k:'desc', label:'Description (optional)', multiline:true}
     ], 'award', 'activities', 'Show Awards & Leadership section on the website', 'awards', {eyebrow:'Recognition', title:'Awards'});
-    renderSimpleList('sec-leadership', 'Leadership', state.data.leadership, [
-      {k:'period', label:'Period'}, {k:'title', label:'Role'}, {k:'org', label:'Organization'}, {k:'desc', label:'Description (optional)', multiline:true}
-    ], 'entry', null, null, 'leadership', {eyebrow:'Involvement', title:'Leadership'});
+    renderLeadership();
     renderCustomSections();
     renderContact();
     $('formArea').classList.add('visible');
@@ -830,6 +844,7 @@
         const rm = document.createElement('button'); rm.className='remove-btn'; rm.type='button'; rm.textContent='Remove';
         rm.onclick = () => { items.splice(idx,1); draw(); };
         card.appendChild(rm);
+        card.appendChild(itemVisibleToggle(item));
         fields.forEach(f => {
           card.appendChild(textField(f.label, item[f.k], v => item[f.k] = v, f.multiline));
         });
@@ -843,6 +858,35 @@
       const blank = {}; fields.forEach(f => blank[f.k] = '');
       items.push(blank); draw();
     };
+    b.appendChild(addBtn);
+  }
+
+  function renderLeadership(){
+    const b = sectionBody('sec-leadership', 'Leadership');
+    b.appendChild(headingFields('leadership', {eyebrow:'Involvement', title:'Leadership'}));
+    const items = state.data.leadership = state.data.leadership || [];
+    const list = document.createElement('div');
+    function draw(){
+      list.innerHTML = '';
+      items.forEach((item, idx) => {
+        const card = document.createElement('div'); card.className='item-card';
+        const rm = document.createElement('button'); rm.className='remove-btn'; rm.type='button'; rm.textContent='Remove';
+        rm.onclick = () => { items.splice(idx,1); draw(); };
+        card.appendChild(rm);
+        card.appendChild(itemVisibleToggle(item));
+        card.appendChild(textField('Period', item.period, v => item.period = v));
+        card.appendChild(textField('Role', item.title, v => item.title = v));
+        card.appendChild(textField('Organization', item.org, v => item.org = v));
+        card.appendChild(textField('Description (optional)', item.desc, v => item.desc = v, true));
+        item.images = item.images || [];
+        imagesRepeater(card, item.images, 'Photo');
+        list.appendChild(card);
+      });
+    }
+    draw();
+    b.appendChild(list);
+    const addBtn = document.createElement('button'); addBtn.className='btn-add'; addBtn.type='button'; addBtn.textContent='+ Add entry';
+    addBtn.onclick = () => { items.push({period:'', title:'', org:'', desc:'', images:[]}); draw(); };
     b.appendChild(addBtn);
   }
 

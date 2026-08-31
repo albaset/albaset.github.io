@@ -332,8 +332,8 @@
   .cert-tile .cap .issuer{font-size:0.7rem; color:var(--text-dim);}
 
   /* AWARDS / ACTIVITIES */
-  .two-col{display:grid; grid-template-columns:1fr 1fr; gap:40px;}
-  @media (max-width:720px){.two-col{grid-template-columns:1fr;}}
+  .stack-section{margin-bottom:44px;}
+  .stack-section:last-child{margin-bottom:0;}
   .simple-list li{padding:16px 0; border-bottom:1px solid var(--border); display:flex; gap:14px; align-items:flex-start;}
   .simple-list li:first-child{padding-top:0;}
   .simple-list li:last-child{border-bottom:none;}
@@ -344,6 +344,7 @@
   .simple-list .txt strong{display:block; margin-bottom:3px; font-size:0.92rem;}
   .simple-list .txt span{display:block; color:var(--text-dim); font-size:0.84rem;}
   .simple-list .txt .desc{margin-top:4px; color:var(--text-dimmer); font-size:0.82rem; line-height:1.5;}
+  .activity-gallery{grid-template-columns:repeat(auto-fill, minmax(120px,1fr)); gap:8px; margin-top:10px; max-width:520px;}
 
   /* FOOTER / CONTACT */
   footer{padding:70px 0 40px; border-top:1px solid var(--border); background:var(--bg-soft);}
@@ -535,21 +536,19 @@
 
 <section id="activities">
   <div class="wrap">
-    <div class="two-col reveal">
-      <div>
-        <div class="section-head" style="margin-bottom:22px;">
-          <div class="eyebrow" id="awardsEyebrow"></div>
-          <h2 id="awardsTitle"></h2>
-        </div>
-        <ul class="simple-list" id="awardsList"></ul>
+    <div class="stack-section reveal">
+      <div class="section-head" style="margin-bottom:22px;">
+        <div class="eyebrow" id="awardsEyebrow"></div>
+        <h2 id="awardsTitle"></h2>
       </div>
-      <div>
-        <div class="section-head" style="margin-bottom:22px;">
-          <div class="eyebrow" id="leadershipEyebrow"></div>
-          <h2 id="leadershipTitle"></h2>
-        </div>
-        <ul class="simple-list" id="leadershipList"></ul>
+      <ul class="simple-list" id="awardsList"></ul>
+    </div>
+    <div class="stack-section reveal">
+      <div class="section-head" style="margin-bottom:22px;">
+        <div class="eyebrow" id="leadershipEyebrow"></div>
+        <h2 id="leadershipTitle"></h2>
       </div>
+      <ul class="simple-list" id="leadershipList"></ul>
     </div>
   </div>
 </section>
@@ -820,10 +819,10 @@
       </div>`).join('');
 
     // Awards / Leadership
-    el('awardsList').innerHTML = (data.awards || []).map(aw => `
+    el('awardsList').innerHTML = (data.awards || []).filter(aw => aw.visible !== false).map(aw => `
       <li><span class="mark">${aw.year || ''}</span><span class="txt"><strong>${aw.title || ''}</strong>${aw.desc ? `<span>${aw.desc}</span>` : ''}</span></li>`).join('');
-    el('leadershipList').innerHTML = (data.leadership || []).map(l => `
-      <li><span class="mark">${l.period || ''}</span><span class="txt"><strong>${l.title || ''}</strong>${l.org ? `<span>${l.org}</span>` : ''}${l.desc ? `<span class="desc">${l.desc}</span>` : ''}</span></li>`).join('');
+    el('leadershipList').innerHTML = (data.leadership || []).filter(l => l.visible !== false).map(l => `
+      <li><span class="mark">${l.period || ''}</span><span class="txt"><strong>${l.title || ''}</strong>${l.org ? `<span>${l.org}</span>` : ''}${l.desc ? `<span class="desc">${l.desc}</span>` : ''}${(l.images && l.images.length) ? `<div class="gallery-2 activity-gallery">${l.images.map(img => `<div class="g-item">${imgBlock(img.src, img.alt, 'g-placeholder', img.label || 'Photo', 'Add a photo from the admin page')}</div>`).join('')}</div>` : ''}</span></li>`).join('');
 
     // Contact
     const c = data.contact || {};
