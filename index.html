@@ -689,6 +689,10 @@
     Object.keys(SOCIAL).forEach(key => {
       if(s[key]) socialHtml += SOCIAL[key](s[key]);
     });
+    (s.custom || []).forEach(c => {
+      if(!c.url) return;
+      socialHtml += `<a href="${c.url}" target="_blank" rel="noopener" aria-label="${c.label || 'Link'}"><span class="icon-letter">${(c.label || '?').charAt(0).toUpperCase()}</span></a>`;
+    });
     el('heroSocial').innerHTML = socialHtml;
 
     // Stats
@@ -831,6 +835,10 @@
     if(s.email) linksHtml += `<a href="mailto:${s.email}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16v12H4z"/><path d="M4 6l8 7 8-7"/></svg>${s.email}</a>`;
     if(s.linkedin) linksHtml += `<a href="${s.linkedin}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>${s.linkedin.replace(/^https?:\/\//,'')}</a>`;
     if(c.address) linksHtml += `<a href="#" onclick="return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>${c.address}</a>`;
+    (s.custom || []).forEach(cl => {
+      if(!cl.url) return;
+      linksHtml += `<a href="${cl.url}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 14 21 3M21 3h-6M21 3v6"/><path d="M19 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h6"/></svg>${cl.label || cl.url}</a>`;
+    });
     el('contactLinks').innerHTML = linksHtml;
     el('footerPanel').innerHTML = (c.rows || []).map(row => `<div class="row"><span class="k">${row.k}</span><span class="v">${row.v}</span></div>`).join('');
     el('footCopyright').textContent = c.copyright || '';

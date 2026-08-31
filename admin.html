@@ -593,6 +593,31 @@
     row2.appendChild(textField('Personal website URL (leave blank to hide)', s.website, v => s.website = v));
     b.appendChild(row2);
     b.appendChild(textField('ResearchGate URL (leave blank to hide)', s.researchgate, v => s.researchgate = v));
+
+    const customLabel = document.createElement('p'); customLabel.className='hint'; customLabel.style.marginTop='18px';
+    customLabel.textContent = 'Any other link (GrabCAD, Behance, Twitter/X, personal blog, etc.) — shown with a round letter icon using the first letter of its label.';
+    b.appendChild(customLabel);
+    const custom = s.custom = s.custom || [];
+    const customWrap = document.createElement('div');
+    function drawCustom(){
+      customWrap.innerHTML = '';
+      custom.forEach((link, idx) => {
+        const card = document.createElement('div'); card.className='item-card';
+        const rm = document.createElement('button'); rm.className='remove-btn'; rm.type='button'; rm.textContent='Remove';
+        rm.onclick = () => { custom.splice(idx,1); drawCustom(); };
+        card.appendChild(rm);
+        const r = document.createElement('div'); r.className='row2';
+        r.appendChild(textField('Label (e.g. "GrabCAD")', link.label, v => link.label = v));
+        r.appendChild(textField('URL', link.url, v => link.url = v));
+        card.appendChild(r);
+        customWrap.appendChild(card);
+      });
+    }
+    drawCustom();
+    b.appendChild(customWrap);
+    const addCustom = document.createElement('button'); addCustom.className='btn-add'; addCustom.type='button'; addCustom.textContent='+ Add link';
+    addCustom.onclick = () => { custom.push({label:'', url:''}); drawCustom(); };
+    b.appendChild(addCustom);
   }
 
   function renderStats(){
@@ -1060,7 +1085,15 @@
   }
 
   // ---------- load / save ----------
+  function confirmDiscard(){
+    if(state.data && !confirm('Loading will discard any unsaved changes currently in the form. Continue?')){
+      return false;
+    }
+    return true;
+  }
+
   async function loadFromGithub(){
+    if(!confirmDiscard()) return;
     setStatus('Loading your content from GitHub...');
     try{
       const json = await ghGet('data.json');
@@ -1078,6 +1111,7 @@
   }
 
   async function loadLocal(){
+    if(!confirmDiscard()) return;
     setStatus('Loading local preview...');
     try{
       const res = await fetch('data.json', {cache:'no-store'});
