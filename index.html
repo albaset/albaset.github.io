@@ -892,9 +892,23 @@
     return section;
   }
 
+  const DEFAULT_SECTION_ORDER = ['about','education','research','experience','skills','projects','certificates','activities'];
+
+  function applySectionOrder(order){
+    const footer = document.querySelector('footer#contact');
+    const seen = {};
+    const finalOrder = (order || []).filter(k => DEFAULT_SECTION_ORDER.includes(k) && !seen[k] && (seen[k] = true));
+    DEFAULT_SECTION_ORDER.forEach(k => { if(!seen[k]) finalOrder.push(k); });
+    finalOrder.forEach(key => {
+      const el = document.getElementById(key);
+      if(el) footer.parentNode.insertBefore(el, footer);
+    });
+  }
+
   function applyVisibilityAndCustomSections(data){
+    applySectionOrder(data.sectionOrder);
     const vis = data.sectionVisibility || {};
-    const FIXED_KEYS = ['about','education','research','experience','skills','projects','certificates','activities'];
+    const FIXED_KEYS = DEFAULT_SECTION_ORDER;
     FIXED_KEYS.forEach(key => {
       const visible = vis[key] !== false;
       const sectionEl = document.getElementById(key);
