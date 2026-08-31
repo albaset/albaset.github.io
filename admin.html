@@ -150,6 +150,7 @@
 <footer class="action-bar">
   <div class="action-inner">
     <span id="status">Connect to GitHub or load a local preview to start editing.</span>
+    <button class="btn secondary" id="btnPreview">Preview my changes</button>
     <button class="btn secondary" id="btnDownload">Download data.json</button>
     <button class="btn primary" id="btnSave" disabled>Save to GitHub</button>
   </div>
@@ -285,6 +286,50 @@
     ta.value = (arr||[]).map(decodeEntities).join('\n');
     ta.addEventListener('input', () => onChange(ta.value.split('\n').map(s=>s.trim()).filter(Boolean)));
     wrap.appendChild(ta);
+    return wrap;
+  }
+
+  function simpleImageField(labelText, obj, key, sizeHint){
+    const wrap = document.createElement('div');
+    wrap.className = 'field image-field';
+    const preview = document.createElement('img');
+    preview.className = 'preview-thumb';
+    preview.src = obj[key] || '';
+    preview.style.visibility = obj[key] ? 'visible' : 'hidden';
+    wrap.appendChild(preview);
+    const meta = document.createElement('div');
+    meta.className = 'meta';
+    const span = document.createElement('span'); span.textContent = labelText; meta.appendChild(span);
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file'; fileInput.accept = 'image/*';
+    const warnEl = document.createElement('div');
+    warnEl.style.cssText = 'font-size:0.72rem; color:var(--red); margin-top:4px; display:none;';
+    warnEl.textContent = 'This photo is quite large and may load slowly on your site. Consider compressing it first (e.g. squoosh.app) — under 1 MB is ideal.';
+    fileInput.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if(!file) return;
+      preview.src = URL.createObjectURL(file);
+      preview.style.visibility = 'visible';
+      warnEl.style.display = file.size > 1.5 * 1024 * 1024 ? 'block' : 'none';
+      const base64 = await fileToBase64(file);
+      const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
+      const path = 'images/' + slugify(labelText) + '-' + Date.now() + '.' + ext;
+      obj[key] = path;
+      state.pendingImages.push({path, base64});
+    });
+    meta.appendChild(fileInput);
+    if(sizeHint){
+      const hintEl = document.createElement('div');
+      hintEl.style.cssText = 'font-size:0.72rem; color:#9399A6; margin-top:4px;';
+      hintEl.textContent = sizeHint;
+      meta.appendChild(hintEl);
+    }
+    meta.appendChild(warnEl);
+    wrap.appendChild(meta);
+    const clearBtn = document.createElement('button');
+    clearBtn.type = 'button'; clearBtn.className = 'btn-remove-small'; clearBtn.textContent = 'Remove photo';
+    clearBtn.onclick = () => { obj[key] = ''; preview.src=''; preview.style.visibility='hidden'; };
+    wrap.appendChild(clearBtn);
     return wrap;
   }
 
@@ -490,7 +535,7 @@
       imagesArr.forEach((img, idx) => {
         const card = document.createElement('div');
         card.style.cssText = 'border:1px solid var(--border);border-radius:10px;padding:10px;width:200px;';
-        card.appendChild(imageField(`${itemLabel} ${idx+1}`, img, 'src', 'Landscape photo works best, e.g. 1000×750px (4:3)'));
+        card.appendChild(simpleImageField(`${itemLabel} ${idx+1}`, img, 'src', 'Landscape photo works best, e.g. 1000×750px (4:3)'));
         card.appendChild(textField('Caption / alt text', img.alt, v => img.alt = v));
         const rm = document.createElement('button');
         rm.type='button'; rm.className='btn-remove-small'; rm.textContent='Remove';
@@ -544,26 +589,85 @@
     skills:'Technical Skills', projects:'Projects', certificates:'Certificates & Achievements', activities:'Awards & Leadership'
   };
 
+  function ensureCustomSectionIds(){
+    const customs = state.data.customSections = state.data.customSections || [];
+    customs.forEach((cs, idx) => {
+      if(!cs.id) cs.id = 'cs-' + idx + '-' + Date.now() + '-' + Math.random().toString(36).slice(2,6);
+    });
+    return customs;
+  }
+
+  function migratePageOrder(){
+    if(Array.isArray(state.data.pageOrder) && state.data.pageOrder.length) return;
+    const seen = {};
+    const fixed = (Array.isArray(state.data.sectionOrder) ? state.data.sectionOrder.filter(k => FIXED_SECTION_KEYS.includes(k)) : [])
+      .filter(k => !seen[k] && (seen[k] = true));
+    FIXED_SECTION_KEYS.forEach(k => { if(!seen[k]) fixed.push(k); });
+
+    const customs = ensureCustomSectionIds();
+    const anchors = ['home'].concat(FIXED_SECTION_KEYS);
+    const grouped = {};
+    customs.forEach(cs => {
+      const key = anchors.includes(cs.placement) ? cs.placement : 'end';
+      (grouped[key] = grouped[key] || []).push(cs.id);
+    });
+    const result = [];
+    if(grouped.home) result.push(...grouped.home);
+    fixed.forEach(key => {
+      result.push(key);
+      if(grouped[key]) result.push(...grouped[key]);
+    });
+    if(grouped.end) result.push(...grouped.end);
+    state.data.pageOrder = result;
+  }
+
+  function syncPageOrder(){
+    ensureCustomSectionIds();
+    migratePageOrder();
+    const customIds = (state.data.customSections || []).map(cs => cs.id);
+    const valid = new Set(FIXED_SECTION_KEYS.concat(customIds));
+    const order = state.data.pageOrder.filter(e => valid.has(e));
+    const seen = new Set(order);
+    FIXED_SECTION_KEYS.forEach(k => { if(!seen.has(k)){ order.push(k); seen.add(k); } });
+    customIds.forEach(id => { if(!seen.has(id)){ order.push(id); seen.add(id); } });
+    state.data.pageOrder = order;
+    return order;
+  }
+
   function renderSectionOrder(){
     const b = sectionBody('sec-order', 'Section Order');
     const intro = document.createElement('p'); intro.className='hint'; intro.style.marginTop='-10px';
-    intro.textContent = 'Control the order these sections appear on the page, top to bottom. (Home always comes first and Contact always comes last.) Custom sections below can still be placed relative to any of these.';
+    intro.textContent = 'Control the order every section appears on the page, top to bottom — including your custom sections below. (Home always comes first and Contact always comes last.)';
     b.appendChild(intro);
 
-    if(!Array.isArray(state.data.sectionOrder)) state.data.sectionOrder = FIXED_SECTION_KEYS.slice();
-    const order = state.data.sectionOrder = state.data.sectionOrder.filter(k => FIXED_SECTION_KEYS.includes(k));
-    FIXED_SECTION_KEYS.forEach(k => { if(!order.includes(k)) order.push(k); });
+    const order = syncPageOrder();
+    const customById = {};
+    (state.data.customSections || []).forEach(cs => { customById[cs.id] = cs; });
+
+    function labelFor(entry){
+      if(FIXED_SECTION_KEYS.includes(entry)) return FIXED_SECTION_LABELS[entry];
+      const cs = customById[entry];
+      return (cs && (cs.title || cs.eyebrow)) || 'Untitled custom section';
+    }
 
     const list = document.createElement('div');
     function draw(){
       list.innerHTML = '';
-      order.forEach((key, idx) => {
+      order.forEach((entry, idx) => {
         const row = document.createElement('div');
         row.style.cssText = 'display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 14px; border:1px solid var(--border); border-radius:10px; margin-bottom:8px; background:#FBFCFE;';
+        const labelWrap = document.createElement('div');
         const label = document.createElement('span');
-        label.textContent = FIXED_SECTION_LABELS[key] || key;
+        label.textContent = labelFor(entry);
         label.style.fontWeight = '600';
-        row.appendChild(label);
+        labelWrap.appendChild(label);
+        if(!FIXED_SECTION_KEYS.includes(entry)){
+          const tag = document.createElement('span');
+          tag.textContent = ' — custom section';
+          tag.style.cssText = 'font-size:0.74rem; color:var(--text-dim); font-weight:400;';
+          labelWrap.appendChild(tag);
+        }
+        row.appendChild(labelWrap);
         const btns = document.createElement('div'); btns.style.cssText = 'display:flex; gap:8px;';
         const upBtn = document.createElement('button'); upBtn.type='button'; upBtn.className='btn-remove-small'; upBtn.textContent='↑ Move up';
         upBtn.disabled = idx===0;
@@ -1003,18 +1107,6 @@
 
   const BLOCK_TYPES = ['text','list','gallery','cards'];
   const BLOCK_LABELS = {text:'Paragraph text', list:'Bullet list', gallery:'Photo gallery', cards:'Card grid (photo + title + text, repeatable)'};
-  const PLACEMENTS = [
-    {v:'home', label:'Right after the intro (top)'},
-    {v:'about', label:'After "About"'},
-    {v:'education', label:'After "Education"'},
-    {v:'research', label:'After "Research & Thesis"'},
-    {v:'experience', label:'After "Industrial Experience"'},
-    {v:'skills', label:'After "Technical Skills"'},
-    {v:'projects', label:'After "Projects"'},
-    {v:'certificates', label:'After "Certificates"'},
-    {v:'activities', label:'After "Awards & Leadership"'},
-    {v:'end', label:'At the very end (just above Contact)'}
-  ];
 
   function renderCustomSections(){
     const b = sectionBody('sec-custom', 'Custom Sections');
@@ -1030,25 +1122,26 @@
       sections.forEach((cs, idx) => {
         const card = document.createElement('div'); card.className='item-card';
         const rm = document.createElement('button'); rm.className='remove-btn'; rm.type='button'; rm.textContent='Remove section';
-        rm.onclick = () => { if(confirm('Remove this whole section?')){ sections.splice(idx,1); drawSections(); } };
+        rm.onclick = () => {
+          if(confirm('Remove this whole section?')){
+            const removedId = cs.id;
+            sections.splice(idx,1);
+            if(Array.isArray(state.data.pageOrder)) state.data.pageOrder = state.data.pageOrder.filter(e => e !== removedId);
+            drawSections();
+            renderSectionOrder();
+          }
+        };
         card.appendChild(rm);
 
-        const moveRow = document.createElement('div'); moveRow.style.cssText='display:flex;gap:8px;margin-bottom:14px;';
-        const upBtn = document.createElement('button'); upBtn.type='button'; upBtn.className='btn-remove-small'; upBtn.textContent='↑ Move up';
-        upBtn.disabled = idx===0;
-        upBtn.onclick = () => { [sections[idx-1], sections[idx]] = [sections[idx], sections[idx-1]]; drawSections(); };
-        const downBtn = document.createElement('button'); downBtn.type='button'; downBtn.className='btn-remove-small'; downBtn.textContent='↓ Move down';
-        downBtn.disabled = idx===sections.length-1;
-        downBtn.onclick = () => { [sections[idx+1], sections[idx]] = [sections[idx], sections[idx+1]]; drawSections(); };
-        moveRow.appendChild(upBtn); moveRow.appendChild(downBtn);
-        card.appendChild(moveRow);
+        const posNote = document.createElement('p'); posNote.className='hint'; posNote.style.marginTop='0';
+        posNote.textContent = 'Its position on the page is set in the "Section Order" panel above.';
+        card.appendChild(posNote);
 
         const row = document.createElement('div'); row.className='row2';
-        row.appendChild(textField('Eyebrow (small label above the title)', cs.eyebrow, v => cs.eyebrow = v));
-        row.appendChild(textField('Section title', cs.title, v => cs.title = v));
+        row.appendChild(textField('Eyebrow (small label above the title)', cs.eyebrow, v => { cs.eyebrow = v; }));
+        row.appendChild(textField('Section title', cs.title, v => { cs.title = v; }));
         card.appendChild(row);
         card.appendChild(textField('Intro text (optional)', cs.lede, v => cs.lede = v, true));
-        card.appendChild(selectFieldLabeled('Where should it appear on the page?', cs.placement || 'end', PLACEMENTS, v => cs.placement = v));
         card.appendChild(imageField('Background photo (optional)', cs, 'background', 'Wide banner photo, e.g. 1600×900px or larger — it fills the whole section width'));
 
         const navRow = document.createElement('div'); navRow.style.cssText='display:flex; gap:14px; align-items:flex-end; margin-bottom:14px; flex-wrap:wrap;';
@@ -1129,8 +1222,11 @@
     b.appendChild(list);
     const addSection = document.createElement('button'); addSection.className='btn-add'; addSection.type='button'; addSection.textContent='+ Add new section';
     addSection.onclick = () => {
-      sections.push({eyebrow:'', title:'', lede:'', placement:'end', background:'', showInNav:false, navLabel:'', blocks:[{type:'text', text:''}]});
+      const id = 'cs-' + sections.length + '-' + Date.now() + '-' + Math.random().toString(36).slice(2,6);
+      sections.push({id, eyebrow:'', title:'', lede:'', background:'', showInNav:false, navLabel:'', blocks:[{type:'text', text:''}]});
+      if(Array.isArray(state.data.pageOrder)) state.data.pageOrder.push(id);
       drawSections();
+      renderSectionOrder();
     };
     b.appendChild(addSection);
   }
@@ -1244,6 +1340,16 @@
     URL.revokeObjectURL(url);
   }
 
+  function openPreview(){
+    if(!state.data){ setStatus('Load your content first.', 'err'); return; }
+    try{
+      localStorage.setItem('portfolioPreviewData', JSON.stringify(state.data));
+      window.open('index.html?preview=1', '_blank');
+    }catch(err){
+      setStatus('Could not open preview: ' + err.message, 'err');
+    }
+  }
+
   // ---------- wire up ----------
   loadSettings();
   $('btnConnect').addEventListener('click', () => {
@@ -1256,6 +1362,7 @@
   $('btnLoadLocal').addEventListener('click', loadLocal);
   $('btnSave').addEventListener('click', saveAll);
   $('btnDownload').addEventListener('click', downloadJson);
+  $('btnPreview').addEventListener('click', openPreview);
 
 })();
 </script>
