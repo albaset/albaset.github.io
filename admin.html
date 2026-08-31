@@ -289,12 +289,16 @@
   }
 
   function imageField(labelText, obj, key, sizeHint){
+    if(typeof obj[key] !== 'object' || obj[key] === null){
+      obj[key] = { src: obj[key] || '', alt: '', hidden: false };
+    }
+    const field = obj[key];
     const wrap = document.createElement('div');
     wrap.className = 'field image-field';
     const preview = document.createElement('img');
     preview.className = 'preview-thumb';
-    preview.src = obj[key] || '';
-    preview.style.visibility = obj[key] ? 'visible' : 'hidden';
+    preview.src = field.src || '';
+    preview.style.visibility = field.src ? 'visible' : 'hidden';
     wrap.appendChild(preview);
     const meta = document.createElement('div');
     meta.className = 'meta';
@@ -313,7 +317,8 @@
       const base64 = await fileToBase64(file);
       const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
       const path = 'images/' + slugify(labelText) + '-' + Date.now() + '.' + ext;
-      obj[key] = path;
+      field.src = path;
+      field.hidden = false;
       state.pendingImages.push({path, base64});
     });
     meta.appendChild(fileInput);
@@ -324,10 +329,32 @@
       meta.appendChild(hintEl);
     }
     meta.appendChild(warnEl);
+
+    const altInput = document.createElement('input');
+    altInput.type = 'text';
+    altInput.placeholder = 'Photo name / description (optional)';
+    altInput.value = field.alt || '';
+    altInput.style.cssText = 'width:100%; padding:8px 10px; margin-top:8px; border:1px solid var(--border); border-radius:8px; font-size:0.82rem; font:inherit;';
+    altInput.addEventListener('input', () => { field.alt = altInput.value; });
+    meta.appendChild(altInput);
+
+    const hideWrap = document.createElement('label');
+    hideWrap.style.cssText = 'display:flex; align-items:center; gap:6px; font-size:0.78rem; color:var(--text-dim); margin-top:8px; cursor:pointer;';
+    const hideChk = document.createElement('input');
+    hideChk.type = 'checkbox'; hideChk.style.width = 'auto';
+    hideChk.checked = !!field.hidden;
+    hideChk.addEventListener('change', () => { field.hidden = hideChk.checked; });
+    hideWrap.appendChild(hideChk);
+    const hideLabel = document.createElement('span');
+    hideLabel.textContent = 'Hide this photo on the site (keeps it uploaded)';
+    hideLabel.style.margin = '0';
+    hideWrap.appendChild(hideLabel);
+    meta.appendChild(hideWrap);
+
     wrap.appendChild(meta);
     const clearBtn = document.createElement('button');
     clearBtn.type = 'button'; clearBtn.className = 'btn-remove-small'; clearBtn.textContent = 'Remove photo';
-    clearBtn.onclick = () => { obj[key] = ''; preview.src=''; preview.style.visibility='hidden'; };
+    clearBtn.onclick = () => { field.src = ''; field.hidden = false; preview.src=''; preview.style.visibility='hidden'; };
     wrap.appendChild(clearBtn);
     return wrap;
   }
@@ -613,6 +640,21 @@
     row.appendChild(textField('Nav brand — first part', meta.brandFirst, v => meta.brandFirst = v));
     row.appendChild(textField('Nav brand — highlighted part', meta.brandLast, v => meta.brandLast = v));
     b.appendChild(row);
+
+    const brandColorWrap = document.createElement('div'); brandColorWrap.style.cssText = 'display:flex; align-items:center; gap:10px; margin-bottom:14px;';
+    const brandColorLabel = document.createElement('span'); brandColorLabel.textContent = 'Highlighted part color'; brandColorLabel.style.cssText = 'font-size:0.78rem; font-weight:600; color:var(--text-dim);';
+    brandColorWrap.appendChild(brandColorLabel);
+    const brandColorInput = document.createElement('input');
+    brandColorInput.type = 'color';
+    brandColorInput.value = meta.brandColor || (state.data.theme && state.data.theme.accent) || '#2555E7';
+    brandColorInput.style.cssText = 'width:34px; height:34px; border:none; padding:0; cursor:pointer; background:none;';
+    brandColorInput.addEventListener('input', () => { meta.brandColor = brandColorInput.value; });
+    brandColorWrap.appendChild(brandColorInput);
+    const resetBrandColor = document.createElement('button');
+    resetBrandColor.type = 'button'; resetBrandColor.className = 'btn-remove-small'; resetBrandColor.textContent = 'Match Accent color';
+    resetBrandColor.onclick = () => { meta.brandColor = ''; brandColorInput.value = (state.data.theme && state.data.theme.accent) || '#2555E7'; };
+    brandColorWrap.appendChild(resetBrandColor);
+    b.appendChild(brandColorWrap);
     b.appendChild(textField('Badge text', h.badge, v => h.badge = v));
     b.appendChild(textField('Full name', h.name, v => h.name = v));
     b.appendChild(textField('Role / headline', h.role, v => h.role = v));

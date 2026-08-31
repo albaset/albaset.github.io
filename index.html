@@ -599,6 +599,12 @@
     return `<img src="${src}" alt="${alt||''}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">${ph}`;
   }
 
+  function photoField(f){
+    if(!f) return { src:'', alt:'' };
+    if(typeof f === 'string') return { src:f, alt:'' };
+    return { src: f.hidden ? '' : (f.src || ''), alt: f.alt || '' };
+  }
+
   function el(id){ return document.getElementById(id); }
 
   function heading(sectionHeadings, key, defaults){
@@ -664,7 +670,8 @@
       document.title = data.meta.title || 'Portfolio';
       const m = document.querySelector('meta[name="description"]');
       if(m) m.setAttribute('content', data.meta.description || '');
-      el('navBrand').innerHTML = `${data.meta.brandFirst||''}<span> ${data.meta.brandLast||''}</span>`;
+      const brandColorAttr = data.meta.brandColor ? ` style="color:${data.meta.brandColor}"` : '';
+      el('navBrand').innerHTML = `${data.meta.brandFirst||''}<span${brandColorAttr}> ${data.meta.brandLast||''}</span>`;
     }
 
     // Nav CTA / CV
@@ -680,7 +687,8 @@
     el('heroDesc').textContent = h.description || '';
     el('heroLocation').textContent = h.location || '';
     el('heroCtaBtn').textContent = h.ctaLabel || 'Contact me';
-    el('heroPhoto').innerHTML = imgBlock(h.photo, h.name, 'ph-placeholder', 'Your photo', 'Add a photo from the admin page');
+    const heroPh = photoField(h.photo);
+    el('heroPhoto').innerHTML = imgBlock(heroPh.src, heroPh.alt || h.name, 'ph-placeholder', 'Your photo', 'Add a photo from the admin page');
     el('heroPhotoCaption').textContent = h.photoCaption || '';
 
     // Social
@@ -741,7 +749,8 @@
     const a = data.about || {};
     el('aboutText').innerHTML = (a.paragraphs || []).map(p => `<p>${p}</p>`).join('') +
       (a.quote ? `<div class="quote-block">${a.quote}</div>` : '');
-    el('aboutPhoto').innerHTML = imgBlock(a.photo, h.name, 'ph-placeholder', 'About photo', 'Add a photo from the admin page');
+    const aboutPh = photoField(a.photo);
+    el('aboutPhoto').innerHTML = imgBlock(aboutPh.src, aboutPh.alt || h.name, 'ph-placeholder', 'About photo', 'Add a photo from the admin page');
     el('aboutInterests').innerHTML = (a.interests || []).map(t => `<span class="tag">${t}</span>`).join('');
     el('aboutLanguages').innerHTML = (a.languages || []).map(l => `<div><div class="v">${l.name}</div><div class="sub">${l.level}</div></div>`).join('');
     el('interestsPanel').style.display = a.showInterests === false ? 'none' : '';
@@ -805,22 +814,28 @@
       </div>`).join('');
 
     // Projects
-    el('projGrid').innerHTML = (data.projects || []).map(p => `
+    el('projGrid').innerHTML = (data.projects || []).map(p => {
+      const ph = photoField(p.image);
+      return `
       <div class="proj-card">
-        <div class="proj-render">${imgBlock(p.image, p.title, '', p.label || 'Project render', 'Add a photo from the admin page')}</div>
+        <div class="proj-render">${imgBlock(ph.src, ph.alt || p.title, '', p.label || 'Project render', 'Add a photo from the admin page')}</div>
         <div class="proj-body">
           ${p.tag ? `<span class="proj-tag">${p.tag}</span>` : ''}
           <h3>${p.title || ''}</h3>
           ${(p.bullets && p.bullets.length) ? `<ul>${p.bullets.map(b => `<li>${b}</li>`).join('')}</ul>` : ''}
         </div>
-      </div>`).join('');
+      </div>`;
+    }).join('');
 
     // Certificates
-    el('certGrid').innerHTML = (data.certificates || []).map(c => `
+    el('certGrid').innerHTML = (data.certificates || []).map(c => {
+      const ph = photoField(c.image);
+      return `
       <div class="cert-tile">
-        <div class="img-slot">${imgBlock(c.image, c.title, '', 'Certificate', 'Add a photo from the admin page')}</div>
+        <div class="img-slot">${imgBlock(ph.src, ph.alt || c.title, '', 'Certificate', 'Add a photo from the admin page')}</div>
         <div class="cap"><div class="title">${c.title || ''}</div><div class="issuer">${c.issuer || ''}</div></div>
-      </div>`).join('');
+      </div>`;
+    }).join('');
 
     // Awards / Leadership
     el('awardsList').innerHTML = (data.awards || []).filter(aw => aw.visible !== false).map(aw => `
@@ -859,15 +874,18 @@
       return (block.images && block.images.length) ? `<div class="gallery-2">${block.images.map(img => `<div class="g-item">${imgBlock(img.src, img.alt, 'g-placeholder', img.label || 'Photo', 'Add a photo from the admin page')}</div>`).join('')}</div>` : '';
     }
     if(block.type === 'cards'){
-      return (block.cards && block.cards.length) ? `<div class="cb-cards">${block.cards.map(c => `
+      return (block.cards && block.cards.length) ? `<div class="cb-cards">${block.cards.map(c => {
+        const ph = photoField(c.image);
+        return `
         <div class="cb-card">
-          <div class="cb-card-media">${imgBlock(c.image, c.title, '', 'Photo', 'Add a photo from the admin page')}</div>
+          ${ph.src ? `<div class="cb-card-media"><img src="${ph.src}" alt="${ph.alt || c.title || ''}" loading="lazy"></div>` : ''}
           <div class="cb-card-body">
             ${c.title ? `<h3>${c.title}</h3>` : ''}
             ${c.subtitle ? `<div class="cb-card-sub">${c.subtitle}</div>` : ''}
             ${c.text ? `<p>${c.text}</p>` : ''}
           </div>
-        </div>`).join('')}</div>` : '';
+        </div>`;
+      }).join('')}</div>` : '';
     }
     return '';
   }
@@ -875,10 +893,11 @@
   function buildCustomSection(cs){
     const section = document.createElement('section');
     section.id = cs._id;
-    section.className = 'custom-section' + (cs.background ? ' has-bg dark-surface' : '');
-    if(cs.background){
+    const bgPh = photoField(cs.background);
+    section.className = 'custom-section' + (bgPh.src ? ' has-bg dark-surface' : '');
+    if(bgPh.src){
       section.style.backgroundColor = '#0A1424';
-      section.style.backgroundImage = `linear-gradient(180deg, rgba(10,20,36,.72), rgba(10,20,36,.85)), url('${cs.background}')`;
+      section.style.backgroundImage = `linear-gradient(180deg, rgba(10,20,36,.72), rgba(10,20,36,.85)), url('${bgPh.src}')`;
     }
     section.innerHTML = `
       <div class="wrap">
