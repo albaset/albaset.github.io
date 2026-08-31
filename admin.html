@@ -139,6 +139,7 @@
     <div class="panel" id="sec-certificates"><h2>Certificates &amp; Achievements</h2></div>
     <div class="panel" id="sec-awards"><h2>Awards</h2></div>
     <div class="panel" id="sec-leadership"><h2>Leadership</h2></div>
+    <div class="panel" id="sec-custom"><h2>Custom Sections</h2></div>
     <div class="panel" id="sec-contact"><h2>Contact Footer</h2></div>
   </div>
 
@@ -305,6 +306,38 @@
     return wrap;
   }
 
+  function selectFieldLabeled(labelText, value, options, onChange){
+    const wrap = document.createElement('label');
+    wrap.className = 'field';
+    const span = document.createElement('span'); span.textContent = labelText; wrap.appendChild(span);
+    const sel = document.createElement('select');
+    options.forEach(o => {
+      const opt = document.createElement('option'); opt.value = o.v; opt.textContent = o.label;
+      if(o.v === value) opt.selected = true;
+      sel.appendChild(opt);
+    });
+    sel.addEventListener('change', () => onChange(sel.value));
+    wrap.appendChild(sel);
+    return wrap;
+  }
+
+  function visibilityToggle(key, label){
+    state.data.sectionVisibility = state.data.sectionVisibility || {};
+    const wrap = document.createElement('label');
+    wrap.style.cssText = 'display:flex; align-items:center; gap:8px; margin-bottom:16px; padding:10px 12px; background:var(--blue-tint); border-radius:8px; font-size:0.84rem; cursor:pointer;';
+    const chk = document.createElement('input');
+    chk.type = 'checkbox';
+    chk.style.width = 'auto';
+    chk.checked = state.data.sectionVisibility[key] !== false;
+    chk.addEventListener('change', () => { state.data.sectionVisibility[key] = chk.checked; });
+    wrap.appendChild(chk);
+    const span = document.createElement('span');
+    span.textContent = label || 'Show this section on the website';
+    span.style.cssText = 'margin:0; font-weight:600; color:var(--text);';
+    wrap.appendChild(span);
+    return wrap;
+  }
+
   function imagesRepeater(container, imagesArr, itemLabel){
     const list = document.createElement('div');
     list.className = 'gallery-wrap';
@@ -344,10 +377,11 @@
     renderCertificates();
     renderSimpleList('sec-awards', 'Awards', state.data.awards, [
       {k:'year', label:'Year'}, {k:'title', label:'Title'}, {k:'desc', label:'Description'}
-    ], 'award');
+    ], 'award', 'activities', 'Show Awards & Leadership section on the website');
     renderSimpleList('sec-leadership', 'Leadership', state.data.leadership, [
       {k:'period', label:'Period'}, {k:'title', label:'Role'}, {k:'org', label:'Organization'}
     ], 'entry');
+    renderCustomSections();
     renderContact();
     $('formArea').classList.add('visible');
   }
@@ -424,6 +458,7 @@
 
   function renderAbout(){
     const b = sectionBody('sec-about', 'About');
+    b.appendChild(visibilityToggle('about'));
     const a = state.data.about = state.data.about || {};
     b.appendChild(listField('About paragraphs', a.paragraphs, v => a.paragraphs = v));
     const note = document.createElement('p'); note.className='hint'; note.style.marginTop='-10px';
@@ -458,6 +493,7 @@
 
   function renderEducation(){
     const b = sectionBody('sec-education', 'Education');
+    b.appendChild(visibilityToggle('education'));
     const items = state.data.education = state.data.education || [];
     const list = document.createElement('div');
     function draw(){
@@ -485,6 +521,7 @@
 
   function renderResearch(){
     const b = sectionBody('sec-research', 'Research & Thesis');
+    b.appendChild(visibilityToggle('research'));
     const r = state.data.research = state.data.research || {};
     b.appendChild(textField('Section intro line', r.lede, v => r.lede = v));
     b.appendChild(textField('Thesis / project title', r.title, v => r.title = v, true));
@@ -501,6 +538,7 @@
 
   function renderExperience(){
     const b = sectionBody('sec-experience', 'Industrial Experience & Visits');
+    b.appendChild(visibilityToggle('experience'));
     const ex = state.data.experience = state.data.experience || {};
     b.appendChild(textField('Section intro line', ex.lede, v => ex.lede = v));
 
@@ -545,6 +583,7 @@
 
   function renderSkills(){
     const b = sectionBody('sec-skills', 'Technical Skills');
+    b.appendChild(visibilityToggle('skills'));
     const groups = state.data.skills = state.data.skills || [];
     const list = document.createElement('div');
     function draw(){
@@ -568,6 +607,7 @@
 
   function renderProjects(){
     const b = sectionBody('sec-projects', 'Projects');
+    b.appendChild(visibilityToggle('projects'));
     const items = state.data.projects = state.data.projects || [];
     const list = document.createElement('div');
     function draw(){
@@ -593,6 +633,7 @@
 
   function renderCertificates(){
     const b = sectionBody('sec-certificates', 'Certificates & Achievements');
+    b.appendChild(visibilityToggle('certificates'));
     const items = state.data.certificates = state.data.certificates || [];
     const list = document.createElement('div');
     function draw(){
@@ -615,8 +656,9 @@
     b.appendChild(addBtn);
   }
 
-  function renderSimpleList(sectionId, titleText, items, fields, addLabel){
+  function renderSimpleList(sectionId, titleText, items, fields, addLabel, toggleKey, toggleLabel){
     const b = sectionBody(sectionId, titleText);
+    if(toggleKey) b.appendChild(visibilityToggle(toggleKey, toggleLabel));
     const list = document.createElement('div');
     function draw(){
       list.innerHTML = '';
@@ -639,6 +681,140 @@
       items.push(blank); draw();
     };
     b.appendChild(addBtn);
+  }
+
+  const BLOCK_TYPES = ['text','list','gallery','cards'];
+  const BLOCK_LABELS = {text:'Paragraph text', list:'Bullet list', gallery:'Photo gallery', cards:'Card grid (photo + title + text, repeatable)'};
+  const PLACEMENTS = [
+    {v:'home', label:'Right after the intro (top)'},
+    {v:'about', label:'After "About"'},
+    {v:'education', label:'After "Education"'},
+    {v:'research', label:'After "Research & Thesis"'},
+    {v:'experience', label:'After "Industrial Experience"'},
+    {v:'skills', label:'After "Technical Skills"'},
+    {v:'projects', label:'After "Projects"'},
+    {v:'certificates', label:'After "Certificates"'},
+    {v:'activities', label:'After "Awards & Leadership"'},
+    {v:'end', label:'At the very end (just above Contact)'}
+  ];
+
+  function renderCustomSections(){
+    const b = sectionBody('sec-custom', 'Custom Sections');
+    const intro = document.createElement('p'); intro.className='hint'; intro.style.marginTop='-10px';
+    intro.textContent = 'Add brand-new sections (like "Travel", "Hobbies", or "Publications") without any coding. Each one can have its own background photo and any mix of text, bullet lists, photo galleries, or card grids.';
+    b.appendChild(intro);
+
+    const sections = state.data.customSections = state.data.customSections || [];
+    const list = document.createElement('div');
+
+    function drawSections(){
+      list.innerHTML = '';
+      sections.forEach((cs, idx) => {
+        const card = document.createElement('div'); card.className='item-card';
+        const rm = document.createElement('button'); rm.className='remove-btn'; rm.type='button'; rm.textContent='Remove section';
+        rm.onclick = () => { if(confirm('Remove this whole section?')){ sections.splice(idx,1); drawSections(); } };
+        card.appendChild(rm);
+
+        const moveRow = document.createElement('div'); moveRow.style.cssText='display:flex;gap:8px;margin-bottom:14px;';
+        const upBtn = document.createElement('button'); upBtn.type='button'; upBtn.className='btn-remove-small'; upBtn.textContent='↑ Move up';
+        upBtn.disabled = idx===0;
+        upBtn.onclick = () => { [sections[idx-1], sections[idx]] = [sections[idx], sections[idx-1]]; drawSections(); };
+        const downBtn = document.createElement('button'); downBtn.type='button'; downBtn.className='btn-remove-small'; downBtn.textContent='↓ Move down';
+        downBtn.disabled = idx===sections.length-1;
+        downBtn.onclick = () => { [sections[idx+1], sections[idx]] = [sections[idx], sections[idx+1]]; drawSections(); };
+        moveRow.appendChild(upBtn); moveRow.appendChild(downBtn);
+        card.appendChild(moveRow);
+
+        const row = document.createElement('div'); row.className='row2';
+        row.appendChild(textField('Eyebrow (small label above the title)', cs.eyebrow, v => cs.eyebrow = v));
+        row.appendChild(textField('Section title', cs.title, v => cs.title = v));
+        card.appendChild(row);
+        card.appendChild(textField('Intro text (optional)', cs.lede, v => cs.lede = v, true));
+        card.appendChild(selectFieldLabeled('Where should it appear on the page?', cs.placement || 'end', PLACEMENTS, v => cs.placement = v));
+        card.appendChild(imageField('Background photo (optional)', cs, 'background'));
+
+        const navRow = document.createElement('div'); navRow.style.cssText='display:flex; gap:14px; align-items:flex-end; margin-bottom:14px; flex-wrap:wrap;';
+        const navCheckWrap = document.createElement('label'); navCheckWrap.style.cssText='display:flex; align-items:center; gap:8px; padding-bottom:10px;';
+        const navCheck = document.createElement('input'); navCheck.type='checkbox'; navCheck.style.width='auto'; navCheck.checked = !!cs.showInNav;
+        navCheck.addEventListener('change', () => cs.showInNav = navCheck.checked);
+        navCheckWrap.appendChild(navCheck);
+        const navCheckLabel = document.createElement('span'); navCheckLabel.textContent='Show in top menu'; navCheckLabel.style.margin='0';
+        navCheckWrap.appendChild(navCheckLabel);
+        navRow.appendChild(navCheckWrap);
+        navRow.appendChild(textField('Menu label', cs.navLabel, v => cs.navLabel = v));
+        card.appendChild(navRow);
+
+        const blocksWrap = document.createElement('div');
+        cs.blocks = cs.blocks || [];
+        function drawBlocks(){
+          blocksWrap.innerHTML = '';
+          cs.blocks.forEach((blk, bIdx) => {
+            const bcard = document.createElement('div');
+            bcard.style.cssText = 'border:1px dashed var(--border); border-radius:10px; padding:12px 14px; margin-bottom:10px;';
+            const bTop = document.createElement('div'); bTop.style.cssText='display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap;';
+            bTop.appendChild(selectFieldLabeled('Block type', blk.type, BLOCK_TYPES.map(t => ({v:t, label:BLOCK_LABELS[t]})), v => {
+              blk.type = v;
+              if(v==='text' && blk.text===undefined) blk.text = '';
+              if(v==='list' && blk.items===undefined) blk.items = [];
+              if(v==='gallery' && blk.images===undefined) blk.images = [];
+              if(v==='cards' && blk.cards===undefined) blk.cards = [];
+              drawBlocks();
+            }));
+            const rmB = document.createElement('button'); rmB.type='button'; rmB.className='btn-remove-small'; rmB.textContent='Remove block';
+            rmB.onclick = () => { cs.blocks.splice(bIdx,1); drawBlocks(); };
+            bTop.appendChild(rmB);
+            bcard.appendChild(bTop);
+
+            if(blk.type === 'text'){
+              bcard.appendChild(textField('Text', blk.text, v => blk.text = v, true));
+            } else if(blk.type === 'list'){
+              bcard.appendChild(listField('List items', blk.items, v => blk.items = v));
+            } else if(blk.type === 'gallery'){
+              blk.images = blk.images || [];
+              imagesRepeater(bcard, blk.images, 'Photo');
+            } else if(blk.type === 'cards'){
+              blk.cards = blk.cards || [];
+              const cardsWrap = document.createElement('div');
+              function drawCards(){
+                cardsWrap.innerHTML = '';
+                blk.cards.forEach((c, cIdx) => {
+                  const cc = document.createElement('div'); cc.style.cssText='border:1px solid var(--border); border-radius:8px; padding:10px; margin-bottom:8px;';
+                  cc.appendChild(textField('Card title', c.title, v => c.title = v));
+                  cc.appendChild(textField('Card subtitle (optional)', c.subtitle, v => c.subtitle = v));
+                  cc.appendChild(textField('Card text', c.text, v => c.text = v, true));
+                  cc.appendChild(imageField('Card photo', c, 'image'));
+                  const rmC = document.createElement('button'); rmC.type='button'; rmC.className='btn-remove-small'; rmC.textContent='Remove card';
+                  rmC.onclick = () => { blk.cards.splice(cIdx,1); drawCards(); };
+                  cc.appendChild(rmC);
+                  cardsWrap.appendChild(cc);
+                });
+              }
+              drawCards();
+              bcard.appendChild(cardsWrap);
+              const addCard = document.createElement('button'); addCard.type='button'; addCard.className='btn-add'; addCard.textContent='+ Add card';
+              addCard.onclick = () => { blk.cards.push({title:'', subtitle:'', text:'', image:''}); drawCards(); };
+              bcard.appendChild(addCard);
+            }
+            blocksWrap.appendChild(bcard);
+          });
+        }
+        drawBlocks();
+        card.appendChild(blocksWrap);
+        const addBlock = document.createElement('button'); addBlock.type='button'; addBlock.className='btn-add'; addBlock.textContent='+ Add block';
+        addBlock.onclick = () => { cs.blocks.push({type:'text', text:''}); drawBlocks(); };
+        card.appendChild(addBlock);
+
+        list.appendChild(card);
+      });
+    }
+    drawSections();
+    b.appendChild(list);
+    const addSection = document.createElement('button'); addSection.className='btn-add'; addSection.type='button'; addSection.textContent='+ Add new section';
+    addSection.onclick = () => {
+      sections.push({eyebrow:'', title:'', lede:'', placement:'end', background:'', showInNav:false, navLabel:'', blocks:[{type:'text', text:''}]});
+      drawSections();
+    };
+    b.appendChild(addSection);
   }
 
   function renderContact(){
