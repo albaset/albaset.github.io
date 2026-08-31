@@ -404,6 +404,11 @@
     return wrap;
   }
 
+  function sectionBackgroundField(key){
+    state.data.sectionBackgrounds = state.data.sectionBackgrounds || {};
+    return imageField('Section background photo (optional)', state.data.sectionBackgrounds, key, 'Wide banner photo, e.g. 1600×900px or larger — it fills the whole section width. A dark overlay is applied automatically for text readability. Leave empty to keep the plain background.');
+  }
+
   function pdfField(labelText, obj, key, defaultFileName){
     const wrap = document.createElement('div');
     wrap.className = 'field';
@@ -494,6 +499,22 @@
     return wrap;
   }
 
+  function boolToggleDefaultOff(obj, key, label){
+    const wrap = document.createElement('label');
+    wrap.style.cssText = 'display:flex; align-items:center; gap:8px; padding:10px 12px; background:var(--blue-tint); border-radius:8px; font-size:0.84rem; cursor:pointer;';
+    const chk = document.createElement('input');
+    chk.type = 'checkbox';
+    chk.style.width = 'auto';
+    chk.checked = obj[key] === true;
+    chk.addEventListener('change', () => { obj[key] = chk.checked; });
+    wrap.appendChild(chk);
+    const span = document.createElement('span');
+    span.textContent = label;
+    span.style.cssText = 'margin:0; font-weight:600; color:var(--text);';
+    wrap.appendChild(span);
+    return wrap;
+  }
+
   function itemVisibleToggle(item){
     const wrap = document.createElement('label');
     wrap.style.cssText = 'display:flex; align-items:center; gap:6px; font-size:0.78rem; color:var(--text-dim); margin-bottom:12px; cursor:pointer;';
@@ -568,7 +589,7 @@
     renderCertificates();
     renderSimpleList('sec-awards', 'Awards', state.data.awards, [
       {k:'year', label:'Year'}, {k:'title', label:'Title'}, {k:'desc', label:'Description (optional)', multiline:true}
-    ], 'award', 'activities', 'Show Awards & Leadership section on the website', 'awards', {eyebrow:'Recognition', title:'Awards'});
+    ], 'award', 'activities', 'Show Awards & Leadership section on the website', 'awards', {eyebrow:'Recognition', title:'Awards'}, 'activities');
     renderLeadership();
     renderCustomSections();
     renderContact();
@@ -732,6 +753,25 @@
 
     b.appendChild(colorPicker('Accent color', 'accent', ACCENT_PRESETS));
     b.appendChild(colorPicker('Dark background (intro & footer)', 'dark', DARK_PRESETS));
+
+    const fxLabel = document.createElement('div');
+    fxLabel.textContent = 'Photo effects';
+    fxLabel.style.cssText = 'font-size:0.78rem; font-weight:600; color:var(--text-dim); margin-bottom:10px;';
+    b.appendChild(fxLabel);
+    const fxHint = document.createElement('p'); fxHint.className = 'hint'; fxHint.style.marginTop = '-4px';
+    fxHint.textContent = 'Turn on any mix of hover effects for photos across your whole site (galleries, project renders, certificates, hero/about photos). Turn off anytime to go back to plain photos.';
+    b.appendChild(fxHint);
+    theme.effects = theme.effects || {};
+    const FX_OPTIONS = [
+      {key:'zoom', label:'Zoom in on hover'},
+      {key:'lift', label:'Lift + shadow on hover'},
+      {key:'grayscale', label:'Grayscale → color on hover'},
+      {key:'glow', label:'Glow border on hover'}
+    ];
+    const fxRow = document.createElement('div');
+    fxRow.style.cssText = 'display:flex; flex-direction:column; gap:8px; margin-bottom:22px;';
+    FX_OPTIONS.forEach(opt => { fxRow.appendChild(boolToggleDefaultOff(theme.effects, opt.key, opt.label)); });
+    b.appendChild(fxRow);
   }
 
   function renderHero(){
@@ -841,6 +881,7 @@
     const b = sectionBody('sec-about', 'About');
     b.appendChild(visibilityToggle('about'));
     b.appendChild(headingFields('about', {eyebrow:'About', title:'Who I Am'}));
+    b.appendChild(sectionBackgroundField('about'));
     const a = state.data.about = state.data.about || {};
     b.appendChild(listField('About paragraphs', a.paragraphs, v => a.paragraphs = v));
     const note = document.createElement('p'); note.className='hint'; note.style.marginTop='-10px';
@@ -880,6 +921,7 @@
     const b = sectionBody('sec-education', 'Education');
     b.appendChild(visibilityToggle('education'));
     b.appendChild(headingFields('education', {eyebrow:'Academic Credentials', title:'Education'}));
+    b.appendChild(sectionBackgroundField('education'));
     const items = state.data.education = state.data.education || [];
     const list = document.createElement('div');
     function draw(){
@@ -909,6 +951,7 @@
     const b = sectionBody('sec-research', 'Research & Thesis');
     b.appendChild(visibilityToggle('research'));
     b.appendChild(headingFields('research', {eyebrow:'Research & Thesis', title:'Undergraduate Research'}));
+    b.appendChild(sectionBackgroundField('research'));
     const r = state.data.research = state.data.research || {};
     b.appendChild(textField('Section intro line', r.lede, v => r.lede = v));
     b.appendChild(textField('Thesis / project title', r.title, v => r.title = v, true));
@@ -927,6 +970,7 @@
     const b = sectionBody('sec-experience', 'Industrial Experience & Visits');
     b.appendChild(visibilityToggle('experience'));
     b.appendChild(headingFields('experience', {eyebrow:'Industry', title:'Industrial Experience & Visits'}));
+    b.appendChild(sectionBackgroundField('experience'));
     const ex = state.data.experience = state.data.experience || {};
     b.appendChild(textField('Section intro line', ex.lede, v => ex.lede = v));
 
@@ -973,6 +1017,7 @@
     const b = sectionBody('sec-skills', 'Technical Skills');
     b.appendChild(visibilityToggle('skills'));
     b.appendChild(headingFields('skills', {eyebrow:'Capabilities', title:'Technical Skills'}));
+    b.appendChild(sectionBackgroundField('skills'));
     const groups = state.data.skills = state.data.skills || [];
     const list = document.createElement('div');
     function draw(){
@@ -998,6 +1043,7 @@
     const b = sectionBody('sec-projects', 'Projects');
     b.appendChild(visibilityToggle('projects'));
     b.appendChild(headingFields('projects', {eyebrow:'Design Work', title:'Projects'}));
+    b.appendChild(sectionBackgroundField('projects'));
     const items = state.data.projects = state.data.projects || [];
     const list = document.createElement('div');
     function draw(){
@@ -1025,6 +1071,7 @@
     const b = sectionBody('sec-certificates', 'Certificates & Achievements');
     b.appendChild(visibilityToggle('certificates'));
     b.appendChild(headingFields('certificates', {eyebrow:'Credentials', title:'Certificates & Achievements', lede:'Professional trainings, workshops and academic recognitions.'}));
+    b.appendChild(sectionBackgroundField('certificates'));
     const items = state.data.certificates = state.data.certificates || [];
     const list = document.createElement('div');
     function draw(){
@@ -1047,10 +1094,11 @@
     b.appendChild(addBtn);
   }
 
-  function renderSimpleList(sectionId, titleText, items, fields, addLabel, toggleKey, toggleLabel, headingKey, headingDefaults){
+  function renderSimpleList(sectionId, titleText, items, fields, addLabel, toggleKey, toggleLabel, headingKey, headingDefaults, bgKey){
     const b = sectionBody(sectionId, titleText);
     if(toggleKey) b.appendChild(visibilityToggle(toggleKey, toggleLabel));
     if(headingKey) b.appendChild(headingFields(headingKey, headingDefaults));
+    if(bgKey) b.appendChild(sectionBackgroundField(bgKey));
     const list = document.createElement('div');
     function draw(){
       list.innerHTML = '';
