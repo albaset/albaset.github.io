@@ -9,6 +9,18 @@
     "accent": "#2555E7",
     "dark": "#0A1424"
   },
+  "sectionHeadings": {
+    "about": { "eyebrow": "About", "title": "Who I Am" },
+    "education": { "eyebrow": "Academic Credentials", "title": "Education" },
+    "research": { "eyebrow": "Research & Thesis", "title": "Undergraduate Research" },
+    "experience": { "eyebrow": "Industry", "title": "Industrial Experience & Visits" },
+    "skills": { "eyebrow": "Capabilities", "title": "Technical Skills" },
+    "projects": { "eyebrow": "Design Work", "title": "Projects" },
+    "certificates": { "eyebrow": "Credentials", "title": "Certificates & Achievements", "lede": "Professional trainings, workshops and academic recognitions." },
+    "awards": { "eyebrow": "Recognition", "title": "Awards" },
+    "leadership": { "eyebrow": "Involvement", "title": "Leadership" },
+    "contact": { "eyebrow": "Get In Touch", "title": "Contact" }
+  },
   "hero": {
     "badge": "Mechanical Engineer · CUET",
     "name": "Al Baset",
@@ -31,11 +43,11 @@
     { "icon": "education", "color": "blue", "title": "Education", "sub": "B.Sc. in ME<br>CGPA 3.77/4.00" },
     { "icon": "research", "color": "violet", "title": "Research", "sub": "Materials &<br>Corrosion" },
     { "icon": "design", "color": "amber", "title": "Design", "sub": "CAD &<br>Simulation" },
-    { "icon": "goal", "color": "green", "title": "Goal", "sub": "Innovation<br>&amp; Impact" }
+    { "icon": "goal", "color": "green", "title": "Goal", "sub": "Innovation<br>& Impact" }
   ],
   "about": {
     "paragraphs": [
-      "I'm a final-year <strong>Mechanical Engineering</strong> student at Chittagong University of Engineering &amp; Technology (CUET), graduating in July 2026 with a CGPA of <strong>3.77 out of 4.00</strong>. I have a strong interest in materials engineering, design, manufacturing, and computational tools.",
+      "I'm a final-year <strong>Mechanical Engineering</strong> student at Chittagong University of Engineering & Technology (CUET), graduating in July 2026 with a CGPA of <strong>3.77 out of 4.00</strong>. I have a strong interest in materials engineering, design, manufacturing, and computational tools.",
       "My final-year thesis investigates <strong>SiC and fly ash reinforcement in hybrid Al-Cu metal matrix composites</strong>, combining hands-on fabrication (stir casting) with mechanical and corrosion testing. I've also spent time on the ground at one of Bangladesh's largest power plants and at manufacturing facilities, which shapes how I think about design for real processes and real operating conditions.",
       "I aspire to build a career in materials and mechanical engineering research, and I am currently exploring graduate study opportunities where I can apply engineering principles to solve practical problems."
     ],
@@ -48,7 +60,7 @@
     ]
   },
   "education": [
-    { "degree": "Bachelor of Science, Mechanical Engineering", "institution": "Chittagong University of Engineering &amp; Technology (CUET)", "score": "CGPA 3.77 / 4.00", "period": "Mar 2022 – Jul 2026" },
+    { "degree": "Bachelor of Science, Mechanical Engineering", "institution": "Chittagong University of Engineering & Technology (CUET)", "score": "CGPA 3.77 / 4.00", "period": "Mar 2022 – Jul 2026" },
     { "degree": "Higher Secondary School Certificate (HSC)", "institution": "Notre Dame College, Dhaka", "score": "GPA 5.00 / 5.00", "period": "Jul 2018 – Jan 2021" },
     { "degree": "Secondary School Certificate (SSC)", "institution": "Cumilla Zilla School, Cumilla", "score": "GPA 5.00 / 5.00", "period": "Jan 2013 – May 2018" }
   ],
@@ -106,15 +118,15 @@
     ]
   },
   "skills": [
-    { "group": "CAD &amp; Design", "items": ["SolidWorks — 2D Drawing", "3D Modeling", "Assembly Design &amp; Simulation"] },
-    { "group": "Programming &amp; Numerical Computing", "items": ["MATLAB", "FORTRAN", "C"] },
-    { "group": "Reference &amp; Academic Writing", "items": ["Mendeley"] },
+    { "group": "CAD & Design", "items": ["SolidWorks — 2D Drawing", "3D Modeling", "Assembly Design & Simulation"] },
+    { "group": "Programming & Numerical Computing", "items": ["MATLAB", "FORTRAN", "C"] },
+    { "group": "Reference & Academic Writing", "items": ["Mendeley"] },
     { "group": "Office Applications", "items": ["Microsoft Word", "Excel", "PowerPoint"] }
   ],
   "projects": [
     {
       "tag": "SolidWorks · Assembly Design",
-      "title": "Turbo Pump Design &amp; Modeling",
+      "title": "Turbo Pump Design & Modeling",
       "image": "",
       "path": "images/turbo-pump.jpg",
       "label": "Turbo pump render",
@@ -126,7 +138,7 @@
     },
     {
       "tag": "SolidWorks · Motion Analysis",
-      "title": "Wankel Engine Design &amp; Motion Analysis",
+      "title": "Wankel Engine Design & Motion Analysis",
       "image": "",
       "path": "images/wankel-engine.jpg",
       "label": "Wankel engine render",
@@ -139,7 +151,7 @@
   ],
   "certificates": [
     { "title": "HVAC Design Session — Part 1", "issuer": "ASHRAE CUET Student Branch · 2025 · 10 PDH", "image": "", "path": "images/hvac-cert.jpg" },
-    { "title": "Computer Fundamentals &amp; Office Applications", "issuer": "EDGE Project, BCC &amp; CUET · 2025 · 60 hrs", "image": "", "path": "images/edge-cert.jpg" },
+    { "title": "Computer Fundamentals & Office Applications", "issuer": "EDGE Project, BCC & CUET · 2025 · 60 hrs", "image": "", "path": "images/edge-cert.jpg" },
     { "title": "Government Merit Scholarship", "issuer": "HSC Examination · 2020", "image": "", "path": "images/scholarship-hsc.jpg" },
     { "title": "Government Merit Scholarship", "issuer": "SSC Examination · 2018", "image": "", "path": "images/scholarship-ssc.jpg" },
     { "title": "Industrial Training Certificate", "issuer": "Matarbari Power Plant, CPGCBL", "image": "", "path": "images/matarbari-cert.jpg" }
@@ -149,9 +161,9 @@
     { "year": "2018", "title": "Government Merit Scholarship", "desc": "Outstanding result, SSC Examination" }
   ],
   "leadership": [
-    { "period": "'25–'26", "title": "Joint Organizing Secretary", "org": "CUET Career Club" },
-    { "period": "'25–'26", "title": "Assistant Sponsor Secretary", "org": "CUET Automotive &amp; Mobility Society (CAMS)" },
-    { "period": "2023", "title": "Conference Volunteer", "org": "7th Int'l Conf. on Mechanical Engineering &amp; Renewable Energy, CUET" }
+    { "period": "'25–'26", "title": "Joint Organizing Secretary", "org": "CUET Career Club", "desc": "" },
+    { "period": "'25–'26", "title": "Assistant Sponsor Secretary", "org": "CUET Automotive & Mobility Society (CAMS)", "desc": "" },
+    { "period": "2023", "title": "Conference Volunteer", "org": "7th Int'l Conf. on Mechanical Engineering & Renewable Energy, CUET", "desc": "" }
   ],
   "contact": {
     "blurb": "Open to opportunities in mechanical design, materials engineering, and power systems. The fastest way to reach me is by email or LinkedIn.",

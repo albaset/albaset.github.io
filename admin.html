@@ -378,6 +378,23 @@
     return wrap;
   }
 
+  function headingFields(key, defaults){
+    state.data.sectionHeadings = state.data.sectionHeadings || {};
+    const sh = state.data.sectionHeadings[key] = state.data.sectionHeadings[key] || {};
+    if(sh.eyebrow === undefined) sh.eyebrow = defaults.eyebrow || '';
+    if(sh.title === undefined) sh.title = defaults.title || '';
+    const wrap = document.createElement('div');
+    const row = document.createElement('div'); row.className = 'row2';
+    row.appendChild(textField('Section label (small text above the heading)', sh.eyebrow, v => sh.eyebrow = v));
+    row.appendChild(textField('Section heading', sh.title, v => sh.title = v));
+    wrap.appendChild(row);
+    if(defaults.lede !== undefined){
+      if(sh.lede === undefined) sh.lede = defaults.lede;
+      wrap.appendChild(textField('Section intro line (optional)', sh.lede, v => sh.lede = v));
+    }
+    return wrap;
+  }
+
   function imagesRepeater(container, imagesArr, itemLabel){
     const list = document.createElement('div');
     list.className = 'gallery-wrap';
@@ -417,11 +434,11 @@
     renderProjects();
     renderCertificates();
     renderSimpleList('sec-awards', 'Awards', state.data.awards, [
-      {k:'year', label:'Year'}, {k:'title', label:'Title'}, {k:'desc', label:'Description'}
-    ], 'award', 'activities', 'Show Awards & Leadership section on the website');
+      {k:'year', label:'Year'}, {k:'title', label:'Title'}, {k:'desc', label:'Description (optional)', multiline:true}
+    ], 'award', 'activities', 'Show Awards & Leadership section on the website', 'awards', {eyebrow:'Recognition', title:'Awards'});
     renderSimpleList('sec-leadership', 'Leadership', state.data.leadership, [
-      {k:'period', label:'Period'}, {k:'title', label:'Role'}, {k:'org', label:'Organization'}
-    ], 'entry');
+      {k:'period', label:'Period'}, {k:'title', label:'Role'}, {k:'org', label:'Organization'}, {k:'desc', label:'Description (optional)', multiline:true}
+    ], 'entry', null, null, 'leadership', {eyebrow:'Involvement', title:'Leadership'});
     renderCustomSections();
     renderContact();
     $('formArea').classList.add('visible');
@@ -550,6 +567,7 @@
   function renderAbout(){
     const b = sectionBody('sec-about', 'About');
     b.appendChild(visibilityToggle('about'));
+    b.appendChild(headingFields('about', {eyebrow:'About', title:'Who I Am'}));
     const a = state.data.about = state.data.about || {};
     b.appendChild(listField('About paragraphs', a.paragraphs, v => a.paragraphs = v));
     const note = document.createElement('p'); note.className='hint'; note.style.marginTop='-10px';
@@ -585,6 +603,7 @@
   function renderEducation(){
     const b = sectionBody('sec-education', 'Education');
     b.appendChild(visibilityToggle('education'));
+    b.appendChild(headingFields('education', {eyebrow:'Academic Credentials', title:'Education'}));
     const items = state.data.education = state.data.education || [];
     const list = document.createElement('div');
     function draw(){
@@ -613,6 +632,7 @@
   function renderResearch(){
     const b = sectionBody('sec-research', 'Research & Thesis');
     b.appendChild(visibilityToggle('research'));
+    b.appendChild(headingFields('research', {eyebrow:'Research & Thesis', title:'Undergraduate Research'}));
     const r = state.data.research = state.data.research || {};
     b.appendChild(textField('Section intro line', r.lede, v => r.lede = v));
     b.appendChild(textField('Thesis / project title', r.title, v => r.title = v, true));
@@ -630,6 +650,7 @@
   function renderExperience(){
     const b = sectionBody('sec-experience', 'Industrial Experience & Visits');
     b.appendChild(visibilityToggle('experience'));
+    b.appendChild(headingFields('experience', {eyebrow:'Industry', title:'Industrial Experience & Visits'}));
     const ex = state.data.experience = state.data.experience || {};
     b.appendChild(textField('Section intro line', ex.lede, v => ex.lede = v));
 
@@ -675,6 +696,7 @@
   function renderSkills(){
     const b = sectionBody('sec-skills', 'Technical Skills');
     b.appendChild(visibilityToggle('skills'));
+    b.appendChild(headingFields('skills', {eyebrow:'Capabilities', title:'Technical Skills'}));
     const groups = state.data.skills = state.data.skills || [];
     const list = document.createElement('div');
     function draw(){
@@ -699,6 +721,7 @@
   function renderProjects(){
     const b = sectionBody('sec-projects', 'Projects');
     b.appendChild(visibilityToggle('projects'));
+    b.appendChild(headingFields('projects', {eyebrow:'Design Work', title:'Projects'}));
     const items = state.data.projects = state.data.projects || [];
     const list = document.createElement('div');
     function draw(){
@@ -725,6 +748,7 @@
   function renderCertificates(){
     const b = sectionBody('sec-certificates', 'Certificates & Achievements');
     b.appendChild(visibilityToggle('certificates'));
+    b.appendChild(headingFields('certificates', {eyebrow:'Credentials', title:'Certificates & Achievements', lede:'Professional trainings, workshops and academic recognitions.'}));
     const items = state.data.certificates = state.data.certificates || [];
     const list = document.createElement('div');
     function draw(){
@@ -747,9 +771,10 @@
     b.appendChild(addBtn);
   }
 
-  function renderSimpleList(sectionId, titleText, items, fields, addLabel, toggleKey, toggleLabel){
+  function renderSimpleList(sectionId, titleText, items, fields, addLabel, toggleKey, toggleLabel, headingKey, headingDefaults){
     const b = sectionBody(sectionId, titleText);
     if(toggleKey) b.appendChild(visibilityToggle(toggleKey, toggleLabel));
+    if(headingKey) b.appendChild(headingFields(headingKey, headingDefaults));
     const list = document.createElement('div');
     function draw(){
       list.innerHTML = '';
@@ -759,7 +784,7 @@
         rm.onclick = () => { items.splice(idx,1); draw(); };
         card.appendChild(rm);
         fields.forEach(f => {
-          card.appendChild(textField(f.label, item[f.k], v => item[f.k] = v));
+          card.appendChild(textField(f.label, item[f.k], v => item[f.k] = v, f.multiline));
         });
         list.appendChild(card);
       });
@@ -910,6 +935,7 @@
 
   function renderContact(){
     const b = sectionBody('sec-contact', 'Contact Footer');
+    b.appendChild(headingFields('contact', {eyebrow:'Get In Touch', title:'Contact'}));
     const c = state.data.contact = state.data.contact || {};
     b.appendChild(textField('Intro blurb', c.blurb, v => c.blurb = v, true));
     b.appendChild(textField('Address (shown as a non-clickable line)', c.address, v => c.address = v));
