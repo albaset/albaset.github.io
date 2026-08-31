@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Al Baset — Mechanical Engineer</title>
-<meta name="description" content="Portfolio of Al Baset, Mechanical Engineering undergraduate at CUET, specializing in materials, composites, and power systems.">
+<title>Portfolio</title>
+<meta name="description" content="">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -365,13 +365,20 @@
     display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
     font-size:0.76rem; color:var(--text-dimmer); padding-top:22px; border-top:1px solid var(--border);
   }
+
+  .admin-hint{
+    position:fixed; right:16px; bottom:16px; z-index:60;
+    background:var(--text); color:var(--bg); font-size:0.72rem; font-weight:600;
+    padding:9px 14px; border-radius:99px; opacity:0.55; transition:opacity 0.2s ease;
+  }
+  .admin-hint:hover{opacity:1;}
 </style>
 </head>
 <body>
 
 <nav>
   <div class="nav-inner">
-    <div class="nav-brand">AI<span> </span>Baset</div>
+    <div class="nav-brand" id="navBrand"></div>
     <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks" aria-label="Menu">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
     </button>
@@ -386,7 +393,7 @@
       <li><a href="#activities">Activities</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
-    <a class="nav-cta" href="CV.pdf" download>Download CV</a>
+    <a class="nav-cta" id="navCta" href="CV.pdf" download>Download CV</a>
   </div>
 </nav>
 
@@ -394,62 +401,28 @@
   <div class="wrap">
     <div class="hero-grid">
       <div>
-        <div class="hero-badge reveal">Mechanical Engineer · CUET</div>
-        <h1 class="name reveal">Al Baset</h1>
-        <div class="role reveal">Mechanical Engineering Graduate</div>
-        <p class="desc reveal">Mechanical Engineering student at Chittagong University of Engineering and Technology (CUET) with hands-on experience in materials fabrication, CAD design, and engineering analysis. My research focuses on hybrid Al–Cu metal matrix composites reinforced with SiC and fly ash.</p>
+        <div class="hero-badge reveal" id="heroBadge"></div>
+        <h1 class="name reveal" id="heroName"></h1>
+        <div class="role reveal" id="heroRole"></div>
+        <p class="desc reveal" id="heroDesc"></p>
         <div class="locline reveal">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
-          Cumilla, Bangladesh
+          <span id="heroLocation"></span>
         </div>
         <div class="hero-cta reveal">
-          <a class="btn solid" href="#contact">Contact me</a>
-          <a class="btn outline" href="CV.pdf" download>Download CV</a>
+          <a class="btn solid" href="#contact" id="heroCtaBtn"></a>
+          <a class="btn outline" id="heroCvBtn" href="CV.pdf" download>Download CV</a>
         </div>
-        <div class="social-row reveal">
-          <a href="https://www.linkedin.com/in/al-baset/" target="_blank" rel="noopener" aria-label="LinkedIn">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
-          </a>
-          <a href="mailto:baset.czs2018@gmail.com" aria-label="Email">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16v12H4z"/><path d="M4 6l8 7 8-7"/></svg>
-          </a>
-          <a href="#" aria-label="ResearchGate" onclick="return false;">
-            <span class="icon-letter">R</span>
-          </a>
-        </div>
+        <div class="social-row reveal" id="heroSocial"></div>
       </div>
 
       <div class="hero-photo-block reveal">
-        <div class="hero-photo">
-          <!-- Replace this whole placeholder div with: <img src="images/hero-photo.jpg" alt="Al Baset"> -->
-          <div class="ph-placeholder"><b>Your photo</b>images/hero-photo.jpg<br>(portrait orientation)</div>
-        </div>
-        <div class="photo-caption">At CUET — Department of Mechanical Engineering</div>
+        <div class="hero-photo" id="heroPhoto"></div>
+        <div class="photo-caption" id="heroPhotoCaption"></div>
       </div>
     </div>
 
-    <div class="stat-row reveal">
-      <div class="stat-card c-blue">
-        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/></svg></div>
-        <div class="title">Education</div>
-        <div class="sub">B.Sc. in ME<br>CGPA 3.77/4.00</div>
-      </div>
-      <div class="stat-card c-violet">
-        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3h6M10 3v5.5L5 18a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9.5V3"/></svg></div>
-        <div class="title">Research</div>
-        <div class="sub">Materials &amp;<br>Corrosion</div>
-      </div>
-      <div class="stat-card c-amber">
-        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9c.2.6.7 1 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></div>
-        <div class="title">Design</div>
-        <div class="sub">CAD &amp;<br>Simulation</div>
-      </div>
-      <div class="stat-card c-green">
-        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></div>
-        <div class="title">Goal</div>
-        <div class="sub">Innovation<br>&amp; Impact</div>
-      </div>
-    </div>
+    <div class="stat-row reveal" id="statRow"></div>
   </div>
 </header>
 
@@ -460,32 +433,16 @@
       <h2>Who I Am</h2>
     </div>
     <div class="about-grid">
-      <div class="about-text reveal">
-        <p>I'm a final-year <strong>Mechanical Engineering</strong> student at Chittagong University of Engineering &amp; Technology (CUET), graduating in July 2026 with a CGPA of <strong>3.77 out of 4.00</strong>. I have a strong interest in materials engineering, design, manufacturing, and computational tools.</p>
-        <p>My final-year thesis investigates <strong>SiC and fly ash reinforcement in hybrid Al-Cu metal matrix composites</strong>, combining hands-on fabrication (stir casting) with mechanical and corrosion testing. I've also spent time on the ground at one of Bangladesh's largest power plants and at manufacturing facilities, which shapes how I think about design for real processes and real operating conditions.</p>
-        <p>I aspire to build a career in materials and mechanical engineering research, and I am currently exploring graduate study opportunities where I can apply engineering principles to solve practical problems.</p>
-        <div class="quote-block">To apply engineering knowledge, hands-on fabrication skill, and analytical problem-solving toward developing practical, sustainable materials solutions — while continuing to grow as a researcher.</div>
-      </div>
+      <div class="about-text reveal" id="aboutText"></div>
       <div class="reveal">
-        <div class="about-photo">
-          <!-- Replace this whole placeholder div with: <img src="images/about-photo.jpg" alt="Al Baset at CUET"> -->
-          <div class="ph-placeholder"><b>About photo</b>images/about-photo.jpg</div>
-        </div>
+        <div class="about-photo" id="aboutPhoto"></div>
         <div class="about-panel">
           <div class="k">Research &amp; Professional Interests</div>
-          <div class="tag-list">
-            <span class="tag">Metal Matrix Composites</span>
-            <span class="tag">Materials Engineering</span>
-            <span class="tag">CAD &amp; Simulation</span>
-            <span class="tag">Power Systems</span>
-          </div>
+          <div class="tag-list" id="aboutInterests"></div>
         </div>
         <div class="about-panel">
           <div class="k">Languages</div>
-          <div class="info-chip-row">
-            <div><div class="v">Bangla</div><div class="sub">Native</div></div>
-            <div><div class="v">English</div><div class="sub">Fluent</div></div>
-          </div>
+          <div class="info-chip-row" id="aboutLanguages"></div>
         </div>
       </div>
     </div>
@@ -498,29 +455,7 @@
       <div class="eyebrow">Academic Credentials</div>
       <h2>Education</h2>
     </div>
-    <div class="edu-list reveal">
-      <div class="edu-card">
-        <div>
-          <div class="main">Bachelor of Science, Mechanical Engineering</div>
-          <div class="sub">Chittagong University of Engineering &amp; Technology (CUET)</div>
-        </div>
-        <div class="meta">CGPA 3.77 / 4.00<span class="period">Mar 2022 – Jul 2026</span></div>
-      </div>
-      <div class="edu-card">
-        <div>
-          <div class="main">Higher Secondary School Certificate (HSC)</div>
-          <div class="sub">Notre Dame College, Dhaka</div>
-        </div>
-        <div class="meta">GPA 5.00 / 5.00<span class="period">Jul 2018 – Jan 2021</span></div>
-      </div>
-      <div class="edu-card">
-        <div>
-          <div class="main">Secondary School Certificate (SSC)</div>
-          <div class="sub">Cumilla Zilla School, Cumilla</div>
-        </div>
-        <div class="meta">GPA 5.00 / 5.00<span class="period">Jan 2013 – May 2018</span></div>
-      </div>
-    </div>
+    <div class="edu-list reveal" id="eduList"></div>
   </div>
 </section>
 
@@ -529,32 +464,12 @@
     <div class="section-head reveal">
       <div class="eyebrow">Research &amp; Thesis</div>
       <h2>Undergraduate Research</h2>
-      <p class="section-lede">Fabrication, testing and analysis of a hybrid metal matrix composite.</p>
+      <p class="section-lede" id="researchLede"></p>
     </div>
-    <div class="abstract-panel reveal">
-      <h3>Analysis of SiC and Fly Ash Reinforcement on Mechanical and Corrosion Behavior of Hybrid Al-Cu Matrix Composites</h3>
-      <ul>
-        <li>Fabricated hybrid Al-Cu-SiC-Fly ash metal matrix composites using the stir casting technique.</li>
-        <li>Evaluated mechanical and corrosion performance of the resulting composite samples.</li>
-      </ul>
-      <div class="meta-row">
-        <div><span class="k">Institution</span><span class="v">CUET — Dept. of Mechanical Engineering</span></div>
-        <div><span class="k">Supervisor</span><span class="v">Dr. Md. Mahbubul Alam, Professor</span></div>
-        <div><span class="k">Duration</span><span class="v">Oct 2025 – Jul 2026</span></div>
-      </div>
-    </div>
+    <div class="abstract-panel reveal" id="researchAbstract"></div>
     <div class="reveal">
-      <div class="gallery-2">
-        <div class="g-item">
-          <!-- Replace with: <img src="images/research-1.jpg" alt="Stir casting fabrication"> -->
-          <div class="g-placeholder"><b>Fabrication photo</b>images/research-1.jpg</div>
-        </div>
-        <div class="g-item">
-          <!-- Replace with: <img src="images/research-2.jpg" alt="Mechanical/corrosion testing"> -->
-          <div class="g-placeholder"><b>Testing photo</b>images/research-2.jpg</div>
-        </div>
-      </div>
-      <div class="gallery-caption">Left: Stir casting fabrication of the composite samples · Right: Mechanical and corrosion testing</div>
+      <div class="gallery-2" id="researchGallery"></div>
+      <div class="gallery-caption" id="researchCaption"></div>
     </div>
   </div>
 </section>
@@ -564,65 +479,11 @@
     <div class="section-head reveal">
       <div class="eyebrow">Industry</div>
       <h2>Industrial Experience &amp; Visits</h2>
-      <p class="section-lede">Hands-on exposure to power generation and manufacturing industries.</p>
+      <p class="section-lede" id="expLede"></p>
     </div>
-
-    <div class="exp-main reveal">
-      <div class="head">
-        <span class="site">Matarbari 2×600 MW Ultra-Super Critical Coal-Fired Power Plant (CPGCBL)</span>
-        <span class="date">Dec 2025 – Jan 2026</span>
-      </div>
-      <span class="pos">Industrial Trainee</span>
-      <ul>
-        <li>Completed a three-week industrial training program at one of Bangladesh's most advanced ultra-supercritical coal-fired power plants.</li>
-        <li>Gained hands-on exposure to power plant operations, maintenance practices, industrial safety, and major mechanical systems including boilers, turbines, generators, and pumps.</li>
-      </ul>
-      <div class="gallery-2">
-        <div class="g-item">
-          <!-- Replace with: <img src="images/matarbari-1.jpg" alt="Matarbari Power Plant training"> -->
-          <div class="g-placeholder"><b>Training photo</b>images/matarbari-1.jpg</div>
-        </div>
-        <div class="g-item">
-          <!-- Replace with: <img src="images/matarbari-2.jpg" alt="Matarbari Power Plant training"> -->
-          <div class="g-placeholder"><b>Training photo</b>images/matarbari-2.jpg</div>
-        </div>
-      </div>
-      <div class="gallery-caption">Industrial training at Matarbari 2×600 MW Power Plant, CPGCBL</div>
-    </div>
-
+    <div class="exp-main reveal" id="expMain"></div>
     <div class="visit-subhead reveal">One-Day Industrial Visits</div>
-    <div class="visit-grid reveal">
-      <div class="visit-card">
-        <span class="site">Walton Hi-Tech Industries PLC</span>
-        <span class="date">Jul 2025</span>
-        <p>Gained practical exposure to refrigerator, air-conditioner, and PCB manufacturing processes, including assembly operations, production systems, and quality control procedures.</p>
-        <div class="gallery-2">
-          <div class="g-item">
-            <!-- Replace with: <img src="images/walton-1.jpg" alt="Walton Hi-Tech Industries visit"> -->
-            <div class="g-placeholder"><b>Photo</b>images/walton-1.jpg</div>
-          </div>
-          <div class="g-item">
-            <!-- Replace with: <img src="images/walton-2.jpg" alt="Walton Hi-Tech Industries visit"> -->
-            <div class="g-placeholder"><b>Photo</b>images/walton-2.jpg</div>
-          </div>
-        </div>
-      </div>
-      <div class="visit-card">
-        <span class="site">S. Alam Cold Rolled Steels Limited</span>
-        <span class="date">May 2024</span>
-        <p>Observed cold-rolled steel manufacturing, boiler operations, and warehouse management systems, along with galvanized and corrugated sheet production processes.</p>
-        <div class="gallery-2">
-          <div class="g-item">
-            <!-- Replace with: <img src="images/salam-1.jpg" alt="S. Alam Cold Rolled Steels visit"> -->
-            <div class="g-placeholder"><b>Photo</b>images/salam-1.jpg</div>
-          </div>
-          <div class="g-item">
-            <!-- Replace with: <img src="images/salam-2.jpg" alt="S. Alam Cold Rolled Steels visit"> -->
-            <div class="g-placeholder"><b>Photo</b>images/salam-2.jpg</div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <div class="visit-grid reveal" id="expVisits"></div>
   </div>
 </section>
 
@@ -632,38 +493,7 @@
       <div class="eyebrow">Capabilities</div>
       <h2>Technical Skills</h2>
     </div>
-    <div class="skill-groups reveal">
-      <div class="skill-group">
-        <h3>CAD &amp; Design</h3>
-        <div class="tag-list">
-          <span class="tag">SolidWorks — 2D Drawing</span>
-          <span class="tag">3D Modeling</span>
-          <span class="tag">Assembly Design &amp; Simulation</span>
-        </div>
-      </div>
-      <div class="skill-group">
-        <h3>Programming &amp; Numerical Computing</h3>
-        <div class="tag-list">
-          <span class="tag">MATLAB</span>
-          <span class="tag">FORTRAN</span>
-          <span class="tag">C</span>
-        </div>
-      </div>
-      <div class="skill-group">
-        <h3>Reference &amp; Academic Writing</h3>
-        <div class="tag-list">
-          <span class="tag">Mendeley</span>
-        </div>
-      </div>
-      <div class="skill-group">
-        <h3>Office Applications</h3>
-        <div class="tag-list">
-          <span class="tag">Microsoft Word</span>
-          <span class="tag">Excel</span>
-          <span class="tag">PowerPoint</span>
-        </div>
-      </div>
-    </div>
+    <div class="skill-groups reveal" id="skillGroups"></div>
   </div>
 </section>
 
@@ -673,38 +503,7 @@
       <div class="eyebrow">Design Work</div>
       <h2>Projects</h2>
     </div>
-    <div class="proj-grid reveal">
-      <div class="proj-card">
-        <div class="proj-render">
-          <!-- Replace with: <img src="images/turbo-pump.jpg" alt="Turbo pump CAD render"> -->
-          <div><b>Turbo pump render</b>images/turbo-pump.jpg</div>
-        </div>
-        <div class="proj-body">
-          <span class="proj-tag">SolidWorks · Assembly Design</span>
-          <h3>Turbo Pump Design &amp; Modeling</h3>
-          <ul>
-            <li>Developed a complete 3D CAD model of a turbo pump using SolidWorks.</li>
-            <li>Designed and assembled major components including the impeller, casing, and shaft assembly.</li>
-            <li>Generated detailed part and assembly drawings.</li>
-          </ul>
-        </div>
-      </div>
-      <div class="proj-card">
-        <div class="proj-render">
-          <!-- Replace with: <img src="images/wankel-engine.jpg" alt="Wankel engine CAD render"> -->
-          <div><b>Wankel engine render</b>images/wankel-engine.jpg</div>
-        </div>
-        <div class="proj-body">
-          <span class="proj-tag">SolidWorks · Motion Analysis</span>
-          <h3>Wankel Engine Design &amp; Motion Analysis</h3>
-          <ul>
-            <li>Designed and modeled a Wankel rotary engine in SolidWorks.</li>
-            <li>Conducted assembly validation and motion analysis of the rotor mechanism.</li>
-            <li>Prepared engineering drawings and assembly documentation.</li>
-          </ul>
-        </div>
-      </div>
-    </div>
+    <div class="proj-grid reveal" id="projGrid"></div>
   </div>
 </section>
 
@@ -715,32 +514,7 @@
       <h2>Certificates &amp; Achievements</h2>
       <p class="section-lede">Professional trainings, workshops and academic recognitions.</p>
     </div>
-    <div class="cert-grid reveal">
-      <div class="cert-tile">
-        <div class="img-slot"><b>Certificate</b>images/hvac-cert.jpg</div>
-        <div class="cap"><div class="title">HVAC Design Session — Part 1</div><div class="issuer">ASHRAE CUET Student Branch · 2025 · 10 PDH</div></div>
-      </div>
-      <div class="cert-tile">
-        <div class="img-slot"><b>Certificate</b>images/edge-cert.jpg</div>
-        <div class="cap"><div class="title">Computer Fundamentals &amp; Office Applications</div><div class="issuer">EDGE Project, BCC &amp; CUET · 2025 · 60 hrs</div></div>
-      </div>
-      <div class="cert-tile">
-        <div class="img-slot"><b>Certificate</b>images/scholarship-hsc.jpg</div>
-        <div class="cap"><div class="title">Government Merit Scholarship</div><div class="issuer">HSC Examination · 2020</div></div>
-      </div>
-      <div class="cert-tile">
-        <div class="img-slot"><b>Certificate</b>images/scholarship-ssc.jpg</div>
-        <div class="cap"><div class="title">Government Merit Scholarship</div><div class="issuer">SSC Examination · 2018</div></div>
-      </div>
-      <div class="cert-tile">
-        <div class="img-slot"><b>Certificate</b>images/matarbari-cert.jpg</div>
-        <div class="cap"><div class="title">Industrial Training Certificate</div><div class="issuer">Matarbari Power Plant, CPGCBL</div></div>
-      </div>
-      <div class="cert-tile">
-        <div class="img-slot"><b>Add another</b>images/your-file-name.jpg</div>
-        <div class="cap"><div class="title">Add another certificate</div><div class="issuer">Duplicate this tile as needed</div></div>
-      </div>
-    </div>
+    <div class="cert-grid reveal" id="certGrid"></div>
   </div>
 </section>
 
@@ -752,36 +526,14 @@
           <div class="eyebrow">Recognition</div>
           <h2>Awards</h2>
         </div>
-        <ul class="simple-list">
-          <li>
-            <span class="mark">2020</span>
-            <span class="txt"><strong>Government Merit Scholarship</strong><span>Outstanding result, HSC Examination</span></span>
-          </li>
-          <li>
-            <span class="mark">2018</span>
-            <span class="txt"><strong>Government Merit Scholarship</strong><span>Outstanding result, SSC Examination</span></span>
-          </li>
-        </ul>
+        <ul class="simple-list" id="awardsList"></ul>
       </div>
       <div>
         <div class="section-head" style="margin-bottom:22px;">
           <div class="eyebrow">Involvement</div>
           <h2>Leadership</h2>
         </div>
-        <ul class="simple-list">
-          <li>
-            <span class="mark">'25–'26</span>
-            <span class="txt"><strong>Joint Organizing Secretary</strong><span>CUET Career Club</span></span>
-          </li>
-          <li>
-            <span class="mark">'25–'26</span>
-            <span class="txt"><strong>Assistant Sponsor Secretary</strong><span>CUET Automotive &amp; Mobility Society (CAMS)</span></span>
-          </li>
-          <li>
-            <span class="mark">2023</span>
-            <span class="txt"><strong>Conference Volunteer</strong><span>7th Int'l Conf. on Mechanical Engineering &amp; Renewable Energy, CUET</span></span>
-          </li>
-        </ul>
+        <ul class="simple-list" id="leadershipList"></ul>
       </div>
     </div>
   </div>
@@ -795,69 +547,238 @@
     </div>
     <div class="footer-grid reveal">
       <div>
-        <p style="color:var(--text-dim); max-width:48ch;">Open to opportunities in mechanical design, materials engineering, and power systems. The fastest way to reach me is by email or LinkedIn.</p>
-        <div class="contact-links">
-          <a href="mailto:baset.czs2018@gmail.com">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16v12H4z"/><path d="M4 6l8 7 8-7"/></svg>
-            baset.czs2018@gmail.com
-          </a>
-          <a href="https://www.linkedin.com/in/al-baset/" target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
-            linkedin.com/in/al-baset
-          </a>
-          <a href="#" onclick="return false;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
-            North Racecourse, Kotwali, Cumilla Sadar-3500, BD
-          </a>
-        </div>
+        <p style="color:var(--text-dim); max-width:48ch;" id="contactBlurb"></p>
+        <div class="contact-links" id="contactLinks"></div>
       </div>
-      <div class="footer-panel">
-        <div class="row"><span class="k">Languages</span><span class="v">Bangla · English</span></div>
-        <div class="row"><span class="k">Program</span><span class="v">BSc ME, CUET</span></div>
-        <div class="row"><span class="k">Status</span><span class="v">Graduating Jul 2026</span></div>
-      </div>
+      <div class="footer-panel" id="footerPanel"></div>
     </div>
     <div class="foot-bottom">
-      <span>© 2026 Al Baset — Portfolio</span>
-      <span>Built as a static site</span>
+      <span id="footCopyright"></span>
+      <span id="footTagline"></span>
     </div>
   </div>
 </footer>
 
+<a class="admin-hint" href="admin.html">Edit this site</a>
+
 <script>
-  const navToggle = document.getElementById('navToggle');
-  const navLinks = document.getElementById('navLinks');
-  navToggle.addEventListener('click', () => {
-    const open = navLinks.classList.toggle('open');
-    navToggle.setAttribute('aria-expanded', open);
-  });
-  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-    navLinks.classList.remove('open');
-    navToggle.setAttribute('aria-expanded', false);
-  }));
+(function(){
 
-  const reveals = document.querySelectorAll('.reveal');
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('in');
-        io.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.12 });
-  reveals.forEach(el => io.observe(el));
+  const ICONS = {
+    education: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/></svg>',
+    research: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3h6M10 3v5.5L5 18a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9.5V3"/></svg>',
+    design: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9c.2.6.7 1 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
+    goal: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>',
+    briefcase: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>',
+    star: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 7h7l-5.5 4.5L18.5 21 12 16.5 5.5 21l2-7.5L2 9h7z"/></svg>'
+  };
 
-  const sections = document.querySelectorAll('section, header.hero');
-  const navA = document.querySelectorAll('.nav-links a');
-  const spy = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const id = entry.target.getAttribute('id');
-        navA.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
-      }
+  const SOCIAL = {
+    linkedin: (v)=>`<a href="${v}" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg></a>`,
+    email: (v)=>`<a href="mailto:${v}" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16v12H4z"/><path d="M4 6l8 7 8-7"/></svg></a>`,
+    github: (v)=>`<a href="${v}" target="_blank" rel="noopener" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.5 0-.24-.01-1.04-.01-1.89-2.78.62-3.37-1.21-3.37-1.21-.46-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.63.07-.63 1 .07 1.53 1.05 1.53 1.05.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.31.1-2.73 0 0 .84-.28 2.75 1.05a9.29 9.29 0 0 1 5 0c1.91-1.33 2.75-1.05 2.75-1.05.55 1.42.2 2.47.1 2.73.64.72 1.03 1.63 1.03 2.75 0 3.94-2.35 4.8-4.58 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .28.18.61.69.5A10.03 10.03 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"/></svg></a>`,
+    website: (v)=>`<a href="${v}" target="_blank" rel="noopener" aria-label="Website"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 3.5 5.5 3.5 9s-1 6.5-3.5 9c-2.5-2.5-3.5-5.5-3.5-9s1-6.5 3.5-9z"/></svg></a>`,
+    researchgate: (v)=>`<a href="${v}" target="_blank" rel="noopener" aria-label="ResearchGate"><span class="icon-letter">R</span></a>`
+  };
+
+  function imgBlock(src, alt, placeholderClass, title, hint){
+    const ph = `<div class="${placeholderClass}"${src ? ' style="display:none"' : ''}><b>${title}</b>${hint || ''}</div>`;
+    if(!src) return ph;
+    return `<img src="${src}" alt="${alt||''}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">${ph}`;
+  }
+
+  function el(id){ return document.getElementById(id); }
+
+  fetch('data.json', {cache:'no-store'})
+    .then(r => r.json())
+    .then(render)
+    .catch(err => {
+      document.body.insertAdjacentHTML('afterbegin',
+        '<div style="padding:20px;background:#fee;color:#900;font-family:sans-serif;">Could not load data.json — ' + err + '</div>');
     });
-  }, { rootMargin: '-45% 0px -50% 0px' });
-  sections.forEach(s => s.id && spy.observe(s));
+
+  function render(data){
+    // Meta
+    if(data.meta){
+      document.title = data.meta.title || 'Portfolio';
+      const m = document.querySelector('meta[name="description"]');
+      if(m) m.setAttribute('content', data.meta.description || '');
+      el('navBrand').innerHTML = `${data.meta.brandFirst||''}<span> ${data.meta.brandLast||''}</span>`;
+    }
+
+    // Nav CTA / CV
+    const cv = (data.hero && data.hero.cvFile) || 'CV.pdf';
+    el('navCta').href = cv;
+    el('heroCvBtn').href = cv;
+
+    // Hero
+    const h = data.hero || {};
+    el('heroBadge').textContent = h.badge || '';
+    el('heroName').textContent = h.name || '';
+    el('heroRole').textContent = h.role || '';
+    el('heroDesc').textContent = h.description || '';
+    el('heroLocation').textContent = h.location || '';
+    el('heroCtaBtn').textContent = h.ctaLabel || 'Contact me';
+    el('heroPhoto').innerHTML = imgBlock(h.photo, h.name, 'ph-placeholder', 'Your photo', 'Add a photo from the admin page');
+    el('heroPhotoCaption').textContent = h.photoCaption || '';
+
+    // Social
+    const s = data.social || {};
+    let socialHtml = '';
+    Object.keys(SOCIAL).forEach(key => {
+      if(s[key]) socialHtml += SOCIAL[key](s[key]);
+    });
+    el('heroSocial').innerHTML = socialHtml;
+
+    // Stats
+    el('statRow').innerHTML = (data.stats || []).map(st => `
+      <div class="stat-card c-${st.color || 'blue'}">
+        <div class="icon">${ICONS[st.icon] || ICONS.star}</div>
+        <div class="title">${st.title || ''}</div>
+        <div class="sub">${st.sub || ''}</div>
+      </div>`).join('');
+
+    // About
+    const a = data.about || {};
+    el('aboutText').innerHTML = (a.paragraphs || []).map(p => `<p>${p}</p>`).join('') +
+      (a.quote ? `<div class="quote-block">${a.quote}</div>` : '');
+    el('aboutPhoto').innerHTML = imgBlock(a.photo, h.name, 'ph-placeholder', 'About photo', 'Add a photo from the admin page');
+    el('aboutInterests').innerHTML = (a.interests || []).map(t => `<span class="tag">${t}</span>`).join('');
+    el('aboutLanguages').innerHTML = (a.languages || []).map(l => `<div><div class="v">${l.name}</div><div class="sub">${l.level}</div></div>`).join('');
+
+    // Education
+    el('eduList').innerHTML = (data.education || []).map(e => `
+      <div class="edu-card">
+        <div>
+          <div class="main">${e.degree || ''}</div>
+          <div class="sub">${e.institution || ''}</div>
+        </div>
+        <div class="meta">${e.score || ''}<span class="period">${e.period || ''}</span></div>
+      </div>`).join('');
+
+    // Research
+    const r = data.research || {};
+    el('researchLede').textContent = r.lede || '';
+    if(r.title || (r.bullets && r.bullets.length) || r.institution || r.supervisor || r.duration){
+      el('researchAbstract').innerHTML = `
+        <h3>${r.title || ''}</h3>
+        ${(r.bullets && r.bullets.length) ? `<ul>${r.bullets.map(b => `<li>${b}</li>`).join('')}</ul>` : ''}
+        <div class="meta-row">
+          ${r.institution ? `<div><span class="k">Institution</span><span class="v">${r.institution}</span></div>` : ''}
+          ${r.supervisor ? `<div><span class="k">Supervisor</span><span class="v">${r.supervisor}</span></div>` : ''}
+          ${r.duration ? `<div><span class="k">Duration</span><span class="v">${r.duration}</span></div>` : ''}
+        </div>`;
+    }
+    el('researchGallery').innerHTML = (r.images || []).map(img => `
+      <div class="g-item">${imgBlock(img.src, img.alt, 'g-placeholder', img.label || 'Photo', 'Add a photo from the admin page')}</div>`).join('');
+    el('researchCaption').textContent = r.caption || '';
+
+    // Experience
+    const ex = data.experience || {};
+    el('expLede').textContent = ex.lede || '';
+    const main = ex.main || {};
+    if(main.site){
+      el('expMain').innerHTML = `
+        <div class="head">
+          <span class="site">${main.site}</span>
+          <span class="date">${main.date || ''}</span>
+        </div>
+        ${main.position ? `<span class="pos">${main.position}</span>` : ''}
+        ${(main.bullets && main.bullets.length) ? `<ul>${main.bullets.map(b => `<li>${b}</li>`).join('')}</ul>` : ''}
+        <div class="gallery-2">${(main.images || []).map(img => `<div class="g-item">${imgBlock(img.src, img.alt, 'g-placeholder', img.label || 'Photo', 'Add a photo from the admin page')}</div>`).join('')}</div>
+        ${main.caption ? `<div class="gallery-caption">${main.caption}</div>` : ''}`;
+    }
+    el('expVisits').innerHTML = (ex.visits || []).map(v => `
+      <div class="visit-card">
+        <span class="site">${v.site || ''}</span>
+        <span class="date">${v.date || ''}</span>
+        <p>${v.desc || ''}</p>
+        <div class="gallery-2">${(v.images || []).map(img => `<div class="g-item">${imgBlock(img.src, img.alt, 'g-placeholder', img.label || 'Photo', 'Add a photo from the admin page')}</div>`).join('')}</div>
+      </div>`).join('');
+
+    // Skills
+    el('skillGroups').innerHTML = (data.skills || []).map(g => `
+      <div class="skill-group">
+        <h3>${g.group || ''}</h3>
+        <div class="tag-list">${(g.items || []).map(i => `<span class="tag">${i}</span>`).join('')}</div>
+      </div>`).join('');
+
+    // Projects
+    el('projGrid').innerHTML = (data.projects || []).map(p => `
+      <div class="proj-card">
+        <div class="proj-render">${imgBlock(p.image, p.title, '', p.label || 'Project render', 'Add a photo from the admin page')}</div>
+        <div class="proj-body">
+          ${p.tag ? `<span class="proj-tag">${p.tag}</span>` : ''}
+          <h3>${p.title || ''}</h3>
+          ${(p.bullets && p.bullets.length) ? `<ul>${p.bullets.map(b => `<li>${b}</li>`).join('')}</ul>` : ''}
+        </div>
+      </div>`).join('');
+
+    // Certificates
+    el('certGrid').innerHTML = (data.certificates || []).map(c => `
+      <div class="cert-tile">
+        <div class="img-slot">${imgBlock(c.image, c.title, '', 'Certificate', 'Add a photo from the admin page')}</div>
+        <div class="cap"><div class="title">${c.title || ''}</div><div class="issuer">${c.issuer || ''}</div></div>
+      </div>`).join('');
+
+    // Awards / Leadership
+    el('awardsList').innerHTML = (data.awards || []).map(aw => `
+      <li><span class="mark">${aw.year || ''}</span><span class="txt"><strong>${aw.title || ''}</strong><span>${aw.desc || ''}</span></span></li>`).join('');
+    el('leadershipList').innerHTML = (data.leadership || []).map(l => `
+      <li><span class="mark">${l.period || ''}</span><span class="txt"><strong>${l.title || ''}</strong><span>${l.org || ''}</span></span></li>`).join('');
+
+    // Contact
+    const c = data.contact || {};
+    el('contactBlurb').textContent = c.blurb || '';
+    let linksHtml = '';
+    if(s.email) linksHtml += `<a href="mailto:${s.email}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16v12H4z"/><path d="M4 6l8 7 8-7"/></svg>${s.email}</a>`;
+    if(s.linkedin) linksHtml += `<a href="${s.linkedin}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>${s.linkedin.replace(/^https?:\/\//,'')}</a>`;
+    if(c.address) linksHtml += `<a href="#" onclick="return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>${c.address}</a>`;
+    el('contactLinks').innerHTML = linksHtml;
+    el('footerPanel').innerHTML = (c.rows || []).map(row => `<div class="row"><span class="k">${row.k}</span><span class="v">${row.v}</span></div>`).join('');
+    el('footCopyright').textContent = c.copyright || '';
+    el('footTagline').textContent = c.tagline || '';
+
+    initInteractions();
+  }
+
+  function initInteractions(){
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    navToggle.addEventListener('click', () => {
+      const open = navLinks.classList.toggle('open');
+      navToggle.setAttribute('aria-expanded', open);
+    });
+    navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', false);
+    }));
+
+    const reveals = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => io.observe(el));
+
+    const sections = document.querySelectorAll('section, header.hero');
+    const navA = document.querySelectorAll('.nav-links a');
+    const spy = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          navA.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
+        }
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    sections.forEach(sec => sec.id && spy.observe(sec));
+  }
+
+})();
 </script>
 
 </body>
