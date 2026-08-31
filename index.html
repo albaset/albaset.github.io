@@ -654,13 +654,37 @@
     root.setProperty('--dark-border', tint(dark, 0.24));
   }
 
-  fetch('data.json', {cache:'no-store'})
-    .then(r => r.json())
-    .then(render)
-    .catch(err => {
-      document.body.insertAdjacentHTML('afterbegin',
-        '<div style="padding:20px;background:#fee;color:#900;font-family:sans-serif;">Could not load data.json — ' + err + '</div>');
-    });
+  function loadData(){
+    const isPreview = new URLSearchParams(location.search).get('preview') === '1';
+    if(isPreview){
+      try{
+        const raw = localStorage.getItem('portfolioPreviewData');
+        if(raw){
+          render(JSON.parse(raw));
+          showPreviewBanner();
+          return;
+        }
+      }catch(e){}
+    }
+    fetch('data.json', {cache:'no-store'})
+      .then(r => r.json())
+      .then(render)
+      .catch(err => {
+        document.body.insertAdjacentHTML('afterbegin',
+          '<div style="padding:20px;background:#fee;color:#900;font-family:sans-serif;">Could not load data.json — ' + err + '</div>');
+      });
+  }
+
+  function showPreviewBanner(){
+    const bar = document.createElement('div');
+    bar.style.cssText = 'position:fixed; top:0; left:0; right:0; z-index:100; background:#E08A1E; color:#1E1400; font-family:sans-serif; font-size:0.84rem; font-weight:600; text-align:center; padding:9px 16px;';
+    bar.innerHTML = 'Previewing unsaved changes from admin.html — this is not the live site. <a href="admin.html" style="color:#1E1400; text-decoration:underline; margin-left:8px;">Back to editor</a>';
+    document.body.prepend(bar);
+    const h = bar.offsetHeight + 'px';
+    document.body.style.paddingTop = h;
+    const nav = document.querySelector('nav');
+    if(nav) nav.style.top = h;
+  }
 
   function render(data){
     applyTheme(data.theme);
@@ -892,7 +916,7 @@
 
   function buildCustomSection(cs){
     const section = document.createElement('section');
-    section.id = cs._id;
+    section.id = cs.id;
     const bgPh = photoField(cs.background);
     section.className = 'custom-section' + (bgPh.src ? ' has-bg dark-surface' : '');
     if(bgPh.src){
@@ -913,19 +937,32 @@
 
   const DEFAULT_SECTION_ORDER = ['about','education','research','experience','skills','projects','certificates','activities'];
 
-  function applySectionOrder(order){
-    const footer = document.querySelector('footer#contact');
+  function buildPageOrder(data){
+    if(Array.isArray(data.pageOrder) && data.pageOrder.length) return data.pageOrder;
+    // Migrate from the older separate sectionOrder + per-custom-section placement model.
     const seen = {};
-    const finalOrder = (order || []).filter(k => DEFAULT_SECTION_ORDER.includes(k) && !seen[k] && (seen[k] = true));
-    DEFAULT_SECTION_ORDER.forEach(k => { if(!seen[k]) finalOrder.push(k); });
-    finalOrder.forEach(key => {
-      const el = document.getElementById(key);
-      if(el) footer.parentNode.insertBefore(el, footer);
+    const fixed = (Array.isArray(data.sectionOrder) ? data.sectionOrder.filter(k => DEFAULT_SECTION_ORDER.includes(k)) : [])
+      .filter(k => !seen[k] && (seen[k] = true));
+    DEFAULT_SECTION_ORDER.forEach(k => { if(!seen[k]) fixed.push(k); });
+
+    const customs = data.customSections || [];
+    const anchors = ['home'].concat(DEFAULT_SECTION_ORDER);
+    const grouped = {};
+    customs.forEach(cs => {
+      const key = anchors.includes(cs.placement) ? cs.placement : 'end';
+      (grouped[key] = grouped[key] || []).push(cs.id);
     });
+    const result = [];
+    if(grouped.home) result.push(...grouped.home);
+    fixed.forEach(key => {
+      result.push(key);
+      if(grouped[key]) result.push(...grouped[key]);
+    });
+    if(grouped.end) result.push(...grouped.end);
+    return result;
   }
 
   function applyVisibilityAndCustomSections(data){
-    applySectionOrder(data.sectionOrder);
     const vis = data.sectionVisibility || {};
     const FIXED_KEYS = DEFAULT_SECTION_ORDER;
     FIXED_KEYS.forEach(key => {
@@ -937,39 +974,26 @@
     });
 
     const customs = data.customSections || [];
-    customs.forEach((cs, idx) => { cs._id = 'custom-' + idx; });
+    const byId = {};
+    customs.forEach((cs, idx) => {
+      if(!cs.id) cs.id = 'cs-' + idx + '-' + Date.now();
+      byId[cs.id] = cs;
+    });
 
-    const anchors = ['home','about','education','research','experience','skills','projects','certificates','activities'];
-    const grouped = {};
-    customs.forEach(cs => {
-      const key = anchors.includes(cs.placement) ? cs.placement : 'end';
-      (grouped[key] = grouped[key] || []).push(cs);
+    const order = buildPageOrder(data);
+    const footer = document.querySelector('footer#contact');
+    order.forEach(entry => {
+      const el = FIXED_KEYS.includes(entry) ? document.getElementById(entry)
+        : (byId[entry] ? buildCustomSection(byId[entry]) : null);
+      if(el) footer.parentNode.insertBefore(el, footer);
     });
-    anchors.forEach(key => {
-      const list = grouped[key];
-      if(!list) return;
-      let insertPoint = document.getElementById(key);
-      if(!insertPoint) return;
-      list.forEach(cs => {
-        const secEl = buildCustomSection(cs);
-        insertPoint.after(secEl);
-        insertPoint = secEl;
-      });
-    });
-    if(grouped.end){
-      const footer = document.querySelector('footer#contact');
-      grouped.end.forEach(cs => {
-        const secEl = buildCustomSection(cs);
-        footer.parentNode.insertBefore(secEl, footer);
-      });
-    }
 
     const navContactLi = document.getElementById('navContactLi');
     customs.forEach(cs => {
       if(cs.showInNav && cs.navLabel){
         const li = document.createElement('li');
         const a = document.createElement('a');
-        a.href = '#' + cs._id;
+        a.href = '#' + cs.id;
         a.textContent = cs.navLabel;
         li.appendChild(a);
         navContactLi.parentNode.insertBefore(li, navContactLi);
@@ -1012,6 +1036,8 @@
     }, { rootMargin: '-45% 0px -50% 0px' });
     sections.forEach(sec => sec.id && spy.observe(sec));
   }
+
+  loadData();
 
 })();
 </script>

@@ -163,21 +163,13 @@
     "duration": "Oct 2025 – Jul 2026",
     "images": [
       {
-        "src": {
-          "src": "",
-          "alt": "",
-          "hidden": false
-        },
+        "src": "",
         "alt": "Stir casting fabrication",
         "label": "Fabrication photo",
         "path": "images/research-1.jpg"
       },
       {
-        "src": {
-          "src": "",
-          "alt": "",
-          "hidden": false
-        },
+        "src": "",
         "alt": "Mechanical/corrosion testing",
         "label": "Testing photo",
         "path": "images/research-2.jpg"
@@ -197,21 +189,13 @@
       ],
       "images": [
         {
-          "src": {
-            "src": "",
-            "alt": "",
-            "hidden": false
-          },
+          "src": "",
           "alt": "Matarbari Power Plant training",
           "label": "Training photo",
           "path": "images/matarbari-1.jpg"
         },
         {
-          "src": {
-            "src": "",
-            "alt": "",
-            "hidden": false
-          },
+          "src": "",
           "alt": "Matarbari Power Plant training",
           "label": "Training photo",
           "path": "images/matarbari-2.jpg"
@@ -226,21 +210,13 @@
         "desc": "Gained practical exposure to refrigerator, air-conditioner, and PCB manufacturing processes, including assembly operations, production systems, and quality control procedures.",
         "images": [
           {
-            "src": {
-              "src": "",
-              "alt": "",
-              "hidden": false
-            },
+            "src": "",
             "alt": "Walton Hi-Tech Industries visit",
             "label": "Photo",
             "path": "images/walton-1.jpg"
           },
           {
-            "src": {
-              "src": "",
-              "alt": "",
-              "hidden": false
-            },
+            "src": "",
             "alt": "Walton Hi-Tech Industries visit",
             "label": "Photo",
             "path": "images/walton-2.jpg"
@@ -253,21 +229,13 @@
         "desc": "Observed cold-rolled steel manufacturing, boiler operations, and warehouse management systems, along with galvanized and corrugated sheet production processes.",
         "images": [
           {
-            "src": {
-              "src": "",
-              "alt": "",
-              "hidden": false
-            },
+            "src": "",
             "alt": "S. Alam Cold Rolled Steels visit",
             "label": "Photo",
             "path": "images/salam-1.jpg"
           },
           {
-            "src": {
-              "src": "",
-              "alt": "",
-              "hidden": false
-            },
+            "src": "",
             "alt": "S. Alam Cold Rolled Steels visit",
             "label": "Photo",
             "path": "images/salam-2.jpg"
@@ -460,6 +428,16 @@
     "activities": true
   },
   "sectionOrder": [
+    "about",
+    "education",
+    "research",
+    "experience",
+    "skills",
+    "projects",
+    "certificates",
+    "activities"
+  ],
+  "pageOrder": [
     "about",
     "education",
     "research",
