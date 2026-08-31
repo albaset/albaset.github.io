@@ -231,7 +231,9 @@
   }
   .about-photo img{width:100%; height:100%; object-fit:cover;}
 
-  .about-panel{background:var(--panel-2); border:1px solid var(--border); border-radius:14px; padding:20px 22px; margin-bottom:14px;}
+  .about-panel-row{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  @media (max-width:480px){.about-panel-row{grid-template-columns:1fr;}}
+  .about-panel{background:var(--panel-2); border:1px solid var(--border); border-radius:14px; padding:20px 22px;}
   .about-panel .k{font-size:0.7rem; color:var(--blue); text-transform:uppercase; letter-spacing:0.05em; font-weight:700; margin-bottom:10px;}
   .tag-list{display:flex; flex-wrap:wrap; gap:8px;}
   .tag{background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:6px 12px; font-size:0.8rem; color:var(--text-dim);}
@@ -449,13 +451,15 @@
       <div class="about-text reveal" id="aboutText"></div>
       <div class="reveal">
         <div class="about-photo" id="aboutPhoto"></div>
-        <div class="about-panel">
-          <div class="k">Research &amp; Professional Interests</div>
-          <div class="tag-list" id="aboutInterests"></div>
-        </div>
-        <div class="about-panel">
-          <div class="k">Languages</div>
-          <div class="info-chip-row" id="aboutLanguages"></div>
+        <div class="about-panel-row">
+          <div class="about-panel">
+            <div class="k">Research &amp; Professional Interests</div>
+            <div class="tag-list" id="aboutInterests"></div>
+          </div>
+          <div class="about-panel">
+            <div class="k">Languages</div>
+            <div class="info-chip-row" id="aboutLanguages"></div>
+          </div>
         </div>
       </div>
     </div>
