@@ -390,17 +390,31 @@
     "certificates": true,
     "activities": true
   },
-  "sectionOrder": ["about", "education", "research", "experience", "skills", "projects", "certificates", "activities"],
+  "sectionOrder": [
+    "about",
+    "education",
+    "research",
+    "experience",
+    "skills",
+    "projects",
+    "certificates",
+    "activities"
+  ],
   "customSections": [
     {
-      "eyebrow": "",
-      "title": "",
-      "lede": "",
+      "eyebrow": "Enjoyment",
+      "title": "Travel ",
+      "lede": "I love traveling ",
       "placement": "end",
       "background": "images/background-photo-optional-1788160430074.jpg",
       "showInNav": false,
       "navLabel": "",
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text": ""
+        }
+      ]
     }
   ]
 }
