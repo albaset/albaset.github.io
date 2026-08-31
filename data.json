@@ -5,6 +5,10 @@
     "brandFirst": "Al",
     "brandLast": "Baset"
   },
+  "theme": {
+    "accent": "#2555E7",
+    "dark": "#0A1424"
+  },
   "hero": {
     "badge": "Mechanical Engineer · CUET",
     "name": "Al Baset",
