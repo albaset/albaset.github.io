@@ -369,7 +369,7 @@
   }
 
   /* CUSTOM SECTIONS */
-  .custom-section.has-bg{background-size:cover; background-position:center; background-repeat:no-repeat;}
+  .has-bg{background-size:cover; background-position:center; background-repeat:no-repeat;}
   .cb-text{color:var(--text-dim); margin-bottom:15px; max-width:65ch; font-size:0.96rem;}
   .cb-list{padding-left:20px; color:var(--text-dim); font-size:0.94rem; margin-bottom:15px;}
   .cb-list li{margin-bottom:8px;}
@@ -386,6 +386,34 @@
   .cb-card-body h3{font-size:0.98rem; font-weight:700; margin-bottom:4px;}
   .cb-card-sub{font-size:0.78rem; color:var(--blue); font-weight:600; margin-bottom:8px;}
   .cb-card-body p{color:var(--text-dim); font-size:0.86rem;}
+
+  /* PHOTO EFFECTS (optional, toggled in the admin Appearance panel) */
+  .hero-photo img, .about-photo img, .gallery-2 .g-item img, .proj-render img, .img-slot img, .cb-card-media img{
+    transition:transform 0.4s ease, filter 0.4s ease;
+  }
+  .proj-card, .cert-tile, .cb-card, .gallery-2 .g-item, .hero-photo, .about-photo{
+    transition:transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  body.fx-zoom .hero-photo:hover img, body.fx-zoom .about-photo:hover img, body.fx-zoom .gallery-2 .g-item:hover img,
+  body.fx-zoom .proj-render:hover img, body.fx-zoom .img-slot:hover img, body.fx-zoom .cb-card-media:hover img{
+    transform:scale(1.09);
+  }
+  body.fx-grayscale .hero-photo img, body.fx-grayscale .about-photo img, body.fx-grayscale .gallery-2 .g-item img,
+  body.fx-grayscale .proj-render img, body.fx-grayscale .img-slot img, body.fx-grayscale .cb-card-media img{
+    filter:grayscale(100%);
+  }
+  body.fx-grayscale .hero-photo:hover img, body.fx-grayscale .about-photo:hover img, body.fx-grayscale .gallery-2 .g-item:hover img,
+  body.fx-grayscale .proj-render:hover img, body.fx-grayscale .img-slot:hover img, body.fx-grayscale .cb-card-media:hover img{
+    filter:grayscale(0%);
+  }
+  body.fx-lift .proj-card:hover, body.fx-lift .cert-tile:hover, body.fx-lift .cb-card:hover, body.fx-lift .gallery-2 .g-item:hover,
+  body.fx-lift .hero-photo:hover, body.fx-lift .about-photo:hover{
+    transform:translateY(-6px); box-shadow:0 18px 32px -16px rgba(15,21,36,0.32);
+  }
+  body.fx-glow .proj-card:hover, body.fx-glow .cert-tile:hover, body.fx-glow .cb-card:hover, body.fx-glow .gallery-2 .g-item:hover,
+  body.fx-glow .hero-photo:hover, body.fx-glow .about-photo:hover{
+    box-shadow:0 0 0 3px var(--blue), 0 10px 26px -10px var(--blue);
+  }
 </style>
 </head>
 <body>
@@ -652,6 +680,12 @@
     root.setProperty('--dark-panel', tint(dark, 0.07));
     root.setProperty('--dark-panel-2', tint(dark, 0.13));
     root.setProperty('--dark-border', tint(dark, 0.24));
+
+    const fx = theme.effects || {};
+    document.body.classList.toggle('fx-zoom', !!fx.zoom);
+    document.body.classList.toggle('fx-lift', !!fx.lift);
+    document.body.classList.toggle('fx-grayscale', !!fx.grayscale);
+    document.body.classList.toggle('fx-glow', !!fx.glow);
   }
 
   function loadData(){
@@ -914,15 +948,23 @@
     return '';
   }
 
+  function applySectionBackground(sectionEl, bgField){
+    const ph = photoField(bgField);
+    sectionEl.classList.remove('has-bg', 'dark-surface');
+    sectionEl.style.backgroundColor = '';
+    sectionEl.style.backgroundImage = '';
+    if(ph.src){
+      sectionEl.classList.add('has-bg', 'dark-surface');
+      sectionEl.style.backgroundColor = '#0A1424';
+      sectionEl.style.backgroundImage = `linear-gradient(180deg, rgba(10,20,36,.72), rgba(10,20,36,.85)), url('${ph.src}')`;
+    }
+  }
+
   function buildCustomSection(cs){
     const section = document.createElement('section');
     section.id = cs.id;
-    const bgPh = photoField(cs.background);
-    section.className = 'custom-section' + (bgPh.src ? ' has-bg dark-surface' : '');
-    if(bgPh.src){
-      section.style.backgroundColor = '#0A1424';
-      section.style.backgroundImage = `linear-gradient(180deg, rgba(10,20,36,.72), rgba(10,20,36,.85)), url('${bgPh.src}')`;
-    }
+    section.className = 'custom-section';
+    applySectionBackground(section, cs.background);
     section.innerHTML = `
       <div class="wrap">
         <div class="section-head reveal">
@@ -965,10 +1007,14 @@
   function applyVisibilityAndCustomSections(data){
     const vis = data.sectionVisibility || {};
     const FIXED_KEYS = DEFAULT_SECTION_ORDER;
+    const bgs = data.sectionBackgrounds || {};
     FIXED_KEYS.forEach(key => {
       const visible = vis[key] !== false;
       const sectionEl = document.getElementById(key);
-      if(sectionEl) sectionEl.style.display = visible ? '' : 'none';
+      if(sectionEl){
+        sectionEl.style.display = visible ? '' : 'none';
+        applySectionBackground(sectionEl, bgs[key]);
+      }
       const navLi = document.querySelector('.nav-links li[data-key="' + key + '"]');
       if(navLi) navLi.style.display = visible ? '' : 'none';
     });
