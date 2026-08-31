@@ -342,7 +342,8 @@
     background:var(--blue-tint); border-radius:8px; padding:5px 10px; white-space:nowrap;
   }
   .simple-list .txt strong{display:block; margin-bottom:3px; font-size:0.92rem;}
-  .simple-list .txt span{color:var(--text-dim); font-size:0.84rem;}
+  .simple-list .txt span{display:block; color:var(--text-dim); font-size:0.84rem;}
+  .simple-list .txt .desc{margin-top:4px; color:var(--text-dimmer); font-size:0.82rem; line-height:1.5;}
 
   /* FOOTER / CONTACT */
   footer{padding:70px 0 40px; border-top:1px solid var(--border); background:var(--bg-soft);}
@@ -441,8 +442,8 @@
 <section id="about">
   <div class="wrap">
     <div class="section-head reveal">
-      <div class="eyebrow">About</div>
-      <h2>Who I Am</h2>
+      <div class="eyebrow" id="aboutEyebrow"></div>
+      <h2 id="aboutTitle"></h2>
     </div>
     <div class="about-grid">
       <div class="about-text reveal" id="aboutText"></div>
@@ -464,8 +465,8 @@
 <section id="education">
   <div class="wrap">
     <div class="section-head reveal">
-      <div class="eyebrow">Academic Credentials</div>
-      <h2>Education</h2>
+      <div class="eyebrow" id="eduEyebrow"></div>
+      <h2 id="eduTitle"></h2>
     </div>
     <div class="edu-list reveal" id="eduList"></div>
   </div>
@@ -474,8 +475,8 @@
 <section id="research">
   <div class="wrap">
     <div class="section-head reveal">
-      <div class="eyebrow">Research &amp; Thesis</div>
-      <h2>Undergraduate Research</h2>
+      <div class="eyebrow" id="researchEyebrow"></div>
+      <h2 id="researchTitle"></h2>
       <p class="section-lede" id="researchLede"></p>
     </div>
     <div class="abstract-panel reveal" id="researchAbstract"></div>
@@ -489,8 +490,8 @@
 <section id="experience">
   <div class="wrap">
     <div class="section-head reveal">
-      <div class="eyebrow">Industry</div>
-      <h2>Industrial Experience &amp; Visits</h2>
+      <div class="eyebrow" id="expEyebrow"></div>
+      <h2 id="expTitle"></h2>
       <p class="section-lede" id="expLede"></p>
     </div>
     <div class="exp-main reveal" id="expMain"></div>
@@ -502,8 +503,8 @@
 <section id="skills">
   <div class="wrap">
     <div class="section-head reveal">
-      <div class="eyebrow">Capabilities</div>
-      <h2>Technical Skills</h2>
+      <div class="eyebrow" id="skillsEyebrow"></div>
+      <h2 id="skillsTitle"></h2>
     </div>
     <div class="skill-groups reveal" id="skillGroups"></div>
   </div>
@@ -512,8 +513,8 @@
 <section id="projects">
   <div class="wrap">
     <div class="section-head reveal">
-      <div class="eyebrow">Design Work</div>
-      <h2>Projects</h2>
+      <div class="eyebrow" id="projEyebrow"></div>
+      <h2 id="projTitle"></h2>
     </div>
     <div class="proj-grid reveal" id="projGrid"></div>
   </div>
@@ -522,9 +523,9 @@
 <section id="certificates">
   <div class="wrap">
     <div class="section-head reveal">
-      <div class="eyebrow">Credentials</div>
-      <h2>Certificates &amp; Achievements</h2>
-      <p class="section-lede">Professional trainings, workshops and academic recognitions.</p>
+      <div class="eyebrow" id="certEyebrow"></div>
+      <h2 id="certTitle"></h2>
+      <p class="section-lede" id="certLede"></p>
     </div>
     <div class="cert-grid reveal" id="certGrid"></div>
   </div>
@@ -535,15 +536,15 @@
     <div class="two-col reveal">
       <div>
         <div class="section-head" style="margin-bottom:22px;">
-          <div class="eyebrow">Recognition</div>
-          <h2>Awards</h2>
+          <div class="eyebrow" id="awardsEyebrow"></div>
+          <h2 id="awardsTitle"></h2>
         </div>
         <ul class="simple-list" id="awardsList"></ul>
       </div>
       <div>
         <div class="section-head" style="margin-bottom:22px;">
-          <div class="eyebrow">Involvement</div>
-          <h2>Leadership</h2>
+          <div class="eyebrow" id="leadershipEyebrow"></div>
+          <h2 id="leadershipTitle"></h2>
         </div>
         <ul class="simple-list" id="leadershipList"></ul>
       </div>
@@ -554,8 +555,8 @@
 <footer id="contact" class="dark-surface">
   <div class="wrap">
     <div class="section-head reveal">
-      <div class="eyebrow">Get In Touch</div>
-      <h2>Contact</h2>
+      <div class="eyebrow" id="contactEyebrow"></div>
+      <h2 id="contactTitle"></h2>
     </div>
     <div class="footer-grid reveal">
       <div>
@@ -598,6 +599,15 @@
   }
 
   function el(id){ return document.getElementById(id); }
+
+  function heading(sectionHeadings, key, defaults){
+    const sh = (sectionHeadings && sectionHeadings[key]) || {};
+    return {
+      eyebrow: sh.eyebrow !== undefined ? sh.eyebrow : defaults.eyebrow,
+      title: sh.title !== undefined ? sh.title : defaults.title,
+      lede: sh.lede !== undefined ? sh.lede : defaults.lede
+    };
+  }
 
   function hexToRgb(hex){
     hex = (hex || '').replace('#','');
@@ -688,6 +698,40 @@
         <div class="sub">${st.sub || ''}</div>
       </div>`).join('');
 
+    // Section headings
+    const sh = data.sectionHeadings;
+    const hAbout = heading(sh, 'about', {eyebrow:'About', title:'Who I Am'});
+    el('aboutEyebrow').textContent = hAbout.eyebrow;
+    el('aboutTitle').textContent = hAbout.title;
+    const hEdu = heading(sh, 'education', {eyebrow:'Academic Credentials', title:'Education'});
+    el('eduEyebrow').textContent = hEdu.eyebrow;
+    el('eduTitle').textContent = hEdu.title;
+    const hResearch = heading(sh, 'research', {eyebrow:'Research & Thesis', title:'Undergraduate Research'});
+    el('researchEyebrow').textContent = hResearch.eyebrow;
+    el('researchTitle').textContent = hResearch.title;
+    const hExp = heading(sh, 'experience', {eyebrow:'Industry', title:'Industrial Experience & Visits'});
+    el('expEyebrow').textContent = hExp.eyebrow;
+    el('expTitle').textContent = hExp.title;
+    const hSkills = heading(sh, 'skills', {eyebrow:'Capabilities', title:'Technical Skills'});
+    el('skillsEyebrow').textContent = hSkills.eyebrow;
+    el('skillsTitle').textContent = hSkills.title;
+    const hProj = heading(sh, 'projects', {eyebrow:'Design Work', title:'Projects'});
+    el('projEyebrow').textContent = hProj.eyebrow;
+    el('projTitle').textContent = hProj.title;
+    const hCert = heading(sh, 'certificates', {eyebrow:'Credentials', title:'Certificates & Achievements', lede:'Professional trainings, workshops and academic recognitions.'});
+    el('certEyebrow').textContent = hCert.eyebrow;
+    el('certTitle').textContent = hCert.title;
+    el('certLede').textContent = hCert.lede || '';
+    const hAwards = heading(sh, 'awards', {eyebrow:'Recognition', title:'Awards'});
+    el('awardsEyebrow').textContent = hAwards.eyebrow;
+    el('awardsTitle').textContent = hAwards.title;
+    const hLeadership = heading(sh, 'leadership', {eyebrow:'Involvement', title:'Leadership'});
+    el('leadershipEyebrow').textContent = hLeadership.eyebrow;
+    el('leadershipTitle').textContent = hLeadership.title;
+    const hContact = heading(sh, 'contact', {eyebrow:'Get In Touch', title:'Contact'});
+    el('contactEyebrow').textContent = hContact.eyebrow;
+    el('contactTitle').textContent = hContact.title;
+
     // About
     const a = data.about || {};
     el('aboutText').innerHTML = (a.paragraphs || []).map(p => `<p>${p}</p>`).join('') +
@@ -773,9 +817,9 @@
 
     // Awards / Leadership
     el('awardsList').innerHTML = (data.awards || []).map(aw => `
-      <li><span class="mark">${aw.year || ''}</span><span class="txt"><strong>${aw.title || ''}</strong><span>${aw.desc || ''}</span></span></li>`).join('');
+      <li><span class="mark">${aw.year || ''}</span><span class="txt"><strong>${aw.title || ''}</strong>${aw.desc ? `<span>${aw.desc}</span>` : ''}</span></li>`).join('');
     el('leadershipList').innerHTML = (data.leadership || []).map(l => `
-      <li><span class="mark">${l.period || ''}</span><span class="txt"><strong>${l.title || ''}</strong><span>${l.org || ''}</span></span></li>`).join('');
+      <li><span class="mark">${l.period || ''}</span><span class="txt"><strong>${l.title || ''}</strong>${l.org ? `<span>${l.org}</span>` : ''}${l.desc ? `<span class="desc">${l.desc}</span>` : ''}</span></li>`).join('');
 
     // Contact
     const c = data.contact || {};
