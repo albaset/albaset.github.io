@@ -405,6 +405,22 @@
     return wrap;
   }
 
+  function boolToggle(obj, key, label){
+    const wrap = document.createElement('label');
+    wrap.style.cssText = 'display:flex; align-items:center; gap:8px; margin-bottom:16px; padding:10px 12px; background:var(--blue-tint); border-radius:8px; font-size:0.84rem; cursor:pointer;';
+    const chk = document.createElement('input');
+    chk.type = 'checkbox';
+    chk.style.width = 'auto';
+    chk.checked = obj[key] !== false;
+    chk.addEventListener('change', () => { obj[key] = chk.checked; });
+    wrap.appendChild(chk);
+    const span = document.createElement('span');
+    span.textContent = label;
+    span.style.cssText = 'margin:0; font-weight:600; color:var(--text);';
+    wrap.appendChild(span);
+    return wrap;
+  }
+
   function headingFields(key, defaults){
     state.data.sectionHeadings = state.data.sectionHeadings || {};
     const sh = state.data.sectionHeadings[key] = state.data.sectionHeadings[key] || {};
@@ -603,8 +619,11 @@
     b.appendChild(note);
     b.appendChild(textField('Pull-quote', a.quote, v => a.quote = v, true));
     b.appendChild(imageField('About photo', a, 'photo', 'Landscape photo works best, e.g. 1000×800px (roughly 5:4)'));
+
+    b.appendChild(boolToggle(a, 'showInterests', 'Show "Research & Professional Interests" panel'));
     b.appendChild(listField('Interests / focus tags', a.interests, v => a.interests = v));
 
+    b.appendChild(boolToggle(a, 'showLanguages', 'Show "Languages" panel'));
     const langs = a.languages = a.languages || [];
     const langWrap = document.createElement('div');
     function drawLangs(){
