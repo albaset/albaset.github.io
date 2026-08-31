@@ -333,7 +333,7 @@
     return wrap;
   }
 
-  function imageField(labelText, obj, key, sizeHint){
+  function imageField(labelText, obj, key, sizeHint, opts){
     if(typeof obj[key] !== 'object' || obj[key] === null){
       obj[key] = { src: obj[key] || '', alt: '', hidden: false };
     }
@@ -383,6 +383,25 @@
     altInput.addEventListener('input', () => { field.alt = altInput.value; });
     meta.appendChild(altInput);
 
+    if(!opts || !opts.noCaption){
+      const capWrap = document.createElement('label');
+      capWrap.style.cssText = 'display:flex; align-items:center; gap:6px; font-size:0.78rem; color:var(--text-dim); margin-top:8px; cursor:pointer;';
+      const capChk = document.createElement('input');
+      capChk.type = 'checkbox'; capChk.style.width = 'auto';
+      capChk.checked = !!field.showCaption;
+      capChk.addEventListener('change', () => { field.showCaption = capChk.checked; });
+      capWrap.appendChild(capChk);
+      const capLabel = document.createElement('span');
+      capLabel.textContent = 'Show this caption below the photo on the site';
+      capLabel.style.margin = '0';
+      capWrap.appendChild(capLabel);
+      meta.appendChild(capWrap);
+      const capHint = document.createElement('div');
+      capHint.style.cssText = 'font-size:0.7rem; color:#9399A6; margin:2px 0 0 22px;';
+      capHint.textContent = 'Uses the caption / description text above.';
+      meta.appendChild(capHint);
+    }
+
     const hideWrap = document.createElement('label');
     hideWrap.style.cssText = 'display:flex; align-items:center; gap:6px; font-size:0.78rem; color:var(--text-dim); margin-top:8px; cursor:pointer;';
     const hideChk = document.createElement('input');
@@ -406,7 +425,7 @@
 
   function sectionBackgroundField(key){
     state.data.sectionBackgrounds = state.data.sectionBackgrounds || {};
-    return imageField('Section background photo (optional)', state.data.sectionBackgrounds, key, 'Wide banner photo, e.g. 1600×900px or larger — it fills the whole section width. A dark overlay is applied automatically for text readability. Leave empty to keep the plain background.');
+    return imageField('Section background photo (optional)', state.data.sectionBackgrounds, key, 'Wide banner photo, e.g. 1600×900px or larger — it fills the whole section width. A dark overlay is applied automatically for text readability. Leave empty to keep the plain background.', {noCaption:true});
   }
 
   function pdfField(labelText, obj, key, defaultFileName){
@@ -558,6 +577,18 @@
         card.style.cssText = 'border:1px solid var(--border);border-radius:10px;padding:10px;width:200px;';
         card.appendChild(simpleImageField(`${itemLabel} ${idx+1}`, img, 'src', 'Landscape photo works best, e.g. 1000×750px (4:3)'));
         card.appendChild(textField('Caption / alt text', img.alt, v => img.alt = v));
+        const capWrap = document.createElement('label');
+        capWrap.style.cssText = 'display:flex; align-items:center; gap:6px; font-size:0.74rem; color:var(--text-dim); margin:2px 0 8px; cursor:pointer;';
+        const capChk = document.createElement('input');
+        capChk.type = 'checkbox'; capChk.style.width = 'auto';
+        capChk.checked = !!img.showCaption;
+        capChk.addEventListener('change', () => { img.showCaption = capChk.checked; });
+        capWrap.appendChild(capChk);
+        const capLabel = document.createElement('span');
+        capLabel.textContent = 'Show caption on site';
+        capLabel.style.margin = '0';
+        capWrap.appendChild(capLabel);
+        card.appendChild(capWrap);
         const rm = document.createElement('button');
         rm.type='button'; rm.className='btn-remove-small'; rm.textContent='Remove';
         rm.onclick = () => { imagesArr.splice(idx,1); draw(); };
@@ -807,8 +838,9 @@
     b.appendChild(textField('Contact button label', h.ctaLabel, v => h.ctaLabel = v));
     if(!h.cvFile) h.cvFile = 'CV.pdf';
     b.appendChild(pdfField('Your CV / resume (PDF)', h, 'cvFile', 'CV.pdf'));
-    b.appendChild(imageField('Hero photo', h, 'photo', 'Portrait photo works best, e.g. 900×1050px (roughly 6:7)'));
+    b.appendChild(imageField('Hero photo', h, 'photo', 'Portrait photo works best, e.g. 900×1050px (roughly 6:7)', {noCaption:true}));
     b.appendChild(textField('Photo caption', h.photoCaption, v => h.photoCaption = v));
+    b.appendChild(boolToggle(h, 'photoCaptionOn', 'Show this caption on the site'));
   }
 
   function renderSocial(){
@@ -1190,7 +1222,7 @@
         row.appendChild(textField('Section title', cs.title, v => { cs.title = v; }));
         card.appendChild(row);
         card.appendChild(textField('Intro text (optional)', cs.lede, v => cs.lede = v, true));
-        card.appendChild(imageField('Background photo (optional)', cs, 'background', 'Wide banner photo, e.g. 1600×900px or larger — it fills the whole section width'));
+        card.appendChild(imageField('Background photo (optional)', cs, 'background', 'Wide banner photo, e.g. 1600×900px or larger — it fills the whole section width', {noCaption:true}));
 
         const navRow = document.createElement('div'); navRow.style.cssText='display:flex; gap:14px; align-items:flex-end; margin-bottom:14px; flex-wrap:wrap;';
         const navCheckWrap = document.createElement('label'); navCheckWrap.style.cssText='display:flex; align-items:center; gap:8px; padding-bottom:10px;';
@@ -1241,7 +1273,7 @@
                   cc.appendChild(textField('Card title', c.title, v => c.title = v));
                   cc.appendChild(textField('Card subtitle (optional)', c.subtitle, v => c.subtitle = v));
                   cc.appendChild(textField('Card text', c.text, v => c.text = v, true));
-                  cc.appendChild(imageField('Card photo', c, 'image', 'e.g. 900×675px (4:3)'));
+                  cc.appendChild(imageField('Card photo', c, 'image', 'e.g. 900×675px (4:3)', {noCaption:true}));
                   const rmC = document.createElement('button'); rmC.type='button'; rmC.className='btn-remove-small'; rmC.textContent='Remove card';
                   rmC.onclick = () => { blk.cards.splice(cIdx,1); drawCards(); };
                   cc.appendChild(rmC);
@@ -1388,10 +1420,40 @@
     URL.revokeObjectURL(url);
   }
 
+  function previewMimeFor(path){
+    const ext = (path.split('.').pop() || '').toLowerCase();
+    if(ext === 'png') return 'image/png';
+    if(ext === 'webp') return 'image/webp';
+    if(ext === 'gif') return 'image/gif';
+    if(ext === 'pdf') return 'application/pdf';
+    return 'image/jpeg';
+  }
+
   function openPreview(){
     if(!state.data){ setStatus('Load your content first.', 'err'); return; }
     try{
-      localStorage.setItem('portfolioPreviewData', JSON.stringify(state.data));
+      const previewData = JSON.parse(JSON.stringify(state.data));
+      if(state.pendingImages.length){
+        const pendingMap = {};
+        state.pendingImages.forEach(img => {
+          pendingMap[img.path] = 'data:' + previewMimeFor(img.path) + ';base64,' + img.base64;
+        });
+        (function walk(node){
+          if(Array.isArray(node)){
+            node.forEach((v, i) => {
+              if(typeof v === 'string' && pendingMap[v]) node[i] = pendingMap[v];
+              else if(v && typeof v === 'object') walk(v);
+            });
+          } else if(node && typeof node === 'object'){
+            Object.keys(node).forEach(k => {
+              const v = node[k];
+              if(typeof v === 'string' && pendingMap[v]) node[k] = pendingMap[v];
+              else if(v && typeof v === 'object') walk(v);
+            });
+          }
+        })(previewData);
+      }
+      localStorage.setItem('portfolioPreviewData', JSON.stringify(previewData));
       window.open('index.html?preview=1', '_blank');
     }catch(err){
       setStatus('Could not open preview: ' + err.message, 'err');

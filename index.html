@@ -257,15 +257,17 @@
   /* PHOTO GALLERY */
   .gallery-2{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
   @media (max-width:600px){.gallery-2{grid-template-columns:1fr;}}
-  .gallery-2 .g-item{
+  .gallery-2 .g-item{display:flex; flex-direction:column;}
+  .gallery-2 .g-photo{
     border-radius:12px; overflow:hidden; border:1px solid var(--border);
     aspect-ratio:4/3; background:var(--panel-2);
     display:flex; align-items:center; justify-content:center;
   }
-  .gallery-2 .g-item img{width:100%; height:100%; object-fit:cover;}
+  .gallery-2 .g-photo img{width:100%; height:100%; object-fit:cover;}
   .g-placeholder{text-align:center; color:var(--text-dimmer); font-size:0.72rem; padding:14px; line-height:1.6;}
   .g-placeholder b{display:block; color:var(--blue); font-family:var(--heading); font-size:0.8rem; margin-bottom:4px;}
   .gallery-caption{text-align:center; font-size:0.78rem; color:var(--text-dimmer); margin-top:12px; font-style:italic;}
+  .photo-cap{text-align:center; font-size:0.74rem; color:var(--text-dimmer); padding:8px 4px 0; line-height:1.4;}
 
   /* THESIS PANEL */
   .abstract-panel{background:var(--panel-2); border:1px solid var(--border); border-radius:var(--radius); padding:28px 30px; margin-bottom:24px;}
@@ -388,29 +390,29 @@
   .cb-card-body p{color:var(--text-dim); font-size:0.86rem;}
 
   /* PHOTO EFFECTS (optional, toggled in the admin Appearance panel) */
-  .hero-photo img, .about-photo img, .gallery-2 .g-item img, .proj-render img, .img-slot img, .cb-card-media img{
+  .hero-photo img, .about-photo img, .gallery-2 .g-photo img, .proj-render img, .img-slot img, .cb-card-media img{
     transition:transform 0.4s ease, filter 0.4s ease;
   }
-  .proj-card, .cert-tile, .cb-card, .gallery-2 .g-item, .hero-photo, .about-photo{
+  .proj-card, .cert-tile, .cb-card, .gallery-2 .g-photo, .hero-photo, .about-photo{
     transition:transform 0.3s ease, box-shadow 0.3s ease;
   }
-  body.fx-zoom .hero-photo:hover img, body.fx-zoom .about-photo:hover img, body.fx-zoom .gallery-2 .g-item:hover img,
+  body.fx-zoom .hero-photo:hover img, body.fx-zoom .about-photo:hover img, body.fx-zoom .gallery-2 .g-photo:hover img,
   body.fx-zoom .proj-render:hover img, body.fx-zoom .img-slot:hover img, body.fx-zoom .cb-card-media:hover img{
     transform:scale(1.09);
   }
-  body.fx-grayscale .hero-photo img, body.fx-grayscale .about-photo img, body.fx-grayscale .gallery-2 .g-item img,
+  body.fx-grayscale .hero-photo img, body.fx-grayscale .about-photo img, body.fx-grayscale .gallery-2 .g-photo img,
   body.fx-grayscale .proj-render img, body.fx-grayscale .img-slot img, body.fx-grayscale .cb-card-media img{
     filter:grayscale(100%);
   }
-  body.fx-grayscale .hero-photo:hover img, body.fx-grayscale .about-photo:hover img, body.fx-grayscale .gallery-2 .g-item:hover img,
+  body.fx-grayscale .hero-photo:hover img, body.fx-grayscale .about-photo:hover img, body.fx-grayscale .gallery-2 .g-photo:hover img,
   body.fx-grayscale .proj-render:hover img, body.fx-grayscale .img-slot:hover img, body.fx-grayscale .cb-card-media:hover img{
     filter:grayscale(0%);
   }
-  body.fx-lift .proj-card:hover, body.fx-lift .cert-tile:hover, body.fx-lift .cb-card:hover, body.fx-lift .gallery-2 .g-item:hover,
+  body.fx-lift .proj-card:hover, body.fx-lift .cert-tile:hover, body.fx-lift .cb-card:hover, body.fx-lift .gallery-2 .g-photo:hover,
   body.fx-lift .hero-photo:hover, body.fx-lift .about-photo:hover{
     transform:translateY(-6px); box-shadow:0 18px 32px -16px rgba(15,21,36,0.32);
   }
-  body.fx-glow .proj-card:hover, body.fx-glow .cert-tile:hover, body.fx-glow .cb-card:hover, body.fx-glow .gallery-2 .g-item:hover,
+  body.fx-glow .proj-card:hover, body.fx-glow .cert-tile:hover, body.fx-glow .cb-card:hover, body.fx-glow .gallery-2 .g-photo:hover,
   body.fx-glow .hero-photo:hover, body.fx-glow .about-photo:hover{
     box-shadow:0 0 0 3px var(--blue), 0 10px 26px -10px var(--blue);
   }
@@ -484,6 +486,7 @@
       </div>
       <div class="reveal">
         <div class="about-photo" id="aboutPhoto"></div>
+        <div class="photo-cap" id="aboutPhotoCap" style="display:none"></div>
         <div class="about-panel" id="languagesPanel">
           <div class="k">Languages</div>
           <div class="info-chip-row" id="aboutLanguages"></div>
@@ -628,9 +631,17 @@
   }
 
   function photoField(f){
-    if(!f) return { src:'', alt:'' };
-    if(typeof f === 'string') return { src:f, alt:'' };
-    return { src: f.hidden ? '' : (f.src || ''), alt: f.alt || '' };
+    if(!f) return { src:'', alt:'', showCaption:false };
+    if(typeof f === 'string') return { src:f, alt:'', showCaption:false };
+    return { src: f.hidden ? '' : (f.src || ''), alt: f.alt || '', showCaption: !!f.showCaption };
+  }
+
+  function photoCapHtml(ph){
+    return (ph && ph.src && ph.alt && ph.showCaption) ? `<div class="photo-cap">${ph.alt}</div>` : '';
+  }
+
+  function galleryItemHtml(img){
+    return `<div class="g-item"><div class="g-photo">${imgBlock(img.src, img.alt, 'g-placeholder', img.label || 'Photo', 'Add a photo from the admin page')}</div>${photoCapHtml(img)}</div>`;
   }
 
   function el(id){ return document.getElementById(id); }
@@ -747,7 +758,10 @@
     el('heroCtaBtn').textContent = h.ctaLabel || 'Contact me';
     const heroPh = photoField(h.photo);
     el('heroPhoto').innerHTML = imgBlock(heroPh.src, heroPh.alt || h.name, 'ph-placeholder', 'Your photo', 'Add a photo from the admin page');
-    el('heroPhotoCaption').textContent = h.photoCaption || '';
+    const heroCapEl = el('heroPhotoCaption');
+    const heroCapText = h.photoCaption || '';
+    heroCapEl.textContent = heroCapText;
+    heroCapEl.style.display = (heroCapText && h.photoCaptionOn !== false) ? '' : 'none';
 
     // Social
     const s = data.social || {};
@@ -809,6 +823,9 @@
       (a.quote ? `<div class="quote-block">${a.quote}</div>` : '');
     const aboutPh = photoField(a.photo);
     el('aboutPhoto').innerHTML = imgBlock(aboutPh.src, aboutPh.alt || h.name, 'ph-placeholder', 'About photo', 'Add a photo from the admin page');
+    const aboutCapEl = el('aboutPhotoCap');
+    aboutCapEl.textContent = aboutPh.alt || '';
+    aboutCapEl.style.display = (aboutPh.src && aboutPh.alt && aboutPh.showCaption) ? '' : 'none';
     el('aboutInterests').innerHTML = (a.interests || []).map(t => `<span class="tag">${t}</span>`).join('');
     el('aboutLanguages').innerHTML = (a.languages || []).map(l => `<div><div class="v">${l.name}</div><div class="sub">${l.level}</div></div>`).join('');
     el('interestsPanel').style.display = a.showInterests === false ? 'none' : '';
@@ -837,8 +854,7 @@
           ${r.duration ? `<div><span class="k">Duration</span><span class="v">${r.duration}</span></div>` : ''}
         </div>`;
     }
-    el('researchGallery').innerHTML = (r.images || []).map(img => `
-      <div class="g-item">${imgBlock(img.src, img.alt, 'g-placeholder', img.label || 'Photo', 'Add a photo from the admin page')}</div>`).join('');
+    el('researchGallery').innerHTML = (r.images || []).map(img => `${galleryItemHtml(img)}`).join('');
     el('researchCaption').textContent = r.caption || '';
 
     // Experience
@@ -853,7 +869,7 @@
         </div>
         ${main.position ? `<span class="pos">${main.position}</span>` : ''}
         ${(main.bullets && main.bullets.length) ? `<ul>${main.bullets.map(b => `<li>${b}</li>`).join('')}</ul>` : ''}
-        <div class="gallery-2">${(main.images || []).map(img => `<div class="g-item">${imgBlock(img.src, img.alt, 'g-placeholder', img.label || 'Photo', 'Add a photo from the admin page')}</div>`).join('')}</div>
+        <div class="gallery-2">${(main.images || []).map(img => `${galleryItemHtml(img)}`).join('')}</div>
         ${main.caption ? `<div class="gallery-caption">${main.caption}</div>` : ''}`;
     }
     el('expVisits').innerHTML = (ex.visits || []).map(v => `
@@ -861,7 +877,7 @@
         <span class="site">${v.site || ''}</span>
         <span class="date">${v.date || ''}</span>
         <p>${v.desc || ''}</p>
-        <div class="gallery-2">${(v.images || []).map(img => `<div class="g-item">${imgBlock(img.src, img.alt, 'g-placeholder', img.label || 'Photo', 'Add a photo from the admin page')}</div>`).join('')}</div>
+        <div class="gallery-2">${(v.images || []).map(img => `${galleryItemHtml(img)}`).join('')}</div>
       </div>`).join('');
 
     // Skills
@@ -877,6 +893,7 @@
       return `
       <div class="proj-card">
         <div class="proj-render">${imgBlock(ph.src, ph.alt || p.title, '', p.label || 'Project render', 'Add a photo from the admin page')}</div>
+        ${photoCapHtml(ph)}
         <div class="proj-body">
           ${p.tag ? `<span class="proj-tag">${p.tag}</span>` : ''}
           <h3>${p.title || ''}</h3>
@@ -891,6 +908,7 @@
       return `
       <div class="cert-tile">
         <div class="img-slot">${imgBlock(ph.src, ph.alt || c.title, '', 'Certificate', 'Add a photo from the admin page')}</div>
+        ${photoCapHtml(ph)}
         <div class="cap"><div class="title">${c.title || ''}</div><div class="issuer">${c.issuer || ''}</div></div>
       </div>`;
     }).join('');
@@ -899,7 +917,7 @@
     el('awardsList').innerHTML = (data.awards || []).filter(aw => aw.visible !== false).map(aw => `
       <li><span class="mark">${aw.year || ''}</span><span class="txt"><strong>${aw.title || ''}</strong>${aw.desc ? `<span>${aw.desc}</span>` : ''}</span></li>`).join('');
     el('leadershipList').innerHTML = (data.leadership || []).filter(l => l.visible !== false).map(l => `
-      <li><span class="mark">${l.period || ''}</span><span class="txt"><strong>${l.title || ''}</strong>${l.org ? `<span>${l.org}</span>` : ''}${l.desc ? `<span class="desc">${l.desc}</span>` : ''}${(l.images && l.images.length) ? `<div class="gallery-2 activity-gallery">${l.images.map(img => `<div class="g-item">${imgBlock(img.src, img.alt, 'g-placeholder', img.label || 'Photo', 'Add a photo from the admin page')}</div>`).join('')}</div>` : ''}</span></li>`).join('');
+      <li><span class="mark">${l.period || ''}</span><span class="txt"><strong>${l.title || ''}</strong>${l.org ? `<span>${l.org}</span>` : ''}${l.desc ? `<span class="desc">${l.desc}</span>` : ''}${(l.images && l.images.length) ? `<div class="gallery-2 activity-gallery">${l.images.map(img => `${galleryItemHtml(img)}`).join('')}</div>` : ''}</span></li>`).join('');
 
     // Contact
     const c = data.contact || {};
@@ -929,7 +947,7 @@
       return (block.items && block.items.length) ? `<ul class="cb-list">${block.items.map(i => `<li>${i}</li>`).join('')}</ul>` : '';
     }
     if(block.type === 'gallery'){
-      return (block.images && block.images.length) ? `<div class="gallery-2">${block.images.map(img => `<div class="g-item">${imgBlock(img.src, img.alt, 'g-placeholder', img.label || 'Photo', 'Add a photo from the admin page')}</div>`).join('')}</div>` : '';
+      return (block.images && block.images.length) ? `<div class="gallery-2">${block.images.map(img => `${galleryItemHtml(img)}`).join('')}</div>` : '';
     }
     if(block.type === 'cards'){
       return (block.cards && block.cards.length) ? `<div class="cb-cards">${block.cards.map(c => {
