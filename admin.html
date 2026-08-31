@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edit Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F7F8FB; --panel:#FFFFFF; --border:#E2E6EE; --text:#0F1524; --text-dim:#5B6472;
+    --blue:#2555E7; --blue-dark:#1B3FB8; --blue-tint:#EEF2FF; --green:#1FA971; --red:#D64545;
+    --heading:'Plus Jakarta Sans', sans-serif; --body:'Inter', sans-serif; --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--bg); color:var(--text); font-family:var(--body); line-height:1.55; padding-bottom:100px;}
+  h1,h2,h3{font-family:var(--heading);}
+  a{color:var(--blue);}
+
+  header.top{
+    position:sticky; top:0; z-index:20; background:rgba(247,248,251,0.92); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border); padding:14px 20px;
+  }
+  .top-inner{max-width:920px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;}
+  .top-inner h1{font-size:1.05rem; font-weight:800;}
+  .top-inner a.back{font-size:0.82rem; color:var(--text-dim); text-decoration:none;}
+
+  .wrap{max-width:920px; margin:0 auto; padding:24px 20px;}
+
+  .panel{background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:22px 24px; margin-bottom:20px;}
+  .panel h2{font-size:1.05rem; margin:0 0 4px;}
+  .panel .hint{color:var(--text-dim); font-size:0.84rem; margin-bottom:16px;}
+
+  .field{display:block; margin-bottom:14px;}
+  .field span{display:block; font-size:0.78rem; font-weight:600; color:var(--text-dim); margin-bottom:5px;}
+  .field span i{font-weight:400; font-style:normal; color:#9399A6;}
+  .field input[type=text], .field input[type=password], .field input[type=email], .field input[type=url], .field textarea, .field select{
+    width:100%; padding:10px 12px; border:1px solid var(--border); border-radius:9px; font:inherit; font-size:0.9rem;
+    background:#fff; color:var(--text);
+  }
+  .field textarea{resize:vertical; min-height:60px;}
+  .row2{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .row3{display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px;}
+  @media (max-width:640px){.row2,.row3{grid-template-columns:1fr;}}
+
+  .item-card{border:1px solid var(--border); border-radius:12px; padding:16px 18px; margin-bottom:12px; background:#FBFCFE; position:relative;}
+  .item-card .remove-btn{position:absolute; top:10px; right:10px; background:none; border:none; color:var(--red); font-size:0.78rem; font-weight:600; cursor:pointer;}
+  .btn-add{margin-top:4px; background:var(--blue-tint); color:var(--blue-dark); border:1px dashed var(--blue); border-radius:9px; padding:9px 14px; font-size:0.84rem; font-weight:600; cursor:pointer;}
+  .btn-add:hover{background:#e2e9ff;}
+
+  .image-field{display:flex; align-items:center; gap:12px; margin-bottom:12px; flex-wrap:wrap;}
+  .image-field .preview-thumb{width:64px; height:64px; object-fit:cover; border-radius:8px; border:1px solid var(--border); background:#eee;}
+  .image-field .meta{flex:1; min-width:160px;}
+  .image-field .meta span{font-size:0.78rem; font-weight:600; color:var(--text-dim); display:block; margin-bottom:4px;}
+  .image-field input[type=file]{font-size:0.8rem;}
+  .btn-remove-small{background:none; border:1px solid var(--border); border-radius:7px; font-size:0.72rem; color:var(--text-dim); padding:5px 9px; cursor:pointer;}
+
+  .gallery-wrap{display:flex; gap:14px; flex-wrap:wrap;}
+
+  footer.action-bar{
+    position:fixed; left:0; right:0; bottom:0; z-index:30; background:var(--panel); border-top:1px solid var(--border);
+    padding:14px 20px; display:flex; justify-content:center;
+  }
+  .action-inner{max-width:920px; width:100%; display:flex; align-items:center; gap:12px; flex-wrap:wrap;}
+  .btn{font-family:var(--body); font-weight:700; font-size:0.9rem; padding:12px 22px; border-radius:10px; border:none; cursor:pointer;}
+  .btn.primary{background:var(--blue); color:#fff;}
+  .btn.primary:hover{background:var(--blue-dark);}
+  .btn.secondary{background:#fff; border:1px solid var(--border); color:var(--text);}
+  .btn.primary:disabled{opacity:0.5; cursor:not-allowed;}
+  #status{font-size:0.84rem; color:var(--text-dim); flex:1; min-width:180px;}
+  #status.ok{color:var(--green); font-weight:600;}
+  #status.err{color:var(--red); font-weight:600;}
+
+  .connect-grid{display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px;}
+  @media (max-width:720px){.connect-grid{grid-template-columns:1fr;}}
+  .connect-actions{display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;}
+  .badge{display:inline-flex; align-items:center; gap:6px; font-size:0.8rem; font-weight:600; padding:6px 12px; border-radius:99px;}
+  .badge.on{background:#E6F7EF; color:var(--green);}
+  .badge.off{background:#F2F4F8; color:var(--text-dim);}
+  details.help{margin-top:14px; font-size:0.83rem; color:var(--text-dim);}
+  details.help summary{cursor:pointer; font-weight:600; color:var(--blue);}
+  details.help ol{padding-left:20px; margin-top:8px;}
+  details.help li{margin-bottom:6px;}
+
+  #formArea{display:none;}
+  #formArea.visible{display:block;}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <h1>Edit Portfolio</h1>
+    <a class="back" href="index.html">&larr; View live site</a>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="panel">
+    <h2>Connect to GitHub</h2>
+    <p class="hint">Save your changes straight to your repository. Nothing you type here is sent anywhere except directly to GitHub.</p>
+    <div class="connect-grid">
+      <label class="field"><span>GitHub username / org</span><input type="text" id="cOwner"></label>
+      <label class="field"><span>Repository name</span><input type="text" id="cRepo"></label>
+      <label class="field"><span>Personal access token</span><input type="password" id="cToken" placeholder="ghp_... or github_pat_..."></label>
+    </div>
+    <label class="field" style="display:flex; align-items:center; gap:8px; margin-top:-4px;">
+      <input type="checkbox" id="cRemember" style="width:auto;"> <span style="margin:0;">Remember these on this device</span>
+    </label>
+    <div class="connect-actions">
+      <button class="btn primary" id="btnConnect">Load my content</button>
+      <button class="btn secondary" id="btnLoadLocal">Preview without saving</button>
+      <span class="badge off" id="connBadge">Not connected</span>
+    </div>
+    <details class="help">
+      <summary>How do I get a token?</summary>
+      <ol>
+        <li>Go to <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a> (GitHub &rarr; Settings &rarr; Developer settings &rarr; Fine-grained tokens).</li>
+        <li>Under "Repository access", choose "Only select repositories" and pick this portfolio repo.</li>
+        <li>Under "Permissions" &rarr; "Repository permissions", set <b>Contents</b> to <b>Read and write</b>. Leave everything else as-is.</li>
+        <li>Generate the token and paste it above. It's only stored in your browser and used to talk directly to GitHub.</li>
+        <li>You can revoke it any time from that same GitHub settings page.</li>
+      </ol>
+    </details>
+  </div>
+
+  <div id="formArea">
+    <div class="panel" id="sec-hero"><h2>Hero</h2></div>
+    <div class="panel" id="sec-social"><h2>Social &amp; Contact Links</h2></div>
+    <div class="panel" id="sec-stats"><h2>Highlight Cards</h2></div>
+    <div class="panel" id="sec-about"><h2>About</h2></div>
+    <div class="panel" id="sec-education"><h2>Education</h2></div>
+    <div class="panel" id="sec-research"><h2>Research &amp; Thesis</h2></div>
+    <div class="panel" id="sec-experience"><h2>Industrial Experience &amp; Visits</h2></div>
+    <div class="panel" id="sec-skills"><h2>Technical Skills</h2></div>
+    <div class="panel" id="sec-projects"><h2>Projects</h2></div>
+    <div class="panel" id="sec-certificates"><h2>Certificates &amp; Achievements</h2></div>
+    <div class="panel" id="sec-awards"><h2>Awards</h2></div>
+    <div class="panel" id="sec-leadership"><h2>Leadership</h2></div>
+    <div class="panel" id="sec-contact"><h2>Contact Footer</h2></div>
+  </div>
+
+</div>
+
+<footer class="action-bar">
+  <div class="action-inner">
+    <span id="status">Connect to GitHub or load a local preview to start editing.</span>
+    <button class="btn secondary" id="btnDownload">Download data.json</button>
+    <button class="btn primary" id="btnSave" disabled>Save to GitHub</button>
+  </div>
+</footer>
+
+<script>
+(function(){
+
+  const state = { data: null, sha: null, token: '', owner: '', repo: '', pendingImages: [], connected: false };
+
+  const ICON_OPTIONS = ['education','research','design','goal','briefcase','star'];
+  const COLOR_OPTIONS = ['blue','violet','amber','green'];
+
+  function $(id){ return document.getElementById(id); }
+  function setStatus(msg, cls){
+    const s = $('status');
+    s.textContent = msg;
+    s.className = cls || '';
+  }
+
+  // ---------- persistence of connection settings ----------
+  function loadSettings(){
+    try{
+      const raw = localStorage.getItem('portfolioAdmin.settings');
+      if(raw){
+        const s = JSON.parse(raw);
+        $('cOwner').value = s.owner || 'albaset';
+        $('cRepo').value = s.repo || 'albaset.github.io';
+      } else {
+        $('cOwner').value = 'albaset';
+        $('cRepo').value = 'albaset.github.io';
+      }
+      const tok = localStorage.getItem('portfolioAdmin.token');
+      if(tok){ $('cToken').value = tok; $('cRemember').checked = true; }
+    }catch(e){}
+  }
+  function saveSettings(){
+    localStorage.setItem('portfolioAdmin.settings', JSON.stringify({owner: state.owner, repo: state.repo}));
+    if($('cRemember').checked){
+      localStorage.setItem('portfolioAdmin.token', state.token);
+    } else {
+      localStorage.removeItem('portfolioAdmin.token');
+    }
+  }
+
+  // ---------- GitHub helpers ----------
+  function b64EncodeUnicode(str){
+    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (m,p1)=>String.fromCharCode('0x'+p1)));
+  }
+  function b64DecodeUnicode(str){
+    return decodeURIComponent(atob(str.replace(/\n/g,'')).split('').map(c=>'%'+('00'+c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+  }
+  function fileToBase64(file){
+    return new Promise((resolve,reject)=>{
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result.split(',')[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+  function slugify(s){ return (s||'img').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-+|-+$)/g,'').slice(0,40) || 'img'; }
+
+  async function ghGet(path){
+    const url = `https://api.github.com/repos/${state.owner}/${state.repo}/contents/${encodeURIComponent(path)}`;
+    const res = await fetch(url, {headers:{'Authorization':'Bearer '+state.token, 'Accept':'application/vnd.github+json'}});
+    if(!res.ok) throw new Error(`Could not load ${path} (HTTP ${res.status}). Check owner/repo/token.`);
+    return res.json();
+  }
+  async function ghPut(path, contentB64, message, sha){
+    const url = `https://api.github.com/repos/${state.owner}/${state.repo}/contents/${encodeURIComponent(path)}`;
+    const body = { message, content: contentB64 };
+    if(sha) body.sha = sha;
+    const res = await fetch(url, {
+      method:'PUT',
+      headers:{'Authorization':'Bearer '+state.token, 'Accept':'application/vnd.github+json', 'Content-Type':'application/json'},
+      body: JSON.stringify(body)
+    });
+    if(!res.ok){
+      const err = await res.json().catch(()=>({message:res.statusText}));
+      throw new Error(err.message || ('HTTP '+res.status));
+    }
+    return res.json();
+  }
+
+  // ---------- field builders ----------
+  function textField(labelText, value, onChange, multiline){
+    const wrap = document.createElement('label');
+    wrap.className = 'field';
+    const span = document.createElement('span'); span.textContent = labelText; wrap.appendChild(span);
+    const input = document.createElement(multiline ? 'textarea' : 'input');
+    if(!multiline) input.type = 'text';
+    input.value = value || '';
+    input.addEventListener('input', () => onChange(input.value));
+    wrap.appendChild(input);
+    return wrap;
+  }
+
+  function listField(labelText, arr, onChange){
+    const wrap = document.createElement('label');
+    wrap.className = 'field';
+    const span = document.createElement('span');
+    span.innerHTML = labelText + ' <i>(one per line)</i>';
+    wrap.appendChild(span);
+    const ta = document.createElement('textarea');
+    ta.value = (arr||[]).join('\n');
+    ta.addEventListener('input', () => onChange(ta.value.split('\n').map(s=>s.trim()).filter(Boolean)));
+    wrap.appendChild(ta);
+    return wrap;
+  }
+
+  function imageField(labelText, obj, key){
+    const wrap = document.createElement('div');
+    wrap.className = 'field image-field';
+    const preview = document.createElement('img');
+    preview.className = 'preview-thumb';
+    preview.src = obj[key] || '';
+    preview.style.visibility = obj[key] ? 'visible' : 'hidden';
+    wrap.appendChild(preview);
+    const meta = document.createElement('div');
+    meta.className = 'meta';
+    const span = document.createElement('span'); span.textContent = labelText; meta.appendChild(span);
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file'; fileInput.accept = 'image/*';
+    fileInput.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if(!file) return;
+      preview.src = URL.createObjectURL(file);
+      preview.style.visibility = 'visible';
+      const base64 = await fileToBase64(file);
+      const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
+      const path = 'images/' + slugify(labelText) + '-' + Date.now() + '.' + ext;
+      obj[key] = path;
+      state.pendingImages.push({path, base64});
+    });
+    meta.appendChild(fileInput);
+    wrap.appendChild(meta);
+    const clearBtn = document.createElement('button');
+    clearBtn.type = 'button'; clearBtn.className = 'btn-remove-small'; clearBtn.textContent = 'Remove photo';
+    clearBtn.onclick = () => { obj[key] = ''; preview.src=''; preview.style.visibility='hidden'; };
+    wrap.appendChild(clearBtn);
+    return wrap;
+  }
+
+  function selectField(labelText, value, options, onChange){
+    const wrap = document.createElement('label');
+    wrap.className = 'field';
+    const span = document.createElement('span'); span.textContent = labelText; wrap.appendChild(span);
+    const sel = document.createElement('select');
+    options.forEach(o => {
+      const opt = document.createElement('option'); opt.value = o; opt.textContent = o;
+      if(o === value) opt.selected = true;
+      sel.appendChild(opt);
+    });
+    sel.addEventListener('change', () => onChange(sel.value));
+    wrap.appendChild(sel);
+    return wrap;
+  }
+
+  function imagesRepeater(container, imagesArr, itemLabel){
+    const list = document.createElement('div');
+    list.className = 'gallery-wrap';
+    function draw(){
+      list.innerHTML = '';
+      imagesArr.forEach((img, idx) => {
+        const card = document.createElement('div');
+        card.style.cssText = 'border:1px solid var(--border);border-radius:10px;padding:10px;width:200px;';
+        card.appendChild(imageField(`${itemLabel} ${idx+1}`, img, 'src'));
+        card.appendChild(textField('Caption / alt text', img.alt, v => img.alt = v));
+        const rm = document.createElement('button');
+        rm.type='button'; rm.className='btn-remove-small'; rm.textContent='Remove';
+        rm.onclick = () => { imagesArr.splice(idx,1); draw(); };
+        card.appendChild(rm);
+        list.appendChild(card);
+      });
+    }
+    draw();
+    container.appendChild(list);
+    const addBtn = document.createElement('button');
+    addBtn.type='button'; addBtn.className='btn-add'; addBtn.textContent = '+ Add photo';
+    addBtn.onclick = () => { imagesArr.push({src:'', alt:'', label:'Photo'}); draw(); };
+    container.appendChild(addBtn);
+  }
+
+  // ---------- section renderers ----------
+  function renderAll(){
+    renderHero();
+    renderSocial();
+    renderStats();
+    renderAbout();
+    renderEducation();
+    renderResearch();
+    renderExperience();
+    renderSkills();
+    renderProjects();
+    renderCertificates();
+    renderSimpleList('sec-awards', 'Awards', state.data.awards, [
+      {k:'year', label:'Year'}, {k:'title', label:'Title'}, {k:'desc', label:'Description'}
+    ], 'award');
+    renderSimpleList('sec-leadership', 'Leadership', state.data.leadership, [
+      {k:'period', label:'Period'}, {k:'title', label:'Role'}, {k:'org', label:'Organization'}
+    ], 'entry');
+    renderContact();
+    $('formArea').classList.add('visible');
+  }
+
+  function sectionBody(id, titleText){
+    const p = $(id);
+    p.innerHTML = `<h2>${titleText}</h2>`;
+    const body = document.createElement('div');
+    p.appendChild(body);
+    return body;
+  }
+
+  function renderHero(){
+    const b = sectionBody('sec-hero', 'Hero');
+    const h = state.data.hero = state.data.hero || {};
+    const meta = state.data.meta = state.data.meta || {};
+    b.appendChild(textField('Site title (browser tab)', meta.title, v => { meta.title = v; }));
+    b.appendChild(textField('Site description (SEO)', meta.description, v => meta.description = v, true));
+    const row = document.createElement('div'); row.className='row2';
+    row.appendChild(textField('Nav brand — first part', meta.brandFirst, v => meta.brandFirst = v));
+    row.appendChild(textField('Nav brand — highlighted part', meta.brandLast, v => meta.brandLast = v));
+    b.appendChild(row);
+    b.appendChild(textField('Badge text', h.badge, v => h.badge = v));
+    b.appendChild(textField('Full name', h.name, v => h.name = v));
+    b.appendChild(textField('Role / headline', h.role, v => h.role = v));
+    b.appendChild(textField('Short description', h.description, v => h.description = v, true));
+    b.appendChild(textField('Location', h.location, v => h.location = v));
+    b.appendChild(textField('Contact button label', h.ctaLabel, v => h.ctaLabel = v));
+    b.appendChild(textField('CV file name (upload the PDF to your repo with this exact name)', h.cvFile, v => h.cvFile = v));
+    b.appendChild(imageField('Hero photo', h, 'photo'));
+    b.appendChild(textField('Photo caption', h.photoCaption, v => h.photoCaption = v));
+  }
+
+  function renderSocial(){
+    const b = sectionBody('sec-social', 'Social & Contact Links');
+    const s = state.data.social = state.data.social || {};
+    const row = document.createElement('div'); row.className='row2';
+    row.appendChild(textField('Email', s.email, v => s.email = v));
+    row.appendChild(textField('LinkedIn URL', s.linkedin, v => s.linkedin = v));
+    b.appendChild(row);
+    const row2 = document.createElement('div'); row2.className='row2';
+    row2.appendChild(textField('GitHub URL (leave blank to hide)', s.github, v => s.github = v));
+    row2.appendChild(textField('Personal website URL (leave blank to hide)', s.website, v => s.website = v));
+    b.appendChild(row2);
+    b.appendChild(textField('ResearchGate URL (leave blank to hide)', s.researchgate, v => s.researchgate = v));
+  }
+
+  function renderStats(){
+    const b = sectionBody('sec-stats', 'Highlight Cards (the 4 boxes under your intro)');
+    const list = document.createElement('div');
+    const stats = state.data.stats = state.data.stats || [];
+    function draw(){
+      list.innerHTML = '';
+      stats.forEach((st, idx) => {
+        const card = document.createElement('div'); card.className='item-card';
+        const rm = document.createElement('button'); rm.className='remove-btn'; rm.textContent='Remove'; rm.type='button';
+        rm.onclick = () => { stats.splice(idx,1); draw(); };
+        card.appendChild(rm);
+        const row = document.createElement('div'); row.className='row2';
+        row.appendChild(selectField('Icon', st.icon, ICON_OPTIONS, v => st.icon = v));
+        row.appendChild(selectField('Color', st.color, COLOR_OPTIONS, v => st.color = v));
+        card.appendChild(row);
+        card.appendChild(textField('Title', st.title, v => st.title = v));
+        card.appendChild(textField('Subtitle (use <br> for a line break)', st.sub, v => st.sub = v));
+        list.appendChild(card);
+      });
+    }
+    draw();
+    b.appendChild(list);
+    const addBtn = document.createElement('button'); addBtn.className='btn-add'; addBtn.type='button'; addBtn.textContent='+ Add card';
+    addBtn.onclick = () => { stats.push({icon:'star', color:'blue', title:'', sub:''}); draw(); };
+    b.appendChild(addBtn);
+  }
+
+  function renderAbout(){
+    const b = sectionBody('sec-about', 'About');
+    const a = state.data.about = state.data.about || {};
+    b.appendChild(listField('About paragraphs', a.paragraphs, v => a.paragraphs = v));
+    const note = document.createElement('p'); note.className='hint'; note.style.marginTop='-10px';
+    note.innerHTML = 'Tip: wrap a word in <code>&lt;strong&gt;word&lt;/strong&gt;</code> to bold it.';
+    b.appendChild(note);
+    b.appendChild(textField('Pull-quote', a.quote, v => a.quote = v, true));
+    b.appendChild(imageField('About photo', a, 'photo'));
+    b.appendChild(listField('Interests / focus tags', a.interests, v => a.interests = v));
+
+    const langs = a.languages = a.languages || [];
+    const langWrap = document.createElement('div');
+    function drawLangs(){
+      langWrap.innerHTML = '';
+      langs.forEach((l, idx) => {
+        const row = document.createElement('div'); row.className='row2'; row.style.marginBottom='8px';
+        row.appendChild(textField('Language', l.name, v => l.name = v));
+        const levelWrap = document.createElement('div'); levelWrap.style.display='flex'; levelWrap.style.gap='8px'; levelWrap.style.alignItems='flex-end';
+        levelWrap.appendChild(textField('Level', l.level, v => l.level = v));
+        const rm = document.createElement('button'); rm.type='button'; rm.className='btn-remove-small'; rm.textContent='Remove'; rm.style.marginBottom='14px';
+        rm.onclick = () => { langs.splice(idx,1); drawLangs(); };
+        levelWrap.appendChild(rm);
+        row.appendChild(levelWrap);
+        langWrap.appendChild(row);
+      });
+    }
+    drawLangs();
+    b.appendChild(langWrap);
+    const addLang = document.createElement('button'); addLang.className='btn-add'; addLang.type='button'; addLang.textContent='+ Add language';
+    addLang.onclick = () => { langs.push({name:'', level:''}); drawLangs(); };
+    b.appendChild(addLang);
+  }
+
+  function renderEducation(){
+    const b = sectionBody('sec-education', 'Education');
+    const items = state.data.education = state.data.education || [];
+    const list = document.createElement('div');
+    function draw(){
+      list.innerHTML = '';
+      items.forEach((e, idx) => {
+        const card = document.createElement('div'); card.className='item-card';
+        const rm = document.createElement('button'); rm.className='remove-btn'; rm.type='button'; rm.textContent='Remove';
+        rm.onclick = () => { items.splice(idx,1); draw(); };
+        card.appendChild(rm);
+        card.appendChild(textField('Degree / certificate', e.degree, v => e.degree = v));
+        card.appendChild(textField('Institution', e.institution, v => e.institution = v));
+        const row = document.createElement('div'); row.className='row2';
+        row.appendChild(textField('Score (GPA/CGPA)', e.score, v => e.score = v));
+        row.appendChild(textField('Period', e.period, v => e.period = v));
+        card.appendChild(row);
+        list.appendChild(card);
+      });
+    }
+    draw();
+    b.appendChild(list);
+    const addBtn = document.createElement('button'); addBtn.className='btn-add'; addBtn.type='button'; addBtn.textContent='+ Add education entry';
+    addBtn.onclick = () => { items.push({degree:'', institution:'', score:'', period:''}); draw(); };
+    b.appendChild(addBtn);
+  }
+
+  function renderResearch(){
+    const b = sectionBody('sec-research', 'Research & Thesis');
+    const r = state.data.research = state.data.research || {};
+    b.appendChild(textField('Section intro line', r.lede, v => r.lede = v));
+    b.appendChild(textField('Thesis / project title', r.title, v => r.title = v, true));
+    b.appendChild(listField('Key points', r.bullets, v => r.bullets = v));
+    const row = document.createElement('div'); row.className='row3';
+    row.appendChild(textField('Institution', r.institution, v => r.institution = v));
+    row.appendChild(textField('Supervisor', r.supervisor, v => r.supervisor = v));
+    row.appendChild(textField('Duration', r.duration, v => r.duration = v));
+    b.appendChild(row);
+    r.images = r.images || [];
+    imagesRepeater(b, r.images, 'Photo');
+    b.appendChild(textField('Gallery caption', r.caption, v => r.caption = v));
+  }
+
+  function renderExperience(){
+    const b = sectionBody('sec-experience', 'Industrial Experience & Visits');
+    const ex = state.data.experience = state.data.experience || {};
+    b.appendChild(textField('Section intro line', ex.lede, v => ex.lede = v));
+
+    const mainH = document.createElement('h3'); mainH.textContent = 'Main training placement'; mainH.style.marginTop='18px';
+    b.appendChild(mainH);
+    const main = ex.main = ex.main || {};
+    b.appendChild(textField('Site / company', main.site, v => main.site = v));
+    const row = document.createElement('div'); row.className='row2';
+    row.appendChild(textField('Date', main.date, v => main.date = v));
+    row.appendChild(textField('Position / role', main.position, v => main.position = v));
+    b.appendChild(row);
+    b.appendChild(listField('Key points', main.bullets, v => main.bullets = v));
+    main.images = main.images || [];
+    imagesRepeater(b, main.images, 'Photo');
+    b.appendChild(textField('Gallery caption', main.caption, v => main.caption = v));
+
+    const visitsH = document.createElement('h3'); visitsH.textContent = 'One-day visits'; visitsH.style.marginTop='22px';
+    b.appendChild(visitsH);
+    const visits = ex.visits = ex.visits || [];
+    const list = document.createElement('div');
+    function draw(){
+      list.innerHTML = '';
+      visits.forEach((v, idx) => {
+        const card = document.createElement('div'); card.className='item-card';
+        const rm = document.createElement('button'); rm.className='remove-btn'; rm.type='button'; rm.textContent='Remove';
+        rm.onclick = () => { visits.splice(idx,1); draw(); };
+        card.appendChild(rm);
+        card.appendChild(textField('Site / company', v.site, val => v.site = val));
+        card.appendChild(textField('Date', v.date, val => v.date = val));
+        card.appendChild(textField('Description', v.desc, val => v.desc = val, true));
+        v.images = v.images || [];
+        imagesRepeater(card, v.images, 'Photo');
+        list.appendChild(card);
+      });
+    }
+    draw();
+    b.appendChild(list);
+    const addBtn = document.createElement('button'); addBtn.className='btn-add'; addBtn.type='button'; addBtn.textContent='+ Add visit';
+    addBtn.onclick = () => { visits.push({site:'', date:'', desc:'', images:[]}); draw(); };
+    b.appendChild(addBtn);
+  }
+
+  function renderSkills(){
+    const b = sectionBody('sec-skills', 'Technical Skills');
+    const groups = state.data.skills = state.data.skills || [];
+    const list = document.createElement('div');
+    function draw(){
+      list.innerHTML = '';
+      groups.forEach((g, idx) => {
+        const card = document.createElement('div'); card.className='item-card';
+        const rm = document.createElement('button'); rm.className='remove-btn'; rm.type='button'; rm.textContent='Remove group';
+        rm.onclick = () => { groups.splice(idx,1); draw(); };
+        card.appendChild(rm);
+        card.appendChild(textField('Group name', g.group, v => g.group = v));
+        card.appendChild(listField('Skills in this group', g.items, v => g.items = v));
+        list.appendChild(card);
+      });
+    }
+    draw();
+    b.appendChild(list);
+    const addBtn = document.createElement('button'); addBtn.className='btn-add'; addBtn.type='button'; addBtn.textContent='+ Add skill group';
+    addBtn.onclick = () => { groups.push({group:'', items:[]}); draw(); };
+    b.appendChild(addBtn);
+  }
+
+  function renderProjects(){
+    const b = sectionBody('sec-projects', 'Projects');
+    const items = state.data.projects = state.data.projects || [];
+    const list = document.createElement('div');
+    function draw(){
+      list.innerHTML = '';
+      items.forEach((p, idx) => {
+        const card = document.createElement('div'); card.className='item-card';
+        const rm = document.createElement('button'); rm.className='remove-btn'; rm.type='button'; rm.textContent='Remove';
+        rm.onclick = () => { items.splice(idx,1); draw(); };
+        card.appendChild(rm);
+        card.appendChild(textField('Tag (tools used)', p.tag, v => p.tag = v));
+        card.appendChild(textField('Project title', p.title, v => p.title = v));
+        card.appendChild(imageField('Render / photo', p, 'image'));
+        card.appendChild(listField('Description points', p.bullets, v => p.bullets = v));
+        list.appendChild(card);
+      });
+    }
+    draw();
+    b.appendChild(list);
+    const addBtn = document.createElement('button'); addBtn.className='btn-add'; addBtn.type='button'; addBtn.textContent='+ Add project';
+    addBtn.onclick = () => { items.push({tag:'', title:'', image:'', bullets:[]}); draw(); };
+    b.appendChild(addBtn);
+  }
+
+  function renderCertificates(){
+    const b = sectionBody('sec-certificates', 'Certificates & Achievements');
+    const items = state.data.certificates = state.data.certificates || [];
+    const list = document.createElement('div');
+    function draw(){
+      list.innerHTML = '';
+      items.forEach((c, idx) => {
+        const card = document.createElement('div'); card.className='item-card';
+        const rm = document.createElement('button'); rm.className='remove-btn'; rm.type='button'; rm.textContent='Remove';
+        rm.onclick = () => { items.splice(idx,1); draw(); };
+        card.appendChild(rm);
+        card.appendChild(textField('Title', c.title, v => c.title = v));
+        card.appendChild(textField('Issuer / details', c.issuer, v => c.issuer = v));
+        card.appendChild(imageField('Certificate image', c, 'image'));
+        list.appendChild(card);
+      });
+    }
+    draw();
+    b.appendChild(list);
+    const addBtn = document.createElement('button'); addBtn.className='btn-add'; addBtn.type='button'; addBtn.textContent='+ Add certificate';
+    addBtn.onclick = () => { items.push({title:'', issuer:'', image:''}); draw(); };
+    b.appendChild(addBtn);
+  }
+
+  function renderSimpleList(sectionId, titleText, items, fields, addLabel){
+    const b = sectionBody(sectionId, titleText);
+    const list = document.createElement('div');
+    function draw(){
+      list.innerHTML = '';
+      items.forEach((item, idx) => {
+        const card = document.createElement('div'); card.className='item-card';
+        const rm = document.createElement('button'); rm.className='remove-btn'; rm.type='button'; rm.textContent='Remove';
+        rm.onclick = () => { items.splice(idx,1); draw(); };
+        card.appendChild(rm);
+        fields.forEach(f => {
+          card.appendChild(textField(f.label, item[f.k], v => item[f.k] = v));
+        });
+        list.appendChild(card);
+      });
+    }
+    draw();
+    b.appendChild(list);
+    const addBtn = document.createElement('button'); addBtn.className='btn-add'; addBtn.type='button'; addBtn.textContent='+ Add ' + addLabel;
+    addBtn.onclick = () => {
+      const blank = {}; fields.forEach(f => blank[f.k] = '');
+      items.push(blank); draw();
+    };
+    b.appendChild(addBtn);
+  }
+
+  function renderContact(){
+    const b = sectionBody('sec-contact', 'Contact Footer');
+    const c = state.data.contact = state.data.contact || {};
+    b.appendChild(textField('Intro blurb', c.blurb, v => c.blurb = v, true));
+    b.appendChild(textField('Address (shown as a non-clickable line)', c.address, v => c.address = v));
+
+    const rows = c.rows = c.rows || [];
+    const rowsWrap = document.createElement('div');
+    function drawRows(){
+      rowsWrap.innerHTML = '';
+      rows.forEach((row, idx) => {
+        const r = document.createElement('div'); r.className='row2'; r.style.marginBottom='8px';
+        r.appendChild(textField('Label', row.k, v => row.k = v));
+        const valWrap = document.createElement('div'); valWrap.style.display='flex'; valWrap.style.gap='8px'; valWrap.style.alignItems='flex-end';
+        valWrap.appendChild(textField('Value', row.v, v => row.v = v));
+        const rm = document.createElement('button'); rm.type='button'; rm.className='btn-remove-small'; rm.textContent='Remove'; rm.style.marginBottom='14px';
+        rm.onclick = () => { rows.splice(idx,1); drawRows(); };
+        valWrap.appendChild(rm);
+        r.appendChild(valWrap);
+        rowsWrap.appendChild(r);
+      });
+    }
+    drawRows();
+    b.appendChild(rowsWrap);
+    const addRow = document.createElement('button'); addRow.className='btn-add'; addRow.type='button'; addRow.textContent='+ Add footer detail row';
+    addRow.onclick = () => { rows.push({k:'', v:''}); drawRows(); };
+    b.appendChild(addRow);
+
+    const row2 = document.createElement('div'); row2.className='row2';
+    row2.appendChild(textField('Copyright line', c.copyright, v => c.copyright = v));
+    row2.appendChild(textField('Tagline', c.tagline, v => c.tagline = v));
+    b.appendChild(row2);
+  }
+
+  // ---------- load / save ----------
+  async function loadFromGithub(){
+    setStatus('Loading your content from GitHub...');
+    try{
+      const json = await ghGet('data.json');
+      state.sha = json.sha;
+      state.data = JSON.parse(b64DecodeUnicode(json.content));
+      state.connected = true;
+      $('connBadge').textContent = 'Connected'; $('connBadge').className = 'badge on';
+      $('btnSave').disabled = false;
+      saveSettings();
+      renderAll();
+      setStatus('Loaded. Make your changes, then click "Save to GitHub".');
+    }catch(err){
+      setStatus('Could not load: ' + err.message, 'err');
+    }
+  }
+
+  async function loadLocal(){
+    setStatus('Loading local preview...');
+    try{
+      const res = await fetch('data.json', {cache:'no-store'});
+      state.data = await res.json();
+      state.sha = null;
+      state.connected = false;
+      $('connBadge').textContent = 'Preview only (not saving)'; $('connBadge').className = 'badge off';
+      $('btnSave').disabled = true;
+      renderAll();
+      setStatus('Preview loaded. Use "Download data.json" to save your edits manually.');
+    }catch(err){
+      setStatus('Could not load data.json: ' + err.message, 'err');
+    }
+  }
+
+  async function saveAll(){
+    if(!state.connected){ setStatus('Connect to GitHub first.', 'err'); return; }
+    $('btnSave').disabled = true;
+    try{
+      for(const img of state.pendingImages){
+        setStatus('Uploading ' + img.path + '...');
+        await ghPut(img.path, img.base64, 'Add ' + img.path);
+      }
+      state.pendingImages = [];
+      setStatus('Saving data.json...');
+      const jsonStr = JSON.stringify(state.data, null, 2);
+      const res = await ghPut('data.json', b64EncodeUnicode(jsonStr), 'Update portfolio content', state.sha);
+      state.sha = res.content.sha;
+      setStatus('Saved! Your site will update in about a minute.', 'ok');
+    }catch(err){
+      setStatus('Save failed: ' + err.message, 'err');
+    }finally{
+      $('btnSave').disabled = false;
+    }
+  }
+
+  function downloadJson(){
+    if(!state.data){ setStatus('Load your content first.', 'err'); return; }
+    const blob = new Blob([JSON.stringify(state.data, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'data.json';
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  // ---------- wire up ----------
+  loadSettings();
+  $('btnConnect').addEventListener('click', () => {
+    state.owner = $('cOwner').value.trim();
+    state.repo = $('cRepo').value.trim();
+    state.token = $('cToken').value.trim();
+    if(!state.owner || !state.repo || !state.token){ setStatus('Fill in owner, repo, and token first.', 'err'); return; }
+    loadFromGithub();
+  });
+  $('btnLoadLocal').addEventListener('click', loadLocal);
+  $('btnSave').addEventListener('click', saveAll);
+  $('btnDownload').addEventListener('click', downloadJson);
+
+})();
+</script>
+
+</body>
+</html>

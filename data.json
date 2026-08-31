@@ -1,0 +1,163 @@
+{
+  "meta": {
+    "title": "Al Baset — Mechanical Engineer",
+    "description": "Portfolio of Al Baset, Mechanical Engineering undergraduate at CUET, specializing in materials, composites, and power systems.",
+    "brandFirst": "Al",
+    "brandLast": "Baset"
+  },
+  "hero": {
+    "badge": "Mechanical Engineer · CUET",
+    "name": "Al Baset",
+    "role": "Mechanical Engineering Graduate",
+    "description": "Mechanical Engineering student at Chittagong University of Engineering and Technology (CUET) with hands-on experience in materials fabrication, CAD design, and engineering analysis. My research focuses on hybrid Al–Cu metal matrix composites reinforced with SiC and fly ash.",
+    "location": "Cumilla, Bangladesh",
+    "photo": "",
+    "photoCaption": "At CUET — Department of Mechanical Engineering",
+    "cvFile": "CV.pdf",
+    "ctaLabel": "Contact me"
+  },
+  "social": {
+    "linkedin": "https://www.linkedin.com/in/al-baset/",
+    "email": "baset.czs2018@gmail.com",
+    "github": "",
+    "website": "",
+    "researchgate": ""
+  },
+  "stats": [
+    { "icon": "education", "color": "blue", "title": "Education", "sub": "B.Sc. in ME<br>CGPA 3.77/4.00" },
+    { "icon": "research", "color": "violet", "title": "Research", "sub": "Materials &<br>Corrosion" },
+    { "icon": "design", "color": "amber", "title": "Design", "sub": "CAD &<br>Simulation" },
+    { "icon": "goal", "color": "green", "title": "Goal", "sub": "Innovation<br>&amp; Impact" }
+  ],
+  "about": {
+    "paragraphs": [
+      "I'm a final-year <strong>Mechanical Engineering</strong> student at Chittagong University of Engineering &amp; Technology (CUET), graduating in July 2026 with a CGPA of <strong>3.77 out of 4.00</strong>. I have a strong interest in materials engineering, design, manufacturing, and computational tools.",
+      "My final-year thesis investigates <strong>SiC and fly ash reinforcement in hybrid Al-Cu metal matrix composites</strong>, combining hands-on fabrication (stir casting) with mechanical and corrosion testing. I've also spent time on the ground at one of Bangladesh's largest power plants and at manufacturing facilities, which shapes how I think about design for real processes and real operating conditions.",
+      "I aspire to build a career in materials and mechanical engineering research, and I am currently exploring graduate study opportunities where I can apply engineering principles to solve practical problems."
+    ],
+    "quote": "To apply engineering knowledge, hands-on fabrication skill, and analytical problem-solving toward developing practical, sustainable materials solutions — while continuing to grow as a researcher.",
+    "photo": "",
+    "interests": ["Metal Matrix Composites", "Materials Engineering", "CAD & Simulation", "Power Systems"],
+    "languages": [
+      { "name": "Bangla", "level": "Native" },
+      { "name": "English", "level": "Fluent" }
+    ]
+  },
+  "education": [
+    { "degree": "Bachelor of Science, Mechanical Engineering", "institution": "Chittagong University of Engineering &amp; Technology (CUET)", "score": "CGPA 3.77 / 4.00", "period": "Mar 2022 – Jul 2026" },
+    { "degree": "Higher Secondary School Certificate (HSC)", "institution": "Notre Dame College, Dhaka", "score": "GPA 5.00 / 5.00", "period": "Jul 2018 – Jan 2021" },
+    { "degree": "Secondary School Certificate (SSC)", "institution": "Cumilla Zilla School, Cumilla", "score": "GPA 5.00 / 5.00", "period": "Jan 2013 – May 2018" }
+  ],
+  "research": {
+    "lede": "Fabrication, testing and analysis of a hybrid metal matrix composite.",
+    "title": "Analysis of SiC and Fly Ash Reinforcement on Mechanical and Corrosion Behavior of Hybrid Al-Cu Matrix Composites",
+    "bullets": [
+      "Fabricated hybrid Al-Cu-SiC-Fly ash metal matrix composites using the stir casting technique.",
+      "Evaluated mechanical and corrosion performance of the resulting composite samples."
+    ],
+    "institution": "CUET — Dept. of Mechanical Engineering",
+    "supervisor": "Dr. Md. Mahbubul Alam, Professor",
+    "duration": "Oct 2025 – Jul 2026",
+    "images": [
+      { "src": "", "alt": "Stir casting fabrication", "label": "Fabrication photo", "path": "images/research-1.jpg" },
+      { "src": "", "alt": "Mechanical/corrosion testing", "label": "Testing photo", "path": "images/research-2.jpg" }
+    ],
+    "caption": "Left: Stir casting fabrication of the composite samples · Right: Mechanical and corrosion testing"
+  },
+  "experience": {
+    "lede": "Hands-on exposure to power generation and manufacturing industries.",
+    "main": {
+      "site": "Matarbari 2×600 MW Ultra-Super Critical Coal-Fired Power Plant (CPGCBL)",
+      "date": "Dec 2025 – Jan 2026",
+      "position": "Industrial Trainee",
+      "bullets": [
+        "Completed a three-week industrial training program at one of Bangladesh's most advanced ultra-supercritical coal-fired power plants.",
+        "Gained hands-on exposure to power plant operations, maintenance practices, industrial safety, and major mechanical systems including boilers, turbines, generators, and pumps."
+      ],
+      "images": [
+        { "src": "", "alt": "Matarbari Power Plant training", "label": "Training photo", "path": "images/matarbari-1.jpg" },
+        { "src": "", "alt": "Matarbari Power Plant training", "label": "Training photo", "path": "images/matarbari-2.jpg" }
+      ],
+      "caption": "Industrial training at Matarbari 2×600 MW Power Plant, CPGCBL"
+    },
+    "visits": [
+      {
+        "site": "Walton Hi-Tech Industries PLC",
+        "date": "Jul 2025",
+        "desc": "Gained practical exposure to refrigerator, air-conditioner, and PCB manufacturing processes, including assembly operations, production systems, and quality control procedures.",
+        "images": [
+          { "src": "", "alt": "Walton Hi-Tech Industries visit", "label": "Photo", "path": "images/walton-1.jpg" },
+          { "src": "", "alt": "Walton Hi-Tech Industries visit", "label": "Photo", "path": "images/walton-2.jpg" }
+        ]
+      },
+      {
+        "site": "S. Alam Cold Rolled Steels Limited",
+        "date": "May 2024",
+        "desc": "Observed cold-rolled steel manufacturing, boiler operations, and warehouse management systems, along with galvanized and corrugated sheet production processes.",
+        "images": [
+          { "src": "", "alt": "S. Alam Cold Rolled Steels visit", "label": "Photo", "path": "images/salam-1.jpg" },
+          { "src": "", "alt": "S. Alam Cold Rolled Steels visit", "label": "Photo", "path": "images/salam-2.jpg" }
+        ]
+      }
+    ]
+  },
+  "skills": [
+    { "group": "CAD &amp; Design", "items": ["SolidWorks — 2D Drawing", "3D Modeling", "Assembly Design &amp; Simulation"] },
+    { "group": "Programming &amp; Numerical Computing", "items": ["MATLAB", "FORTRAN", "C"] },
+    { "group": "Reference &amp; Academic Writing", "items": ["Mendeley"] },
+    { "group": "Office Applications", "items": ["Microsoft Word", "Excel", "PowerPoint"] }
+  ],
+  "projects": [
+    {
+      "tag": "SolidWorks · Assembly Design",
+      "title": "Turbo Pump Design &amp; Modeling",
+      "image": "",
+      "path": "images/turbo-pump.jpg",
+      "label": "Turbo pump render",
+      "bullets": [
+        "Developed a complete 3D CAD model of a turbo pump using SolidWorks.",
+        "Designed and assembled major components including the impeller, casing, and shaft assembly.",
+        "Generated detailed part and assembly drawings."
+      ]
+    },
+    {
+      "tag": "SolidWorks · Motion Analysis",
+      "title": "Wankel Engine Design &amp; Motion Analysis",
+      "image": "",
+      "path": "images/wankel-engine.jpg",
+      "label": "Wankel engine render",
+      "bullets": [
+        "Designed and modeled a Wankel rotary engine in SolidWorks.",
+        "Conducted assembly validation and motion analysis of the rotor mechanism.",
+        "Prepared engineering drawings and assembly documentation."
+      ]
+    }
+  ],
+  "certificates": [
+    { "title": "HVAC Design Session — Part 1", "issuer": "ASHRAE CUET Student Branch · 2025 · 10 PDH", "image": "", "path": "images/hvac-cert.jpg" },
+    { "title": "Computer Fundamentals &amp; Office Applications", "issuer": "EDGE Project, BCC &amp; CUET · 2025 · 60 hrs", "image": "", "path": "images/edge-cert.jpg" },
+    { "title": "Government Merit Scholarship", "issuer": "HSC Examination · 2020", "image": "", "path": "images/scholarship-hsc.jpg" },
+    { "title": "Government Merit Scholarship", "issuer": "SSC Examination · 2018", "image": "", "path": "images/scholarship-ssc.jpg" },
+    { "title": "Industrial Training Certificate", "issuer": "Matarbari Power Plant, CPGCBL", "image": "", "path": "images/matarbari-cert.jpg" }
+  ],
+  "awards": [
+    { "year": "2020", "title": "Government Merit Scholarship", "desc": "Outstanding result, HSC Examination" },
+    { "year": "2018", "title": "Government Merit Scholarship", "desc": "Outstanding result, SSC Examination" }
+  ],
+  "leadership": [
+    { "period": "'25–'26", "title": "Joint Organizing Secretary", "org": "CUET Career Club" },
+    { "period": "'25–'26", "title": "Assistant Sponsor Secretary", "org": "CUET Automotive &amp; Mobility Society (CAMS)" },
+    { "period": "2023", "title": "Conference Volunteer", "org": "7th Int'l Conf. on Mechanical Engineering &amp; Renewable Energy, CUET" }
+  ],
+  "contact": {
+    "blurb": "Open to opportunities in mechanical design, materials engineering, and power systems. The fastest way to reach me is by email or LinkedIn.",
+    "address": "North Racecourse, Kotwali, Cumilla Sadar-3500, BD",
+    "rows": [
+      { "k": "Languages", "v": "Bangla · English" },
+      { "k": "Program", "v": "BSc ME, CUET" },
+      { "k": "Status", "v": "Graduating Jul 2026" }
+    ],
+    "copyright": "© 2026 Al Baset — Portfolio",
+    "tagline": "Built as a static site"
+  }
+}
