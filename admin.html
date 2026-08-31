@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Sora:wght@600;700&family=Space+Grotesk:wght@600;700&family=Outfit:wght@600;700&family=Playfair+Display:wght@600;700&family=Roboto:wght@400;600&family=Source+Sans+3:wght@400;600&family=Work+Sans:wght@400;600&family=Nunito+Sans:wght@400;600&family=Lora:wght@400;600&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#F7F8FB; --panel:#FFFFFF; --border:#E2E6EE; --text:#0F1524; --text-dim:#5B6472;
@@ -178,6 +179,35 @@
     {name:'Plum', hex:'#170B24'},
     {name:'Espresso', hex:'#1E1610'}
   ];
+  const HEADING_COLOR_PRESETS = [
+    {name:'Charcoal (default)', hex:'#0F1524'},
+    {name:'Black', hex:'#000000'},
+    {name:'Navy', hex:'#0B1C33'},
+    {name:'Espresso', hex:'#2B1B12'},
+    {name:'Deep Green', hex:'#0E2A1F'}
+  ];
+  const BODY_COLOR_PRESETS = [
+    {name:'Slate (default)', hex:'#5B6472'},
+    {name:'Warm Gray', hex:'#6B6459'},
+    {name:'Cool Gray', hex:'#5A6673'},
+    {name:'Soft Black', hex:'#33363D'}
+  ];
+  const HEADING_FONTS = {
+    'Plus Jakarta Sans': "'Plus Jakarta Sans', sans-serif",
+    'Poppins': "'Poppins', sans-serif",
+    'Sora': "'Sora', sans-serif",
+    'Space Grotesk': "'Space Grotesk', sans-serif",
+    'Outfit': "'Outfit', sans-serif",
+    'Playfair Display': "'Playfair Display', serif"
+  };
+  const BODY_FONTS = {
+    'Inter': "'Inter', sans-serif",
+    'Roboto': "'Roboto', sans-serif",
+    'Source Sans 3': "'Source Sans 3', sans-serif",
+    'Work Sans': "'Work Sans', sans-serif",
+    'Nunito Sans': "'Nunito Sans', sans-serif",
+    'Lora': "'Lora', serif"
+  };
 
   function $(id){ return document.getElementById(id); }
   function setStatus(msg, cls){
@@ -485,6 +515,26 @@
     return wrap;
   }
 
+  function fontSelectField(labelText, theme, key, fontMap, defaultName){
+    const wrap = document.createElement('label');
+    wrap.className = 'field';
+    const span = document.createElement('span'); span.textContent = labelText; wrap.appendChild(span);
+    const sel = document.createElement('select');
+    const current = fontMap[theme[key]] ? theme[key] : defaultName;
+    Object.keys(fontMap).forEach(name => {
+      const opt = document.createElement('option');
+      opt.value = name;
+      opt.textContent = name;
+      opt.style.fontFamily = fontMap[name];
+      if(name === current) opt.selected = true;
+      sel.appendChild(opt);
+    });
+    sel.style.fontFamily = fontMap[current];
+    sel.addEventListener('change', () => { theme[key] = sel.value; sel.style.fontFamily = fontMap[sel.value]; });
+    wrap.appendChild(sel);
+    return wrap;
+  }
+
   function visibilityToggle(key, label){
     state.data.sectionVisibility = state.data.sectionVisibility || {};
     const wrap = document.createElement('label');
@@ -745,6 +795,8 @@
     const theme = state.data.theme = state.data.theme || {};
     if(!theme.accent) theme.accent = '#2555E7';
     if(!theme.dark) theme.dark = '#0A1424';
+    if(!theme.headingColor) theme.headingColor = '#0F1524';
+    if(!theme.bodyColor) theme.bodyColor = '#5B6472';
 
     function colorPicker(label, key, presets){
       const wrap = document.createElement('div');
@@ -784,6 +836,20 @@
 
     b.appendChild(colorPicker('Accent color', 'accent', ACCENT_PRESETS));
     b.appendChild(colorPicker('Dark background (intro & footer)', 'dark', DARK_PRESETS));
+
+    const typoLabel = document.createElement('div');
+    typoLabel.textContent = 'Typography';
+    typoLabel.style.cssText = 'font-size:0.78rem; font-weight:600; color:var(--text-dim); margin-bottom:10px;';
+    b.appendChild(typoLabel);
+    const typoHint = document.createElement('p'); typoHint.className = 'hint'; typoHint.style.marginTop = '-4px';
+    typoHint.textContent = 'These apply to your whole site: the font used for headings/titles, the font used for regular text, and the color of both (on normal, light sections — your dark intro and footer keep their own light-on-dark colors for readability).';
+    b.appendChild(typoHint);
+    const fontRow = document.createElement('div'); fontRow.className = 'row2'; fontRow.style.marginBottom = '18px';
+    fontRow.appendChild(fontSelectField('Heading font', theme, 'headingFont', HEADING_FONTS, 'Plus Jakarta Sans'));
+    fontRow.appendChild(fontSelectField('Body font', theme, 'bodyFont', BODY_FONTS, 'Inter'));
+    b.appendChild(fontRow);
+    b.appendChild(colorPicker('Heading text color', 'headingColor', HEADING_COLOR_PRESETS));
+    b.appendChild(colorPicker('Body text color', 'bodyColor', BODY_COLOR_PRESETS));
 
     const fxLabel = document.createElement('div');
     fxLabel.textContent = 'Photo effects';
