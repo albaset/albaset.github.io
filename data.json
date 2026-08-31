@@ -189,13 +189,13 @@
       ],
       "images": [
         {
-          "src": "",
+          "src": "images/photo-1-1788171663344.jpg",
           "alt": "Matarbari Power Plant training",
           "label": "Training photo",
           "path": "images/matarbari-1.jpg"
         },
         {
-          "src": "",
+          "src": "images/photo-2-1788171671596.jpg",
           "alt": "Matarbari Power Plant training",
           "label": "Training photo",
           "path": "images/matarbari-2.jpg"
