@@ -678,6 +678,36 @@
     return `rgba(${r},${g},${b},${alpha})`;
   }
 
+  const HEADING_FONTS = {
+    'Plus Jakarta Sans': { css:"'Plus Jakarta Sans', sans-serif", google:'Plus+Jakarta+Sans:wght@600;700;800' },
+    'Poppins': { css:"'Poppins', sans-serif", google:'Poppins:wght@600;700;800' },
+    'Sora': { css:"'Sora', sans-serif", google:'Sora:wght@600;700;800' },
+    'Space Grotesk': { css:"'Space Grotesk', sans-serif", google:'Space+Grotesk:wght@600;700' },
+    'Outfit': { css:"'Outfit', sans-serif", google:'Outfit:wght@600;700;800' },
+    'Playfair Display': { css:"'Playfair Display', serif", google:'Playfair+Display:wght@600;700;800' }
+  };
+  const BODY_FONTS = {
+    'Inter': { css:"'Inter', sans-serif", google:'Inter:wght@400;500;600;700' },
+    'Roboto': { css:"'Roboto', sans-serif", google:'Roboto:wght@400;500;700' },
+    'Source Sans 3': { css:"'Source Sans 3', sans-serif", google:'Source+Sans+3:wght@400;500;600;700' },
+    'Work Sans': { css:"'Work Sans', sans-serif", google:'Work+Sans:wght@400;500;600;700' },
+    'Nunito Sans': { css:"'Nunito Sans', sans-serif", google:'Nunito+Sans:wght@400;600;700' },
+    'Lora': { css:"'Lora', serif", google:'Lora:wght@400;500;600;700' }
+  };
+
+  function loadGoogleFonts(headingGoogle, bodyGoogle){
+    const parts = [headingGoogle, bodyGoogle].filter((v, i, arr) => v && arr.indexOf(v) === i);
+    const href = 'https://fonts.googleapis.com/css2?' + parts.map(f => 'family=' + f).join('&') + '&display=swap';
+    let link = document.getElementById('dynFontLink');
+    if(!link){
+      link = document.createElement('link');
+      link.id = 'dynFontLink';
+      link.rel = 'stylesheet';
+      document.head.appendChild(link);
+    }
+    if(link.getAttribute('href') !== href) link.setAttribute('href', href);
+  }
+
   function applyTheme(theme){
     theme = theme || {};
     const accent = theme.accent || '#2555E7';
@@ -691,6 +721,20 @@
     root.setProperty('--dark-panel', tint(dark, 0.07));
     root.setProperty('--dark-panel-2', tint(dark, 0.13));
     root.setProperty('--dark-border', tint(dark, 0.24));
+
+    const headingColor = theme.headingColor || '#0F1524';
+    const bodyColor = theme.bodyColor || '#5B6472';
+    root.setProperty('--text', headingColor);
+    root.setProperty('--text-dim', bodyColor);
+    root.setProperty('--text-dimmer', tint(bodyColor, 0.4));
+
+    const headingFontName = HEADING_FONTS[theme.headingFont] ? theme.headingFont : 'Plus Jakarta Sans';
+    const bodyFontName = BODY_FONTS[theme.bodyFont] ? theme.bodyFont : 'Inter';
+    root.setProperty('--heading', HEADING_FONTS[headingFontName].css);
+    root.setProperty('--body', BODY_FONTS[bodyFontName].css);
+    if(headingFontName !== 'Plus Jakarta Sans' || bodyFontName !== 'Inter'){
+      loadGoogleFonts(HEADING_FONTS[headingFontName].google, BODY_FONTS[bodyFontName].google);
+    }
 
     const fx = theme.effects || {};
     document.body.classList.toggle('fx-zoom', !!fx.zoom);
