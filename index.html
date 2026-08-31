@@ -366,6 +366,24 @@
     font-size:0.76rem; color:var(--text-dimmer); padding-top:22px; border-top:1px solid var(--border);
   }
 
+  /* CUSTOM SECTIONS */
+  .custom-section.has-bg{background-size:cover; background-position:center; background-repeat:no-repeat;}
+  .cb-text{color:var(--text-dim); margin-bottom:15px; max-width:65ch; font-size:0.96rem;}
+  .cb-list{padding-left:20px; color:var(--text-dim); font-size:0.94rem; margin-bottom:15px;}
+  .cb-list li{margin-bottom:8px;}
+  .cb-cards{display:grid; grid-template-columns:repeat(auto-fill, minmax(230px,1fr)); gap:18px; margin-bottom:15px;}
+  .cb-card{background:var(--panel); border:1px solid var(--border); border-radius:14px; overflow:hidden;}
+  .cb-card-media{
+    aspect-ratio:4/3; background:var(--panel-2); overflow:hidden;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--text-dimmer); font-size:0.68rem; text-align:center; padding:12px; line-height:1.6;
+  }
+  .cb-card-media img{width:100%; height:100%; object-fit:cover; display:block;}
+  .cb-card-media b{display:block; color:var(--blue); font-family:var(--heading); margin-bottom:4px;}
+  .cb-card-body{padding:16px 18px;}
+  .cb-card-body h3{font-size:0.98rem; font-weight:700; margin-bottom:4px;}
+  .cb-card-sub{font-size:0.78rem; color:var(--blue); font-weight:600; margin-bottom:8px;}
+  .cb-card-body p{color:var(--text-dim); font-size:0.86rem;}
 </style>
 </head>
 <body>
@@ -378,14 +396,14 @@
     </button>
     <ul class="nav-links" id="navLinks">
       <li><a href="#home">Home</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#research">Research</a></li>
-      <li><a href="#experience">Experience</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#certificates">Certificates</a></li>
-      <li><a href="#activities">Activities</a></li>
-      <li><a href="#contact">Contact</a></li>
+      <li data-key="about"><a href="#about">About</a></li>
+      <li data-key="research"><a href="#research">Research</a></li>
+      <li data-key="experience"><a href="#experience">Experience</a></li>
+      <li data-key="skills"><a href="#skills">Skills</a></li>
+      <li data-key="projects"><a href="#projects">Projects</a></li>
+      <li data-key="certificates"><a href="#certificates">Certificates</a></li>
+      <li data-key="activities"><a href="#activities">Activities</a></li>
+      <li id="navContactLi"><a href="#contact">Contact</a></li>
     </ul>
     <a class="nav-cta" id="navCta" href="CV.pdf" download>Download CV</a>
   </div>
@@ -731,7 +749,104 @@
     el('footCopyright').textContent = c.copyright || '';
     el('footTagline').textContent = c.tagline || '';
 
+    applyVisibilityAndCustomSections(data);
     initInteractions();
+  }
+
+  function renderBlock(block){
+    if(block.type === 'text'){
+      return block.text ? `<p class="cb-text">${block.text}</p>` : '';
+    }
+    if(block.type === 'list'){
+      return (block.items && block.items.length) ? `<ul class="cb-list">${block.items.map(i => `<li>${i}</li>`).join('')}</ul>` : '';
+    }
+    if(block.type === 'gallery'){
+      return (block.images && block.images.length) ? `<div class="gallery-2">${block.images.map(img => `<div class="g-item">${imgBlock(img.src, img.alt, 'g-placeholder', img.label || 'Photo', 'Add a photo from the admin page')}</div>`).join('')}</div>` : '';
+    }
+    if(block.type === 'cards'){
+      return (block.cards && block.cards.length) ? `<div class="cb-cards">${block.cards.map(c => `
+        <div class="cb-card">
+          <div class="cb-card-media">${imgBlock(c.image, c.title, '', 'Photo', 'Add a photo from the admin page')}</div>
+          <div class="cb-card-body">
+            ${c.title ? `<h3>${c.title}</h3>` : ''}
+            ${c.subtitle ? `<div class="cb-card-sub">${c.subtitle}</div>` : ''}
+            ${c.text ? `<p>${c.text}</p>` : ''}
+          </div>
+        </div>`).join('')}</div>` : '';
+    }
+    return '';
+  }
+
+  function buildCustomSection(cs){
+    const section = document.createElement('section');
+    section.id = cs._id;
+    section.className = 'custom-section' + (cs.background ? ' has-bg dark-surface' : '');
+    if(cs.background){
+      section.style.backgroundColor = '#0A1424';
+      section.style.backgroundImage = `linear-gradient(180deg, rgba(10,20,36,.72), rgba(10,20,36,.85)), url('${cs.background}')`;
+    }
+    section.innerHTML = `
+      <div class="wrap">
+        <div class="section-head reveal">
+          ${cs.eyebrow ? `<div class="eyebrow">${cs.eyebrow}</div>` : ''}
+          <h2>${cs.title || ''}</h2>
+          ${cs.lede ? `<p class="section-lede">${cs.lede}</p>` : ''}
+        </div>
+        <div class="reveal">${(cs.blocks || []).map(renderBlock).join('')}</div>
+      </div>`;
+    return section;
+  }
+
+  function applyVisibilityAndCustomSections(data){
+    const vis = data.sectionVisibility || {};
+    const FIXED_KEYS = ['about','education','research','experience','skills','projects','certificates','activities'];
+    FIXED_KEYS.forEach(key => {
+      const visible = vis[key] !== false;
+      const sectionEl = document.getElementById(key);
+      if(sectionEl) sectionEl.style.display = visible ? '' : 'none';
+      const navLi = document.querySelector('.nav-links li[data-key="' + key + '"]');
+      if(navLi) navLi.style.display = visible ? '' : 'none';
+    });
+
+    const customs = data.customSections || [];
+    customs.forEach((cs, idx) => { cs._id = 'custom-' + idx; });
+
+    const anchors = ['home','about','education','research','experience','skills','projects','certificates','activities'];
+    const grouped = {};
+    customs.forEach(cs => {
+      const key = anchors.includes(cs.placement) ? cs.placement : 'end';
+      (grouped[key] = grouped[key] || []).push(cs);
+    });
+    anchors.forEach(key => {
+      const list = grouped[key];
+      if(!list) return;
+      let insertPoint = document.getElementById(key);
+      if(!insertPoint) return;
+      list.forEach(cs => {
+        const secEl = buildCustomSection(cs);
+        insertPoint.after(secEl);
+        insertPoint = secEl;
+      });
+    });
+    if(grouped.end){
+      const footer = document.querySelector('footer#contact');
+      grouped.end.forEach(cs => {
+        const secEl = buildCustomSection(cs);
+        footer.parentNode.insertBefore(secEl, footer);
+      });
+    }
+
+    const navContactLi = document.getElementById('navContactLi');
+    customs.forEach(cs => {
+      if(cs.showInNav && cs.navLabel){
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = '#' + cs._id;
+        a.textContent = cs.navLabel;
+        li.appendChild(a);
+        navContactLi.parentNode.insertBefore(li, navContactLi);
+      }
+    });
   }
 
   function initInteractions(){
