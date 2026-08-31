@@ -342,19 +342,22 @@
       "period": "'25–'26",
       "title": "Joint Organizing Secretary",
       "org": "CUET Career Club",
-      "desc": ""
+      "desc": "",
+      "images": []
     },
     {
       "period": "'25–'26",
       "title": "Assistant Sponsor Secretary",
       "org": "CUET Automotive & Mobility Society (CAMS)",
-      "desc": ""
+      "desc": "",
+      "images": []
     },
     {
       "period": "2023",
       "title": "Conference Volunteer",
       "org": "7th Int'l Conf. on Mechanical Engineering & Renewable Energy, CUET",
-      "desc": "yugbhjmlkituigyihljk;"
+      "desc": "yugbhjmlkituigyihljk;",
+      "images": []
     }
   ],
   "contact": {
@@ -387,5 +390,16 @@
     "certificates": true,
     "activities": true
   },
-  "customSections": []
+  "customSections": [
+    {
+      "eyebrow": "",
+      "title": "",
+      "lede": "",
+      "placement": "end",
+      "background": "images/background-photo-optional-1788160430074.jpg",
+      "showInNav": false,
+      "navLabel": "",
+      "blocks": []
+    }
+  ]
 }
