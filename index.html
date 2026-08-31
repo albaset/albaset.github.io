@@ -51,14 +51,14 @@
   /* Dark navy surface used for hero + footer, reusing all shared component
      styles by overriding the same CSS variables locally */
   .dark-surface{
-    background:#0A1424;
-    --panel:#111E33;
-    --panel-2:#152943;
-    --border:#233A57;
+    background:var(--dark-bg, #0A1424);
+    --panel:var(--dark-panel, #111E33);
+    --panel-2:var(--dark-panel-2, #152943);
+    --border:var(--dark-border, #233A57);
     --text:#F4F7FC;
     --text-dim:#9FB0C9;
     --text-dimmer:#6C7F9C;
-    --blue-tint:rgba(69,140,255,0.16);
+    --blue-tint:var(--blue-tint-dark, rgba(69,140,255,0.16));
     color:var(--text);
   }
   .dark-surface::selection{background:var(--blue);}
@@ -599,6 +599,44 @@
 
   function el(id){ return document.getElementById(id); }
 
+  function hexToRgb(hex){
+    hex = (hex || '').replace('#','');
+    if(hex.length === 3) hex = hex.split('').map(c => c+c).join('');
+    const num = parseInt(hex, 16) || 0;
+    return { r:(num>>16)&255, g:(num>>8)&255, b:num&255 };
+  }
+  function rgbToHex(r,g,b){
+    const c = v => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2,'0');
+    return '#' + c(r) + c(g) + c(b);
+  }
+  function shade(hex, amount){
+    const {r,g,b} = hexToRgb(hex);
+    return rgbToHex(r*(1-amount), g*(1-amount), b*(1-amount));
+  }
+  function tint(hex, amount){
+    const {r,g,b} = hexToRgb(hex);
+    return rgbToHex(r+(255-r)*amount, g+(255-g)*amount, b+(255-b)*amount);
+  }
+  function rgbaStr(hex, alpha){
+    const {r,g,b} = hexToRgb(hex);
+    return `rgba(${r},${g},${b},${alpha})`;
+  }
+
+  function applyTheme(theme){
+    theme = theme || {};
+    const accent = theme.accent || '#2555E7';
+    const dark = theme.dark || '#0A1424';
+    const root = document.documentElement.style;
+    root.setProperty('--blue', accent);
+    root.setProperty('--blue-dark', shade(accent, 0.22));
+    root.setProperty('--blue-tint', tint(accent, 0.92));
+    root.setProperty('--blue-tint-dark', rgbaStr(accent, 0.16));
+    root.setProperty('--dark-bg', dark);
+    root.setProperty('--dark-panel', tint(dark, 0.07));
+    root.setProperty('--dark-panel-2', tint(dark, 0.13));
+    root.setProperty('--dark-border', tint(dark, 0.24));
+  }
+
   fetch('data.json', {cache:'no-store'})
     .then(r => r.json())
     .then(render)
@@ -608,6 +646,8 @@
     });
 
   function render(data){
+    applyTheme(data.theme);
+
     // Meta
     if(data.meta){
       document.title = data.meta.title || 'Portfolio';

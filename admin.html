@@ -127,6 +127,7 @@
   </div>
 
   <div id="formArea">
+    <div class="panel" id="sec-appearance"><h2>Appearance</h2></div>
     <div class="panel" id="sec-hero"><h2>Hero</h2></div>
     <div class="panel" id="sec-social"><h2>Social &amp; Contact Links</h2></div>
     <div class="panel" id="sec-stats"><h2>Highlight Cards</h2></div>
@@ -160,6 +161,21 @@
 
   const ICON_OPTIONS = ['education','research','design','goal','briefcase','star'];
   const COLOR_OPTIONS = ['blue','violet','amber','green'];
+  const ACCENT_PRESETS = [
+    {name:'Blue', hex:'#2555E7'},
+    {name:'Emerald', hex:'#0F9D66'},
+    {name:'Violet', hex:'#6D42D6'},
+    {name:'Teal', hex:'#0E8F8F'},
+    {name:'Amber', hex:'#B8720A'},
+    {name:'Rose', hex:'#C23A63'}
+  ];
+  const DARK_PRESETS = [
+    {name:'Navy', hex:'#0A1424'},
+    {name:'Charcoal', hex:'#17181C'},
+    {name:'Forest', hex:'#0B1F17'},
+    {name:'Plum', hex:'#170B24'},
+    {name:'Espresso', hex:'#1E1610'}
+  ];
 
   function $(id){ return document.getElementById(id); }
   function setStatus(msg, cls){
@@ -233,15 +249,28 @@
   }
 
   // ---------- field builders ----------
-  function textField(labelText, value, onChange, multiline){
+  function decodeEntities(str){
+    if(!str) return str;
+    const ta = document.createElement('textarea');
+    ta.innerHTML = str;
+    return ta.value;
+  }
+
+  function textField(labelText, value, onChange, multiline, hint){
     const wrap = document.createElement('label');
     wrap.className = 'field';
     const span = document.createElement('span'); span.textContent = labelText; wrap.appendChild(span);
     const input = document.createElement(multiline ? 'textarea' : 'input');
     if(!multiline) input.type = 'text';
-    input.value = value || '';
+    input.value = decodeEntities(value || '');
     input.addEventListener('input', () => onChange(input.value));
     wrap.appendChild(input);
+    if(hint){
+      const hintEl = document.createElement('div');
+      hintEl.style.cssText = 'font-size:0.74rem; color:#9399A6; margin-top:4px;';
+      hintEl.textContent = hint;
+      wrap.appendChild(hintEl);
+    }
     return wrap;
   }
 
@@ -252,13 +281,13 @@
     span.innerHTML = labelText + ' <i>(one per line)</i>';
     wrap.appendChild(span);
     const ta = document.createElement('textarea');
-    ta.value = (arr||[]).join('\n');
+    ta.value = (arr||[]).map(decodeEntities).join('\n');
     ta.addEventListener('input', () => onChange(ta.value.split('\n').map(s=>s.trim()).filter(Boolean)));
     wrap.appendChild(ta);
     return wrap;
   }
 
-  function imageField(labelText, obj, key){
+  function imageField(labelText, obj, key, sizeHint){
     const wrap = document.createElement('div');
     wrap.className = 'field image-field';
     const preview = document.createElement('img');
@@ -271,11 +300,15 @@
     const span = document.createElement('span'); span.textContent = labelText; meta.appendChild(span);
     const fileInput = document.createElement('input');
     fileInput.type = 'file'; fileInput.accept = 'image/*';
+    const warnEl = document.createElement('div');
+    warnEl.style.cssText = 'font-size:0.72rem; color:var(--red); margin-top:4px; display:none;';
+    warnEl.textContent = 'This photo is quite large and may load slowly on your site. Consider compressing it first (e.g. squoosh.app) — under 1 MB is ideal.';
     fileInput.addEventListener('change', async (e) => {
       const file = e.target.files[0];
       if(!file) return;
       preview.src = URL.createObjectURL(file);
       preview.style.visibility = 'visible';
+      warnEl.style.display = file.size > 1.5 * 1024 * 1024 ? 'block' : 'none';
       const base64 = await fileToBase64(file);
       const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
       const path = 'images/' + slugify(labelText) + '-' + Date.now() + '.' + ext;
@@ -283,6 +316,13 @@
       state.pendingImages.push({path, base64});
     });
     meta.appendChild(fileInput);
+    if(sizeHint){
+      const hintEl = document.createElement('div');
+      hintEl.style.cssText = 'font-size:0.72rem; color:#9399A6; margin-top:4px;';
+      hintEl.textContent = sizeHint;
+      meta.appendChild(hintEl);
+    }
+    meta.appendChild(warnEl);
     wrap.appendChild(meta);
     const clearBtn = document.createElement('button');
     clearBtn.type = 'button'; clearBtn.className = 'btn-remove-small'; clearBtn.textContent = 'Remove photo';
@@ -346,7 +386,7 @@
       imagesArr.forEach((img, idx) => {
         const card = document.createElement('div');
         card.style.cssText = 'border:1px solid var(--border);border-radius:10px;padding:10px;width:200px;';
-        card.appendChild(imageField(`${itemLabel} ${idx+1}`, img, 'src'));
+        card.appendChild(imageField(`${itemLabel} ${idx+1}`, img, 'src', 'Landscape photo works best, e.g. 1000×750px (4:3)'));
         card.appendChild(textField('Caption / alt text', img.alt, v => img.alt = v));
         const rm = document.createElement('button');
         rm.type='button'; rm.className='btn-remove-small'; rm.textContent='Remove';
@@ -365,6 +405,7 @@
 
   // ---------- section renderers ----------
   function renderAll(){
+    renderAppearance();
     renderHero();
     renderSocial();
     renderStats();
@@ -394,6 +435,56 @@
     return body;
   }
 
+  function renderAppearance(){
+    const b = sectionBody('sec-appearance', 'Appearance');
+    const intro = document.createElement('p'); intro.className='hint'; intro.style.marginTop='-10px';
+    intro.textContent = 'These two colors carry through your whole site: the accent (buttons, links, badges) and the dark background used on your intro section and the footer.';
+    b.appendChild(intro);
+
+    const theme = state.data.theme = state.data.theme || {};
+    if(!theme.accent) theme.accent = '#2555E7';
+    if(!theme.dark) theme.dark = '#0A1424';
+
+    function colorPicker(label, key, presets){
+      const wrap = document.createElement('div');
+      wrap.style.marginBottom = '22px';
+      const labelEl = document.createElement('div');
+      labelEl.textContent = label;
+      labelEl.style.cssText = 'font-size:0.78rem; font-weight:600; color:var(--text-dim); margin-bottom:10px;';
+      wrap.appendChild(labelEl);
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex; gap:12px; flex-wrap:wrap; align-items:center;';
+      function draw(){
+        row.innerHTML = '';
+        presets.forEach(p => {
+          const sw = document.createElement('button');
+          sw.type = 'button';
+          sw.title = p.name;
+          const active = (theme[key] || '').toLowerCase() === p.hex.toLowerCase();
+          sw.style.cssText = `width:36px; height:36px; border-radius:50%; background:${p.hex}; cursor:pointer; border:${active ? '3px solid var(--text)' : '2px solid var(--border)'}; padding:0;`;
+          sw.onclick = () => { theme[key] = p.hex; draw(); };
+          row.appendChild(sw);
+        });
+        const customWrap = document.createElement('label');
+        customWrap.style.cssText = 'display:flex; align-items:center; gap:6px; font-size:0.78rem; color:var(--text-dim); cursor:pointer;';
+        const colorInput = document.createElement('input');
+        colorInput.type = 'color';
+        colorInput.value = theme[key];
+        colorInput.style.cssText = 'width:36px; height:36px; border:none; padding:0; cursor:pointer; background:none;';
+        colorInput.addEventListener('input', () => { theme[key] = colorInput.value; });
+        customWrap.appendChild(colorInput);
+        customWrap.appendChild(document.createTextNode('Custom'));
+        row.appendChild(customWrap);
+      }
+      draw();
+      wrap.appendChild(row);
+      return wrap;
+    }
+
+    b.appendChild(colorPicker('Accent color', 'accent', ACCENT_PRESETS));
+    b.appendChild(colorPicker('Dark background (intro & footer)', 'dark', DARK_PRESETS));
+  }
+
   function renderHero(){
     const b = sectionBody('sec-hero', 'Hero');
     const h = state.data.hero = state.data.hero || {};
@@ -411,7 +502,7 @@
     b.appendChild(textField('Location', h.location, v => h.location = v));
     b.appendChild(textField('Contact button label', h.ctaLabel, v => h.ctaLabel = v));
     b.appendChild(textField('CV file name (upload the PDF to your repo with this exact name)', h.cvFile, v => h.cvFile = v));
-    b.appendChild(imageField('Hero photo', h, 'photo'));
+    b.appendChild(imageField('Hero photo', h, 'photo', 'Portrait photo works best, e.g. 900×1050px (roughly 6:7)'));
     b.appendChild(textField('Photo caption', h.photoCaption, v => h.photoCaption = v));
   }
 
@@ -465,7 +556,7 @@
     note.innerHTML = 'Tip: wrap a word in <code>&lt;strong&gt;word&lt;/strong&gt;</code> to bold it.';
     b.appendChild(note);
     b.appendChild(textField('Pull-quote', a.quote, v => a.quote = v, true));
-    b.appendChild(imageField('About photo', a, 'photo'));
+    b.appendChild(imageField('About photo', a, 'photo', 'Landscape photo works best, e.g. 1000×800px (roughly 5:4)'));
     b.appendChild(listField('Interests / focus tags', a.interests, v => a.interests = v));
 
     const langs = a.languages = a.languages || [];
@@ -619,7 +710,7 @@
         card.appendChild(rm);
         card.appendChild(textField('Tag (tools used)', p.tag, v => p.tag = v));
         card.appendChild(textField('Project title', p.title, v => p.title = v));
-        card.appendChild(imageField('Render / photo', p, 'image'));
+        card.appendChild(imageField('Render / photo', p, 'image', 'Wide photo works best, e.g. 1200×750px (16:10)'));
         card.appendChild(listField('Description points', p.bullets, v => p.bullets = v));
         list.appendChild(card);
       });
@@ -645,7 +736,7 @@
         card.appendChild(rm);
         card.appendChild(textField('Title', c.title, v => c.title = v));
         card.appendChild(textField('Issuer / details', c.issuer, v => c.issuer = v));
-        card.appendChild(imageField('Certificate image', c, 'image'));
+        card.appendChild(imageField('Certificate image', c, 'image', 'e.g. 900×675px (4:3) — a clear photo or scan of the certificate'));
         list.appendChild(card);
       });
     }
@@ -731,7 +822,7 @@
         card.appendChild(row);
         card.appendChild(textField('Intro text (optional)', cs.lede, v => cs.lede = v, true));
         card.appendChild(selectFieldLabeled('Where should it appear on the page?', cs.placement || 'end', PLACEMENTS, v => cs.placement = v));
-        card.appendChild(imageField('Background photo (optional)', cs, 'background'));
+        card.appendChild(imageField('Background photo (optional)', cs, 'background', 'Wide banner photo, e.g. 1600×900px or larger — it fills the whole section width'));
 
         const navRow = document.createElement('div'); navRow.style.cssText='display:flex; gap:14px; align-items:flex-end; margin-bottom:14px; flex-wrap:wrap;';
         const navCheckWrap = document.createElement('label'); navCheckWrap.style.cssText='display:flex; align-items:center; gap:8px; padding-bottom:10px;';
@@ -782,7 +873,7 @@
                   cc.appendChild(textField('Card title', c.title, v => c.title = v));
                   cc.appendChild(textField('Card subtitle (optional)', c.subtitle, v => c.subtitle = v));
                   cc.appendChild(textField('Card text', c.text, v => c.text = v, true));
-                  cc.appendChild(imageField('Card photo', c, 'image'));
+                  cc.appendChild(imageField('Card photo', c, 'image', 'e.g. 900×675px (4:3)'));
                   const rmC = document.createElement('button'); rmC.type='button'; rmC.className='btn-remove-small'; rmC.textContent='Remove card';
                   rmC.onclick = () => { blk.cards.splice(cIdx,1); drawCards(); };
                   cc.appendChild(rmC);
