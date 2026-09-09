@@ -1045,23 +1045,57 @@
     b.appendChild(addBtn);
   }
 
+  function migrateResearch(){
+    let r = state.data.research;
+    if(!Array.isArray(r)){
+      const legacy = r || {};
+      if(legacy.lede){
+        state.data.sectionHeadings = state.data.sectionHeadings || {};
+        state.data.sectionHeadings.research = state.data.sectionHeadings.research || {};
+        if(state.data.sectionHeadings.research.lede === undefined){
+          state.data.sectionHeadings.research.lede = legacy.lede;
+        }
+        delete legacy.lede;
+      }
+      r = Object.keys(legacy).length ? [legacy] : [];
+      state.data.research = r;
+    }
+    return r;
+  }
+
   function renderResearch(){
     const b = sectionBody('sec-research', 'Research & Thesis');
     b.appendChild(visibilityToggle('research'));
-    b.appendChild(headingFields('research', {eyebrow:'Research & Thesis', title:'Undergraduate Research'}));
+    migrateResearch();
+    b.appendChild(headingFields('research', {eyebrow:'Research & Thesis', title:'Undergraduate Research', lede:''}));
     b.appendChild(sectionBackgroundField('research'));
-    const r = state.data.research = state.data.research || {};
-    b.appendChild(textField('Section intro line', r.lede, v => r.lede = v));
-    b.appendChild(textField('Thesis / project title', r.title, v => r.title = v, true));
-    b.appendChild(listField('Key points', r.bullets, v => r.bullets = v));
-    const row = document.createElement('div'); row.className='row3';
-    row.appendChild(textField('Institution', r.institution, v => r.institution = v));
-    row.appendChild(textField('Supervisor', r.supervisor, v => r.supervisor = v));
-    row.appendChild(textField('Duration', r.duration, v => r.duration = v));
-    b.appendChild(row);
-    r.images = r.images || [];
-    imagesRepeater(b, r.images, 'Photo');
-    b.appendChild(textField('Gallery caption', r.caption, v => r.caption = v));
+    const items = state.data.research;
+    const list = document.createElement('div');
+    function draw(){
+      list.innerHTML = '';
+      items.forEach((r, idx) => {
+        const card = document.createElement('div'); card.className='item-card';
+        const rm = document.createElement('button'); rm.className='remove-btn'; rm.type='button'; rm.textContent='Remove';
+        rm.onclick = () => { items.splice(idx,1); draw(); };
+        card.appendChild(rm);
+        card.appendChild(textField('Thesis / project title', r.title, v => r.title = v, true));
+        card.appendChild(listField('Key points', r.bullets, v => r.bullets = v));
+        const row = document.createElement('div'); row.className='row3';
+        row.appendChild(textField('Institution', r.institution, v => r.institution = v));
+        row.appendChild(textField('Supervisor', r.supervisor, v => r.supervisor = v));
+        row.appendChild(textField('Duration', r.duration, v => r.duration = v));
+        card.appendChild(row);
+        r.images = r.images || [];
+        imagesRepeater(card, r.images, 'Photo');
+        card.appendChild(textField('Gallery caption', r.caption, v => r.caption = v));
+        list.appendChild(card);
+      });
+    }
+    draw();
+    b.appendChild(list);
+    const addBtn = document.createElement('button'); addBtn.className='btn-add'; addBtn.type='button'; addBtn.textContent='+ Add research project';
+    addBtn.onclick = () => { items.push({title:'', bullets:[], institution:'', supervisor:'', duration:'', images:[], caption:''}); draw(); };
+    b.appendChild(addBtn);
   }
 
   function renderExperience(){
