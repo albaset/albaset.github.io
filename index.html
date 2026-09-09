@@ -526,8 +526,9 @@
       <h2 id="expTitle"></h2>
       <p class="section-lede" id="expLede"></p>
     </div>
-    <div class="exp-main reveal" id="expMain"></div>
-    <div class="visit-subhead reveal">One-Day Industrial Visits</div>
+    <div class="visit-subhead reveal" id="mainsSubhead"></div>
+    <div id="expMains"></div>
+    <div class="visit-subhead reveal" id="visitsSubhead"></div>
     <div class="visit-grid reveal" id="expVisits"></div>
   </div>
 </section>
@@ -638,6 +639,12 @@
     const r = data.research;
     if(Array.isArray(r)) return r;
     return (r && Object.keys(r).length) ? [r] : [];
+  }
+
+  function experienceMains(ex){
+    if(Array.isArray(ex.mains)) return ex.mains;
+    const legacy = ex.main;
+    return (legacy && legacy.site) ? [legacy] : [];
   }
 
   function photoCapHtml(ph){
@@ -915,19 +922,24 @@
     // Experience
     const ex = data.experience || {};
     el('expLede').textContent = ex.lede || '';
-    const main = ex.main || {};
-    if(main.site){
-      el('expMain').innerHTML = `
+    const mains = experienceMains(ex).filter(m => m.visible !== false);
+    el('mainsSubhead').textContent = ex.mainsHeading || 'Main Training Placements';
+    el('mainsSubhead').style.display = mains.length ? '' : 'none';
+    el('expMains').innerHTML = mains.map(main => `
+      <div class="exp-main reveal">
         <div class="head">
-          <span class="site">${main.site}</span>
+          <span class="site">${main.site || ''}</span>
           <span class="date">${main.date || ''}</span>
         </div>
         ${main.position ? `<span class="pos">${main.position}</span>` : ''}
         ${(main.bullets && main.bullets.length) ? `<ul>${main.bullets.map(b => `<li>${b}</li>`).join('')}</ul>` : ''}
         <div class="gallery-2">${(main.images || []).map(img => `${galleryItemHtml(img)}`).join('')}</div>
-        ${main.caption ? `<div class="gallery-caption">${main.caption}</div>` : ''}`;
-    }
-    el('expVisits').innerHTML = (ex.visits || []).map(v => `
+        ${main.caption ? `<div class="gallery-caption">${main.caption}</div>` : ''}
+      </div>`).join('');
+    const visits = (ex.visits || []).filter(v => v.visible !== false);
+    el('visitsSubhead').textContent = ex.visitsHeading || 'One-Day Industrial Visits';
+    el('visitsSubhead').style.display = visits.length ? '' : 'none';
+    el('expVisits').innerHTML = visits.map(v => `
       <div class="visit-card">
         <span class="site">${v.site || ''}</span>
         <span class="date">${v.date || ''}</span>
