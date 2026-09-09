@@ -1098,6 +1098,15 @@
     b.appendChild(addBtn);
   }
 
+  function migrateExperienceMains(ex){
+    if(!Array.isArray(ex.mains)){
+      const legacy = ex.main;
+      ex.mains = (legacy && Object.keys(legacy).length) ? [legacy] : [];
+      delete ex.main;
+    }
+    return ex.mains;
+  }
+
   function renderExperience(){
     const b = sectionBody('sec-experience', 'Industrial Experience & Visits');
     b.appendChild(visibilityToggle('experience'));
@@ -1106,21 +1115,38 @@
     const ex = state.data.experience = state.data.experience || {};
     b.appendChild(textField('Section intro line', ex.lede, v => ex.lede = v));
 
-    const mainH = document.createElement('h3'); mainH.textContent = 'Main training placement'; mainH.style.marginTop='18px';
-    b.appendChild(mainH);
-    const main = ex.main = ex.main || {};
-    b.appendChild(textField('Site / company', main.site, v => main.site = v));
-    const row = document.createElement('div'); row.className='row2';
-    row.appendChild(textField('Date', main.date, v => main.date = v));
-    row.appendChild(textField('Position / role', main.position, v => main.position = v));
-    b.appendChild(row);
-    b.appendChild(listField('Key points', main.bullets, v => main.bullets = v));
-    main.images = main.images || [];
-    imagesRepeater(b, main.images, 'Photo');
-    b.appendChild(textField('Gallery caption', main.caption, v => main.caption = v));
+    if(ex.mainsHeading === undefined) ex.mainsHeading = 'Main Training Placements';
+    b.appendChild(textField('"Main placements" heading shown on the site', ex.mainsHeading, v => ex.mainsHeading = v));
+    const mains = migrateExperienceMains(ex);
+    const mainsList = document.createElement('div');
+    function drawMains(){
+      mainsList.innerHTML = '';
+      mains.forEach((main, idx) => {
+        const card = document.createElement('div'); card.className='item-card';
+        const rm = document.createElement('button'); rm.className='remove-btn'; rm.type='button'; rm.textContent='Remove';
+        rm.onclick = () => { mains.splice(idx,1); drawMains(); };
+        card.appendChild(rm);
+        card.appendChild(itemVisibleToggle(main));
+        card.appendChild(textField('Site / company', main.site, v => main.site = v));
+        const row = document.createElement('div'); row.className='row2';
+        row.appendChild(textField('Date', main.date, v => main.date = v));
+        row.appendChild(textField('Position / role', main.position, v => main.position = v));
+        card.appendChild(row);
+        card.appendChild(listField('Key points', main.bullets, v => main.bullets = v));
+        main.images = main.images || [];
+        imagesRepeater(card, main.images, 'Photo');
+        card.appendChild(textField('Gallery caption', main.caption, v => main.caption = v));
+        mainsList.appendChild(card);
+      });
+    }
+    drawMains();
+    b.appendChild(mainsList);
+    const addMainBtn = document.createElement('button'); addMainBtn.className='btn-add'; addMainBtn.type='button'; addMainBtn.textContent='+ Add training placement';
+    addMainBtn.onclick = () => { mains.push({site:'', date:'', position:'', bullets:[], images:[], caption:''}); drawMains(); };
+    b.appendChild(addMainBtn);
 
-    const visitsH = document.createElement('h3'); visitsH.textContent = 'One-day visits'; visitsH.style.marginTop='22px';
-    b.appendChild(visitsH);
+    if(ex.visitsHeading === undefined) ex.visitsHeading = 'One-Day Industrial Visits';
+    b.appendChild(textField('"One-day visits" heading shown on the site', ex.visitsHeading, v => ex.visitsHeading = v));
     const visits = ex.visits = ex.visits || [];
     const list = document.createElement('div');
     function draw(){
@@ -1130,6 +1156,7 @@
         const rm = document.createElement('button'); rm.className='remove-btn'; rm.type='button'; rm.textContent='Remove';
         rm.onclick = () => { visits.splice(idx,1); draw(); };
         card.appendChild(rm);
+        card.appendChild(itemVisibleToggle(v));
         card.appendChild(textField('Site / company', v.site, val => v.site = val));
         card.appendChild(textField('Date', v.date, val => v.date = val));
         card.appendChild(textField('Description', v.desc, val => v.desc = val, true));
