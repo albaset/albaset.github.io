@@ -8,7 +8,12 @@
   },
   "theme": {
     "accent": "#2555E7",
-    "dark": "#0A1424"
+    "dark": "#0A1424",
+    "headingColor": "#0F1524",
+    "bodyColor": "#5B6472",
+    "effects": {
+      "zoom": true
+    }
   },
   "sectionHeadings": {
     "about": {
@@ -76,32 +81,7 @@
     "researchgate": "https://www.researchgate.net/profile/Al-Baset?ev=hdr_xprf",
     "custom": []
   },
-  "stats": [
-    {
-      "icon": "education",
-      "color": "blue",
-      "title": "Education",
-      "sub": "B.Sc. in ME<br>CGPA 3.77/4.00"
-    },
-    {
-      "icon": "research",
-      "color": "violet",
-      "title": "Research",
-      "sub": "Materials &<br>Corrosion"
-    },
-    {
-      "icon": "design",
-      "color": "amber",
-      "title": "Design",
-      "sub": "CAD &<br>Simulation"
-    },
-    {
-      "icon": "goal",
-      "color": "green",
-      "title": "Goal",
-      "sub": "Innovation<br>& Impact"
-    }
-  ],
+  "stats": [],
   "about": {
     "paragraphs": [
       "I'm a final-year <strong>Mechanical Engineering</strong> student at Chittagong University of Engineering & Technology (CUET), graduating in July 2026 with a CGPA of <strong>3.77 out of 4.00</strong>. I have a strong interest in materials engineering, design, manufacturing, and computational tools.",
@@ -447,5 +427,47 @@
     "certificates",
     "activities"
   ],
-  "customSections": []
+  "customSections": [],
+  "sectionBackgrounds": {
+    "about": {
+      "src": "",
+      "alt": "",
+      "hidden": false
+    },
+    "education": {
+      "src": "",
+      "alt": "",
+      "hidden": false
+    },
+    "research": {
+      "src": "",
+      "alt": "",
+      "hidden": false
+    },
+    "experience": {
+      "src": "",
+      "alt": "",
+      "hidden": false
+    },
+    "skills": {
+      "src": "",
+      "alt": "",
+      "hidden": false
+    },
+    "projects": {
+      "src": "",
+      "alt": "",
+      "hidden": false
+    },
+    "certificates": {
+      "src": "",
+      "alt": "",
+      "hidden": false
+    },
+    "activities": {
+      "src": "",
+      "alt": "",
+      "hidden": false
+    }
+  }
 }
