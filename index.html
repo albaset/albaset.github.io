@@ -271,6 +271,8 @@
 
   /* THESIS PANEL */
   .abstract-panel{background:var(--panel-2); border:1px solid var(--border); border-radius:var(--radius); padding:28px 30px; margin-bottom:24px;}
+  .research-item{margin-bottom:44px;}
+  .research-item:last-child{margin-bottom:0;}
   .abstract-panel h3{font-size:1.12rem; font-weight:700; margin-bottom:14px; line-height:1.4;}
   .abstract-panel ul{margin:14px 0;}
   .abstract-panel li{padding-left:20px; position:relative; margin-bottom:8px; color:var(--text-dim); font-size:0.92rem;}
@@ -513,11 +515,7 @@
       <h2 id="researchTitle"></h2>
       <p class="section-lede" id="researchLede"></p>
     </div>
-    <div class="abstract-panel reveal" id="researchAbstract"></div>
-    <div class="reveal">
-      <div class="gallery-2" id="researchGallery"></div>
-      <div class="gallery-caption" id="researchCaption"></div>
-    </div>
+    <div id="researchList"></div>
   </div>
 </section>
 
@@ -634,6 +632,12 @@
     if(!f) return { src:'', alt:'', showCaption:false };
     if(typeof f === 'string') return { src:f, alt:'', showCaption:false };
     return { src: f.hidden ? '' : (f.src || ''), alt: f.alt || '', showCaption: !!f.showCaption };
+  }
+
+  function researchItems(data){
+    const r = data.research;
+    if(Array.isArray(r)) return r;
+    return (r && Object.keys(r).length) ? [r] : [];
   }
 
   function photoCapHtml(ph){
@@ -838,6 +842,8 @@
     const hResearch = heading(sh, 'research', {eyebrow:'Research & Thesis', title:'Undergraduate Research'});
     el('researchEyebrow').textContent = hResearch.eyebrow;
     el('researchTitle').textContent = hResearch.title;
+    const researchListLegacy = researchItems(data);
+    el('researchLede').textContent = hResearch.lede || (researchListLegacy[0] && researchListLegacy[0].lede) || '';
     const hExp = heading(sh, 'experience', {eyebrow:'Industry', title:'Industrial Experience & Visits'});
     el('expEyebrow').textContent = hExp.eyebrow;
     el('expTitle').textContent = hExp.title;
@@ -886,20 +892,25 @@
       </div>`).join('');
 
     // Research
-    const r = data.research || {};
-    el('researchLede').textContent = r.lede || '';
-    if(r.title || (r.bullets && r.bullets.length) || r.institution || r.supervisor || r.duration){
-      el('researchAbstract').innerHTML = `
-        <h3>${r.title || ''}</h3>
-        ${(r.bullets && r.bullets.length) ? `<ul>${r.bullets.map(b => `<li>${b}</li>`).join('')}</ul>` : ''}
-        <div class="meta-row">
-          ${r.institution ? `<div><span class="k">Institution</span><span class="v">${r.institution}</span></div>` : ''}
-          ${r.supervisor ? `<div><span class="k">Supervisor</span><span class="v">${r.supervisor}</span></div>` : ''}
-          ${r.duration ? `<div><span class="k">Duration</span><span class="v">${r.duration}</span></div>` : ''}
-        </div>`;
-    }
-    el('researchGallery').innerHTML = (r.images || []).map(img => `${galleryItemHtml(img)}`).join('');
-    el('researchCaption').textContent = r.caption || '';
+    el('researchList').innerHTML = researchItems(data).map(r => {
+      const hasAbstract = r.title || (r.bullets && r.bullets.length) || r.institution || r.supervisor || r.duration;
+      const gallery = (r.images || []).map(img => galleryItemHtml(img)).join('');
+      return `
+      <div class="research-item reveal">
+        ${hasAbstract ? `
+        <div class="abstract-panel">
+          <h3>${r.title || ''}</h3>
+          ${(r.bullets && r.bullets.length) ? `<ul>${r.bullets.map(b => `<li>${b}</li>`).join('')}</ul>` : ''}
+          <div class="meta-row">
+            ${r.institution ? `<div><span class="k">Institution</span><span class="v">${r.institution}</span></div>` : ''}
+            ${r.supervisor ? `<div><span class="k">Supervisor</span><span class="v">${r.supervisor}</span></div>` : ''}
+            ${r.duration ? `<div><span class="k">Duration</span><span class="v">${r.duration}</span></div>` : ''}
+          </div>
+        </div>` : ''}
+        ${gallery ? `<div class="gallery-2">${gallery}</div>` : ''}
+        ${r.caption ? `<div class="gallery-caption">${r.caption}</div>` : ''}
+      </div>`;
+    }).join('');
 
     // Experience
     const ex = data.experience || {};
