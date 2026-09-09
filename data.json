@@ -72,7 +72,8 @@
     },
     "photoCaption": "At CUET — Department of Mechanical Engineering",
     "cvFile": "CV.pdf",
-    "ctaLabel": "Contact me"
+    "ctaLabel": "Contact me",
+    "photoCaptionOn": false
   },
   "social": {
     "linkedin": "https://www.linkedin.com/in/al-baset/",
