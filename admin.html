@@ -1351,6 +1351,7 @@
 
   function renderLeadership(){
     const b = sectionBody('sec-leadership', 'Leadership');
+    b.appendChild(visibilityToggle('leadership', 'Show Leadership on the website'));
     b.appendChild(headingFields('leadership', {eyebrow:'Involvement', title:'Leadership'}));
     const items = state.data.leadership = state.data.leadership || [];
     const list = document.createElement('div');
