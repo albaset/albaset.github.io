@@ -574,7 +574,7 @@
       </div>
       <ul class="simple-list" id="awardsList"></ul>
     </div>
-    <div class="stack-section reveal">
+    <div class="stack-section reveal" id="leadershipBlock">
       <div class="section-head" style="margin-bottom:22px;">
         <div class="eyebrow" id="leadershipEyebrow"></div>
         <h2 id="leadershipTitle"></h2>
@@ -1000,6 +1000,7 @@
       <li><span class="mark">${aw.year || ''}</span><span class="txt"><strong>${aw.title || ''}</strong>${aw.desc ? `<span>${aw.desc}</span>` : ''}</span></li>`).join('');
     el('leadershipList').innerHTML = (data.leadership || []).filter(l => l.visible !== false).map(l => `
       <li><span class="mark">${l.period || ''}</span><span class="txt"><strong>${l.title || ''}</strong>${l.org ? `<span>${l.org}</span>` : ''}${l.desc ? `<span class="desc">${l.desc}</span>` : ''}${(l.images && l.images.length) ? `<div class="gallery-2 activity-gallery">${l.images.map(img => `${galleryItemHtml(img)}`).join('')}</div>` : ''}</span></li>`).join('');
+    el('leadershipBlock').style.display = (data.sectionVisibility && data.sectionVisibility.leadership === false) ? 'none' : '';
 
     // Contact
     const c = data.contact || {};
