@@ -26,7 +26,8 @@
     },
     "research": {
       "eyebrow": "Research & Thesis",
-      "title": "Undergraduate Research"
+      "title": "Undergraduate Research",
+      "lede": "Fabrication, testing and analysis of a hybrid metal matrix composite."
     },
     "experience": {
       "eyebrow": "Industry",
@@ -65,7 +66,7 @@
     "description": "Mechanical Engineering student at Chittagong University of Engineering and Technology (CUET) with hands-on experience in materials fabrication, CAD design, and engineering analysis. My research focuses on hybrid Al–Cu metal matrix composites reinforced with SiC and fly ash.",
     "location": "Cumilla, Bangladesh",
     "photo": {
-      "src": "images/hero-photo-1788158634821.jpg",
+      "src": "images/hero-photo-1788949943567.jpg",
       "alt": "",
       "hidden": false
     },
@@ -131,58 +132,35 @@
       "period": "Jan 2013 – May 2018"
     }
   ],
-  "research": {
-    "lede": "Fabrication, testing and analysis of a hybrid metal matrix composite.",
-    "title": "Analysis of SiC and Fly Ash Reinforcement on Mechanical and Corrosion Behavior of Hybrid Al-Cu Matrix Composites",
-    "bullets": [
-      "Fabricated hybrid Al-Cu-SiC-Fly ash metal matrix composites using the stir casting technique.",
-      "Evaluated mechanical and corrosion performance of the resulting composite samples."
-    ],
-    "institution": "CUET — Dept. of Mechanical Engineering",
-    "supervisor": "Dr. Md. Mahbubul Alam, Professor",
-    "duration": "Oct 2025 – Jul 2026",
-    "images": [
-      {
-        "src": "",
-        "alt": "Stir casting fabrication",
-        "label": "Fabrication photo",
-        "path": "images/research-1.jpg"
-      },
-      {
-        "src": "",
-        "alt": "Mechanical/corrosion testing",
-        "label": "Testing photo",
-        "path": "images/research-2.jpg"
-      }
-    ],
-    "caption": ""
-  },
-  "experience": {
-    "lede": "Hands-on exposure to power generation and manufacturing industries.",
-    "main": {
-      "site": "Matarbari 2×600 MW Ultra-Super Critical Coal-Fired Power Plant (CPGCBL)",
-      "date": "Dec 2025 – Jan 2026",
-      "position": "Industrial Trainee",
+  "research": [
+    {
+      "title": "Analysis of SiC and Fly Ash Reinforcement on Mechanical and Corrosion Behavior of Hybrid Al-Cu Matrix Composites",
       "bullets": [
-        "Completed a three-week industrial training program at one of Bangladesh's most advanced ultra-supercritical coal-fired power plants.",
-        "Gained hands-on exposure to power plant operations, maintenance practices, industrial safety, and major mechanical systems including boilers, turbines, generators, and pumps."
+        "Fabricated hybrid Al-Cu-SiC-Fly ash metal matrix composites using the stir casting technique.",
+        "Evaluated mechanical and corrosion performance of the resulting composite samples."
       ],
+      "institution": "CUET — Dept. of Mechanical Engineering",
+      "supervisor": "Dr. Md. Mahbubul Alam, Professor",
+      "duration": "Oct 2025 – Jul 2026",
       "images": [
         {
-          "src": "images/photo-1-1788171663344.jpg",
-          "alt": "Matarbari Power Plant training",
-          "label": "Training photo",
-          "path": "images/matarbari-1.jpg"
+          "src": "",
+          "alt": "Stir casting fabrication",
+          "label": "Fabrication photo",
+          "path": "images/research-1.jpg"
         },
         {
-          "src": "images/photo-2-1788171671596.jpg",
-          "alt": "Matarbari Power Plant training",
-          "label": "Training photo",
-          "path": "images/matarbari-2.jpg"
+          "src": "",
+          "alt": "Mechanical/corrosion testing",
+          "label": "Testing photo",
+          "path": "images/research-2.jpg"
         }
       ],
-      "caption": "Industrial training at Matarbari 2×600 MW Power Plant, CPGCBL"
-    },
+      "caption": ""
+    }
+  ],
+  "experience": {
+    "lede": "Hands-on exposure to power generation and manufacturing industries.",
     "visits": [
       {
         "site": "Walton Hi-Tech Industries PLC",
@@ -222,40 +200,105 @@
           }
         ]
       }
+    ],
+    "mainsHeading": "Main Training Placements",
+    "mains": [
+      {
+        "site": "Matarbari 2×600 MW Ultra-Super Critical Coal-Fired Power Plant (CPGCBL)",
+        "date": "Dec 2025 – Jan 2026",
+        "position": "Industrial Trainee",
+        "bullets": [
+          "Completed a three-week industrial training program at one of Bangladesh's most advanced ultra-supercritical coal-fired power plants.",
+          "Gained hands-on exposure to power plant operations, maintenance practices, industrial safety, and major mechanical systems including boilers, turbines, generators, and pumps."
+        ],
+        "images": [
+          {
+            "src": "images/photo-1-1788171663344.jpg",
+            "alt": "Matarbari Power Plant training",
+            "label": "Training photo",
+            "path": "images/matarbari-1.jpg"
+          },
+          {
+            "src": "images/photo-2-1788171671596.jpg",
+            "alt": "Matarbari Power Plant training",
+            "label": "Training photo",
+            "path": "images/matarbari-2.jpg"
+          }
+        ],
+        "caption": "Industrial training at Matarbari 2×600 MW Power Plant, CPGCBL"
+      }
+    ],
+    "visitsHeading": "One-Day Industrial Visits"
+  },
+  "skills": {
+    "individual": [],
+    "groups": [
+      {
+        "group": "CAD & Design",
+        "visible": true,
+        "items": [
+          {
+            "name": "SolidWorks — 2D Drawing",
+            "visible": true
+          },
+          {
+            "name": "3D Modeling",
+            "visible": true
+          },
+          {
+            "name": "Assembly Design & Simulation",
+            "visible": true
+          }
+        ]
+      },
+      {
+        "group": "Programming & Numerical Computing",
+        "visible": true,
+        "items": [
+          {
+            "name": "MATLAB",
+            "visible": true
+          },
+          {
+            "name": "FORTRAN",
+            "visible": true
+          },
+          {
+            "name": "C",
+            "visible": true
+          }
+        ]
+      },
+      {
+        "group": "Reference & Academic Writing",
+        "visible": true,
+        "items": [
+          {
+            "name": "Mendeley",
+            "visible": true
+          }
+        ]
+      },
+      {
+        "group": "Office Applications",
+        "visible": true,
+        "items": [
+          {
+            "name": "Microsoft Word",
+            "visible": true
+          },
+          {
+            "name": "Excel",
+            "visible": true
+          },
+          {
+            "name": "PowerPoint",
+            "visible": true
+          }
+        ]
+      }
     ]
   },
-  "skills": [
-    {
-      "group": "CAD & Design",
-      "items": [
-        "SolidWorks — 2D Drawing",
-        "3D Modeling",
-        "Assembly Design & Simulation"
-      ]
-    },
-    {
-      "group": "Programming & Numerical Computing",
-      "items": [
-        "MATLAB",
-        "FORTRAN",
-        "C"
-      ]
-    },
-    {
-      "group": "Reference & Academic Writing",
-      "items": [
-        "Mendeley"
-      ]
-    },
-    {
-      "group": "Office Applications",
-      "items": [
-        "Microsoft Word",
-        "Excel",
-        "PowerPoint"
-      ]
-    }
-  ],
   "projects": [
     {
       "tag": "SolidWorks · Assembly Design",
