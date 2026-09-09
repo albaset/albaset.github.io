@@ -312,26 +312,6 @@
       "path": "images/edge-cert.jpg"
     },
     {
-      "title": "Government Merit Scholarship",
-      "issuer": "HSC Examination · 2020",
-      "image": {
-        "src": "",
-        "alt": "",
-        "hidden": false
-      },
-      "path": "images/scholarship-hsc.jpg"
-    },
-    {
-      "title": "Government Merit Scholarship",
-      "issuer": "SSC Examination · 2018",
-      "image": {
-        "src": "",
-        "alt": "",
-        "hidden": false
-      },
-      "path": "images/scholarship-ssc.jpg"
-    },
-    {
       "title": "Industrial Training Certificate",
       "issuer": "Matarbari Power Plant, CPGCBL",
       "image": {
@@ -425,9 +405,30 @@
     "skills",
     "projects",
     "certificates",
-    "activities"
+    "activities",
+    "cs-0-1788946614280-l83j"
   ],
-  "customSections": [],
+  "customSections": [
+    {
+      "id": "cs-0-1788946614280-l83j",
+      "eyebrow": "Exploration",
+      "title": "Travel",
+      "lede": "I am a travel enthusiast",
+      "background": {
+        "src": "",
+        "alt": "",
+        "hidden": false
+      },
+      "showInNav": false,
+      "navLabel": "",
+      "blocks": [
+        {
+          "type": "text",
+          "text": ""
+        }
+      ]
+    }
+  ],
   "sectionBackgrounds": {
     "about": {
       "src": "",
