@@ -1172,30 +1172,96 @@
     b.appendChild(addBtn);
   }
 
+  function migrateSkills(){
+    let s = state.data.skills;
+    if(Array.isArray(s)){
+      s = { individual: [], groups: s.map(g => ({
+        group: g.group, visible: g.visible !== false,
+        items: (g.items || []).map(it => typeof it === 'string' ? { name: it, visible: true } : it)
+      })) };
+    }
+    s = s || {};
+    s.individual = s.individual || [];
+    s.groups = s.groups || [];
+    state.data.skills = s;
+    return s;
+  }
+
+  function skillTagRepeater(itemsArr){
+    const wrap = document.createElement('div');
+    const list = document.createElement('div');
+    function draw(){
+      list.innerHTML = '';
+      itemsArr.forEach((it, idx) => {
+        const row = document.createElement('div');
+        row.style.cssText = 'display:flex; align-items:center; gap:8px; margin-bottom:6px;';
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = it.name || '';
+        input.style.cssText = 'flex:1; padding:8px 10px; border:1px solid var(--border); border-radius:8px; font-size:0.86rem; font:inherit;';
+        input.addEventListener('input', () => { it.name = input.value; });
+        row.appendChild(input);
+        const hideLabel = document.createElement('label');
+        hideLabel.style.cssText = 'display:flex; align-items:center; gap:4px; font-size:0.74rem; color:var(--text-dim); white-space:nowrap; cursor:pointer;';
+        const hideChk = document.createElement('input');
+        hideChk.type = 'checkbox'; hideChk.style.width = 'auto';
+        hideChk.checked = it.visible !== false;
+        hideChk.addEventListener('change', () => { it.visible = hideChk.checked; });
+        hideLabel.appendChild(hideChk);
+        hideLabel.appendChild(document.createTextNode('Show'));
+        row.appendChild(hideLabel);
+        const rm = document.createElement('button');
+        rm.type = 'button'; rm.className = 'btn-remove-small'; rm.textContent = 'Remove';
+        rm.onclick = () => { itemsArr.splice(idx,1); draw(); };
+        row.appendChild(rm);
+        list.appendChild(row);
+      });
+    }
+    draw();
+    wrap.appendChild(list);
+    const addBtn = document.createElement('button');
+    addBtn.type = 'button'; addBtn.className = 'btn-add'; addBtn.textContent = '+ Add skill';
+    addBtn.onclick = () => { itemsArr.push({name:'', visible:true}); draw(); };
+    wrap.appendChild(addBtn);
+    return wrap;
+  }
+
   function renderSkills(){
     const b = sectionBody('sec-skills', 'Technical Skills');
     b.appendChild(visibilityToggle('skills'));
     b.appendChild(headingFields('skills', {eyebrow:'Capabilities', title:'Technical Skills'}));
     b.appendChild(sectionBackgroundField('skills'));
-    const groups = state.data.skills = state.data.skills || [];
-    const list = document.createElement('div');
-    function draw(){
-      list.innerHTML = '';
-      groups.forEach((g, idx) => {
+    const sk = migrateSkills();
+
+    const indivLabel = document.createElement('h3'); indivLabel.textContent = 'Individual skills (no group)'; indivLabel.style.marginTop = '18px';
+    b.appendChild(indivLabel);
+    const indivHint = document.createElement('p'); indivHint.className = 'hint'; indivHint.style.marginTop = '-10px';
+    indivHint.textContent = 'Skills shown on their own under the section heading, without belonging to any group.';
+    b.appendChild(indivHint);
+    b.appendChild(skillTagRepeater(sk.individual));
+
+    const groupsLabel = document.createElement('h3'); groupsLabel.textContent = 'Skill groups'; groupsLabel.style.marginTop = '26px';
+    b.appendChild(groupsLabel);
+    const groupsWrap = document.createElement('div');
+    function drawGroups(){
+      groupsWrap.innerHTML = '';
+      sk.groups.forEach((g, idx) => {
         const card = document.createElement('div'); card.className='item-card';
         const rm = document.createElement('button'); rm.className='remove-btn'; rm.type='button'; rm.textContent='Remove group';
-        rm.onclick = () => { groups.splice(idx,1); draw(); };
+        rm.onclick = () => { sk.groups.splice(idx,1); drawGroups(); };
         card.appendChild(rm);
+        card.appendChild(itemVisibleToggle(g));
         card.appendChild(textField('Group name', g.group, v => g.group = v));
-        card.appendChild(listField('Skills in this group', g.items, v => g.items = v));
-        list.appendChild(card);
+        g.items = g.items || [];
+        card.appendChild(skillTagRepeater(g.items));
+        groupsWrap.appendChild(card);
       });
     }
-    draw();
-    b.appendChild(list);
-    const addBtn = document.createElement('button'); addBtn.className='btn-add'; addBtn.type='button'; addBtn.textContent='+ Add skill group';
-    addBtn.onclick = () => { groups.push({group:'', items:[]}); draw(); };
-    b.appendChild(addBtn);
+    drawGroups();
+    b.appendChild(groupsWrap);
+    const addGroupBtn = document.createElement('button'); addGroupBtn.className='btn-add'; addGroupBtn.type='button'; addGroupBtn.textContent='+ Add skill group';
+    addGroupBtn.onclick = () => { sk.groups.push({group:'', visible:true, items:[]}); drawGroups(); };
+    b.appendChild(addGroupBtn);
   }
 
   function renderProjects(){
@@ -1359,7 +1425,7 @@
         const navCheckLabel = document.createElement('span'); navCheckLabel.textContent='Show in top menu'; navCheckLabel.style.margin='0';
         navCheckWrap.appendChild(navCheckLabel);
         navRow.appendChild(navCheckWrap);
-        navRow.appendChild(textField('Menu label', cs.navLabel, v => cs.navLabel = v));
+        navRow.appendChild(textField('Menu label (optional — uses the section title above if left blank)', cs.navLabel, v => cs.navLabel = v));
         card.appendChild(navRow);
 
         const blocksWrap = document.createElement('div');
@@ -1430,7 +1496,7 @@
     const addSection = document.createElement('button'); addSection.className='btn-add'; addSection.type='button'; addSection.textContent='+ Add new section';
     addSection.onclick = () => {
       const id = 'cs-' + sections.length + '-' + Date.now() + '-' + Math.random().toString(36).slice(2,6);
-      sections.push({id, eyebrow:'', title:'', lede:'', background:'', showInNav:false, navLabel:'', blocks:[{type:'text', text:''}]});
+      sections.push({id, eyebrow:'', title:'', lede:'', background:'', showInNav:true, navLabel:'', blocks:[{type:'text', text:''}]});
       if(Array.isArray(state.data.pageOrder)) state.data.pageOrder.push(id);
       drawSections();
       renderSectionOrder();

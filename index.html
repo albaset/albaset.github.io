@@ -539,6 +539,7 @@
       <div class="eyebrow" id="skillsEyebrow"></div>
       <h2 id="skillsTitle"></h2>
     </div>
+    <div class="tag-list reveal" id="skillIndividual" style="margin-bottom:24px;"></div>
     <div class="skill-groups reveal" id="skillGroups"></div>
   </div>
 </section>
@@ -639,6 +640,17 @@
     const r = data.research;
     if(Array.isArray(r)) return r;
     return (r && Object.keys(r).length) ? [r] : [];
+  }
+
+  function skillsData(data){
+    let s = data.skills;
+    if(Array.isArray(s)){
+      return { individual: [], groups: s.map(g => ({
+        group: g.group, visible: g.visible !== false,
+        items: (g.items || []).map(it => typeof it === 'string' ? { name: it, visible: true } : it)
+      })) };
+    }
+    return s || { individual: [], groups: [] };
   }
 
   function experienceMains(ex){
@@ -948,10 +960,13 @@
       </div>`).join('');
 
     // Skills
-    el('skillGroups').innerHTML = (data.skills || []).map(g => `
+    const sk = skillsData(data);
+    el('skillIndividual').innerHTML = (sk.individual || []).filter(s => s.visible !== false)
+      .map(s => `<span class="tag">${s.name || ''}</span>`).join('');
+    el('skillGroups').innerHTML = (sk.groups || []).filter(g => g.visible !== false).map(g => `
       <div class="skill-group">
         <h3>${g.group || ''}</h3>
-        <div class="tag-list">${(g.items || []).map(i => `<span class="tag">${i}</span>`).join('')}</div>
+        <div class="tag-list">${(g.items || []).filter(it => it.visible !== false).map(it => `<span class="tag">${it.name || ''}</span>`).join('')}</div>
       </div>`).join('');
 
     // Projects
@@ -1121,11 +1136,12 @@
 
     const navContactLi = document.getElementById('navContactLi');
     customs.forEach(cs => {
-      if(cs.showInNav && cs.navLabel){
+      const label = cs.navLabel || cs.title;
+      if(cs.showInNav && label){
         const li = document.createElement('li');
         const a = document.createElement('a');
         a.href = '#' + cs.id;
-        a.textContent = cs.navLabel;
+        a.textContent = label;
         li.appendChild(a);
         navContactLi.parentNode.insertBefore(li, navContactLi);
       }

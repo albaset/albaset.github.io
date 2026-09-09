@@ -419,7 +419,7 @@
         "alt": "",
         "hidden": false
       },
-      "showInNav": false,
+      "showInNav": true,
       "navLabel": "",
       "blocks": [
         {
